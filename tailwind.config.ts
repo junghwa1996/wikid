@@ -102,6 +102,9 @@ export default {
         // 48px
         '48sb': ['48px', { lineHeight: '46px', fontWeight: '600' }], // Semibold
       },
+      borderRadius: {
+        custom: '10px',
+      },
     },
   },
   plugins: [],
