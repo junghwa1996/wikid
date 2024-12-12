@@ -1,0 +1,35 @@
+name: PR Test Workflow
+
+# Pull Request 이벤트 시 워크플로우 실행
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 리포지토리 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Node.js 설정
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      # 의존성 설치
+      - name: Install dependencies
+        run: npm install
+
+      # 테스트 실행
+      - name: Run tests
+        run: npm test
