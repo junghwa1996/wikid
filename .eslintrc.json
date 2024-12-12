@@ -1,8 +1,6 @@
 {
   "extends": [
     "next/core-web-vitals", // Next.js 기본 규칙
-    "airbnb", // Airbnb 스타일 가이드
-    "airbnb/hooks", // React Hooks 관련 규칙
     "prettier" // Prettier와 충돌하지 않도록 조정
   ],
   "plugins": ["prettier"],
