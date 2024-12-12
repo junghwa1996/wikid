@@ -36,7 +36,20 @@ export default {
           100: 'var(--yellow-100)',
         },
       },
+      fontFamily: {
+        sans: [
+          'Pretendard',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'sans-serif',
+        ],
+      },
     },
   },
   plugins: [],
+  darkMode: 'media',
 } satisfies Config;
