@@ -11,3 +11,5 @@ npm run dev
 ### 빌드
 
 npm run build
+
+테스트를 위한 README 작성
