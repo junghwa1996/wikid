@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "echo \"No test specified\" && exit 1"
+    "test": "npm run lint"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.62.7",
