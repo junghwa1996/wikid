@@ -48,6 +48,9 @@ export default {
           'sans-serif',
         ],
       },
+      boxShadow: {
+        custom: '0px 4px 20px 0px rgba(0, 0, 0, 0.08)',
+      },
     },
   },
   plugins: [],
