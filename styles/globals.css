@@ -24,29 +24,27 @@
   --yellow-100: #fdd181;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #121212;
-    --white: #e4e4e4;
-    --gray-100: #c6cada;
-    --gray-200: #8f95b2;
-    --gray-300: #6e748d;
-    --gray-400: #474d66;
-    --gray-500: #3b415b;
-    --gray-600: #2a2d3a;
+.dark {
+  --background: #121212;
+  --white: #e4e4e4;
+  --gray-100: #3b415b;
+  --gray-200: #474d66;
+  --gray-300: #8f95b2;
+  --gray-400: #c6cada;
+  --gray-500: #e4e5f0;
+  --gray-600: #f7f7fa;
 
-    --green-100: #3a8f76;
-    --green-200: #4cbfa4;
-    --green-300: #a5e5d1;
+  --green-100: #3a8f76;
+  --green-200: #4cbfa4;
+  --green-300: #a5e5d1;
 
-    --red-50: #8a1c1c;
-    --red-100: #d14343;
-    --red-200: #f37474;
+  --red-50: #8a1c1c;
+  --red-100: #d14343;
+  --red-200: #f37474;
 
-    --purple-100: #b095ff;
+  --purple-100: #b095ff;
 
-    --yellow-100: #e7a832;
-  }
+  --yellow-100: #e7a832;
 }
 
 body {
