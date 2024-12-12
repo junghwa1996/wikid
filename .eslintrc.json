@@ -1,7 +1,18 @@
 {
-  "extends": ["next/core-web-vitals", "prettier"],
+  "extends": [
+    "next/core-web-vitals", // Next.js 기본 규칙
+    "prettier" // Prettier와 충돌하지 않도록 조정
+  ],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error", // Prettier를 ESLint 오류로 간주
+    "react/react-in-jsx-scope": "off", // React 17+에서 불필요
+    "import/prefer-default-export": "off", // 필요 시 규칙 비활성화 (옵션)
+    "react/jsx-props-no-spreading": "off" // Props 스프레드 허용 (옵션)
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // 프로젝트의 React 버전 자동 감지
+    }
   }
 }
