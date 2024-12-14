@@ -31,8 +31,6 @@ module.exports = [
       // Prettier 관련 규칙
       'prettier/prettier': 'error', // Prettier에서 감지한 스타일 위반을 ESLint 에러로 처리
 
-      endOfLine: 'auto', // delete `␍`eslintprettier/prettier 에러 처리
-
       // React 관련 규칙
       'react/react-in-jsx-scope': 'off', // React 17+에서는 import React가 필요 없으므로 비활성화
 
