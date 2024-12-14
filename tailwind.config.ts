@@ -106,6 +106,11 @@ export default {
         custom: '10px',
       },
     },
+    screens: {
+      mo: '375px',
+      ta: '768px',
+      pc: '1024px',
+    },
   },
   plugins: [],
 } satisfies Config;
