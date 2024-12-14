@@ -107,9 +107,9 @@ export default {
       },
     },
     screens: {
-      mo: '375px',
-      ta: '768px',
-      pc: '1024px',
+      mo: { max: '767px' },
+      ta: { min: '768px', max: '1023px' },
+      pc: { min: '1024px' },
     },
   },
   plugins: [],
