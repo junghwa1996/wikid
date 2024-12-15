@@ -1,3 +1,6 @@
+import Button from '@/components/Button';
+import LinkBar from '@/components/LinkBar';
+
 export default function Test() {
   const commonCellClass = 'border-r border-gray-300';
   const commonRowClass = 'flex flex-wrap items-end gap-2';
@@ -12,13 +15,29 @@ export default function Test() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className={commonCellClass}>컴포넌트명 입력</td>
-            <td className={commonRowClass}>{/* 컴포넌트를 추가해주세요 */}</td>
+          <tr className="border-b border-gray-300">
+            <td className={commonCellClass}>Button</td>
+            <td className={commonRowClass}>
+              <Button size="small">small</Button>
+              <Button>normal</Button>
+              <Button size="large">large</Button>
+              <Button disabled>disabled</Button>
+              <Button isLoading>isLoading</Button>
+              <Button onClick={() => alert('button onClick')}>onClick</Button>
+              <Button variant="secondary">secondary</Button>
+              <Button variant="danger">danger</Button>
+              <Button variant="dark">dark</Button>
+              <Button variant="light">light</Button>
+              <Button href="https://github.com/codeitFE11-part3-team7">
+                link
+              </Button>
+            </td>
           </tr>
           <tr>
-            <td className={commonCellClass}>컴포넌트명 입력</td>
-            <td className={commonRowClass}>{/* 컴포넌트를 추가해주세요 */}</td>
+            <td className={commonCellClass}>LinkBar</td>
+            <td className={commonRowClass}>
+              <LinkBar link="https://www.google.com" />
+            </td>
           </tr>
         </tbody>
       </table>
