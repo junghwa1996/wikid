@@ -6,6 +6,13 @@ interface MenuProps {
   onSelect: (option: string) => void;
 }
 
+/**
+ * 메뉴팝업을 띄우는 컴포넌트
+ * @param options 메뉴팝업에 들어가는 옵션을 담을 배열
+ * @param onClick 선택한 옵션을 반환
+ * @param menuSize 팝업의 크기
+ */
+
 const Menu: React.FC<MenuProps> = ({ options, onSelect, menuSize }) => {
   return (
     <ul
