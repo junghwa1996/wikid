@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useValidation } from 'hooks/useValidation';
 
 interface InputFieldProps {
   value: string;
@@ -9,54 +10,30 @@ interface InputFieldProps {
   compareValue?: string;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
+function InputField({
   value,
   onChange,
   type = 'text',
   placeholder,
   label,
   compareValue,
-}) => {
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(
-    undefined
-  );
-
-  const validateInput = (value: string) => {
-    if (!value) return undefined;
-
-    if (type === 'email') {
-      if (!/\S+@\S+\.\S+/.test(value)) {
-        return '이메일 형식으로 작성해 주세요.';
-      }
-    }
-    if (type === 'password') {
-      if (value.length < 8) {
-        return '8자 이상 입력해주세요.';
-      }
-    }
-    if (type === 'name') {
-      if (value.length > 10) {
-        return '열 자 이하로 작성해주세요.';
-      }
-    }
-    if (type === 'passwordConfirm' && compareValue !== undefined) {
-      if (value !== compareValue) {
-        return '비밀번호가 일치하지 않습니다.';
-      }
-    }
-    return undefined;
-  };
+}: InputFieldProps) {
+  const { errorMessage, validate } = useValidation({
+    type,
+    compareValue,
+  });
 
   const handleBlur = () => {
-    const error = validateInput(value);
-    setErrorMessage(error);
+    validate(value);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e);
-    const error = validateInput(e.target.value);
-    setErrorMessage(error);
+    if (errorMessage) {
+      validate(e.target.value);
+    }
   };
+
   //스타일에 따른 클래스
   const variantClass = {
     container: 'mb-[24px] flex flex-col gap-[10px]',
@@ -94,6 +71,6 @@ const InputField: React.FC<InputFieldProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default InputField;

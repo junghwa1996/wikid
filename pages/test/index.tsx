@@ -1,4 +1,4 @@
-import Signup from '@/pages/signup';
+import Signup from '@/pages/signUp';
 import Button from '@/components/Button';
 import LinkBar from '@/components/LinkBar';
 
