@@ -52,7 +52,7 @@ export default function Test() {
               </Button>
             </td>
           </tr>
-          <tr>
+          <tr className="border-b border-gray-300">
             <td className={commonCellClass}>SnackBar</td>
             <td className={commonRowClass}>
               <SnackBar state="info" />
@@ -61,7 +61,7 @@ export default function Test() {
               {snackState !== 'null' && <SnackBar state={snackState} />}
             </td>
           </tr>
-          <tr>
+          <tr className="border-b border-gray-300">
             <td className={commonCellClass}>LinkBar</td>
             <td className={commonRowClass}>
               <LinkBar link="https://www.google.com" />
