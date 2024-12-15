@@ -1,5 +1,6 @@
 import Button from '@/components/Button';
 import LinkBar from '@/components/LinkBar';
+import SearchInput from '@/components/SearchInput';
 
 export default function Test() {
   const commonCellClass = 'border-r border-gray-300';
@@ -37,6 +38,12 @@ export default function Test() {
             <td className={commonCellClass}>LinkBar</td>
             <td className={commonRowClass}>
               <LinkBar link="https://www.google.com" />
+            </td>
+          </tr>
+          <tr>
+            <td className={commonCellClass}>SearchInput</td>
+            <td className={commonRowClass}>
+              <SearchInput />
             </td>
           </tr>
         </tbody>
