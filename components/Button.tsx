@@ -64,7 +64,7 @@ interface Props {
  * @param {boolean} props.isLoading - loading 여부
  * @param {function} props.onClick - onClick에 전달할 함수
  * @param {ReactNode} props.children - button태그 사이 들어갈 필수 요소
- * @returns {JSX.Element} 링크값 없으면 button 없으면 Link 요소 반환
+ * @returns {JSX.Element} 링크값 없으면 button 있으면 Link 요소 반환
  */
 export default function Button({
   className = '',
