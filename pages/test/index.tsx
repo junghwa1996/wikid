@@ -56,8 +56,8 @@ export default function Test() {
             <td className={commonCellClass}>SnackBar</td>
             <td className={commonRowClass}>
               <SnackBar state="info" />
-              <button onClick={handleSuccess}>복사</button>
-              <button onClick={handleFail}>에러</button>
+              <Button onClick={handleSuccess}>복사</Button>
+              <Button onClick={handleFail}>에러</Button>
               {snackState !== 'null' && <SnackBar state={snackState} />}
             </td>
           </tr>
