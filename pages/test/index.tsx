@@ -44,6 +44,11 @@ export default function Test() {
             <td className={commonCellClass}>LinkBar</td>
             <td className={commonRowClass}>
               <LinkBar link="https://www.google.com" />
+
+              <td className={commonCellClass}>inputfield</td>
+              <td className={commonRowClass}>
+                <Signup />
+              </td>
             </td>
           </tr>
         </tbody>
