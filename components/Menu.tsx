@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface MenuProps {
   options: string[];
   menuSize?: string;
@@ -9,7 +7,7 @@ interface MenuProps {
 /**
  * 메뉴팝업을 띄우는 컴포넌트
  * @param options 메뉴팝업에 들어가는 옵션을 담을 배열
- * @param onClick 선택한 옵션을 반환
+ * @param onSelect 선택한 옵션을 반환
  * @param menuSize 팝업의 크기
  */
 
