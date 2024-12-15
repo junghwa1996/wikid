@@ -1,3 +1,5 @@
+import LinkBar from '@/components/LinkBar';
+
 export default function Test() {
   const commonCellClass = 'border-r border-gray-300';
   const commonRowClass = 'flex flex-wrap items-end gap-2';
@@ -13,12 +15,10 @@ export default function Test() {
         </thead>
         <tbody>
           <tr>
-            <td className={commonCellClass}>컴포넌트명 입력</td>
-            <td className={commonRowClass}>{/* 컴포넌트를 추가해주세요 */}</td>
-          </tr>
-          <tr>
-            <td className={commonCellClass}>컴포넌트명 입력</td>
-            <td className={commonRowClass}>{/* 컴포넌트를 추가해주세요 */}</td>
+            <td className={commonCellClass}>LinkBar</td>
+            <td className={commonRowClass}>
+              <LinkBar link="https://www.google.com" />
+            </td>
           </tr>
         </tbody>
       </table>
