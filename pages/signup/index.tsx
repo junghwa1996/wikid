@@ -4,22 +4,8 @@ import InputField from '@/components/Input';
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  // 이메일 유효성 검사
-  const validateEmail = (value: string) => {
-    if (!/\S+@\S+\.\S+/.test(value)) {
-      return '이메일 형식으로 작성해 주세요.';
-    }
-    return undefined;
-  };
-
-  // 패스워드 유효성 검사
-  const validatePassword = (value: string) => {
-    if (value.length < 8) {
-      return '8자 이상 입력해주세요.';
-    }
-    return undefined;
-  };
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [name, setName] = useState('');
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -27,6 +13,16 @@ const SignUp: React.FC = () => {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+  };
+
+  const handlePasswordConfirmChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPasswordConfirm(e.target.value);
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -37,12 +33,19 @@ const SignUp: React.FC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <InputField
+        label="이름"
+        type="name"
+        value={name}
+        onChange={handleNameChange}
+        placeholder="이름을 입력해 주세요"
+      />
+
+      <InputField
         label="이메일"
         type="email"
         value={email}
         onChange={handleEmailChange}
         placeholder="이메일을 입력해 주세요"
-        validate={validateEmail}
       />
 
       <InputField
@@ -51,7 +54,15 @@ const SignUp: React.FC = () => {
         value={password}
         onChange={handlePasswordChange}
         placeholder="비밀번호를 입력해 주세요"
-        validate={validatePassword}
+      />
+
+      <InputField
+        label="비밀번호 확인"
+        type="passwordConfirm"
+        value={passwordConfirm}
+        onChange={handlePasswordConfirmChange}
+        placeholder="비밀번호를 다시 입력해 주세요"
+        compareValue={password}
       />
     </form>
   );
