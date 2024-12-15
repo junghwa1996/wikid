@@ -13,7 +13,7 @@ interface MenuProps {
  * @param menuSize 팝업의 크기
  */
 
-const Menu: React.FC<MenuProps> = ({ options, onSelect, menuSize }) => {
+export default function Menu({ options, onSelect, menuSize }: MenuProps) {
   return (
     <ul
       className={`${menuSize} absolute z-10 mt-2 rounded-xl border border-gray-300 bg-white p-1 text-14 shadow-lg`}
@@ -29,6 +29,4 @@ const Menu: React.FC<MenuProps> = ({ options, onSelect, menuSize }) => {
       ))}
     </ul>
   );
-};
-
-export default Menu;
+}
