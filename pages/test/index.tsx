@@ -43,7 +43,7 @@ export default function Test() {
           <tr>
             <td className={commonCellClass}>SearchInput</td>
             <td className={commonRowClass}>
-              <SearchInput />
+              <SearchInput size="large" value="" onChange={() => {}} />
             </td>
           </tr>
         </tbody>
