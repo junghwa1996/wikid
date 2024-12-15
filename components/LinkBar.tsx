@@ -16,7 +16,7 @@ export default function LinkBar({ link, onClick }: LinkBarProps) {
       className="flex cursor-pointer items-center gap-[5px] rounded-custom bg-green-100 px-[10px] py-[3px] mo:py-1"
     >
       <img
-        src="/icon-link.svg"
+        src="icon/icon-link.svg"
         alt="링크 아이콘"
         className="h-5 w-5 mo:h-4 mo:w-4"
       />
