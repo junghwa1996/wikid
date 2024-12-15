@@ -10,7 +10,8 @@ interface LinkBarProps {
  */
 export default function LinkBar({ link, onClick }: LinkBarProps) {
   return (
-    <div
+    <button
+      type="button"
       onClick={onClick}
       className="flex cursor-pointer items-center gap-[5px] rounded-custom bg-green-100 px-[10px] py-[3px] mo:py-1"
     >
@@ -20,6 +21,6 @@ export default function LinkBar({ link, onClick }: LinkBarProps) {
         className="h-5 w-5 mo:h-4 mo:w-4"
       />
       <p className="text-14 text-green-200 mo:text-12">{link}</p>
-    </div>
+    </button>
   );
 }
