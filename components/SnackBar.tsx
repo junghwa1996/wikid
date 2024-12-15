@@ -8,20 +8,20 @@ const stateConfig = {
     style:
       'bg-red-50 border-red-100 fixed left-1/2 transform -translate-x-1/2 top-[120px] mx-auto mo:bottom-[80px] mo:top-auto w-[384px] mo:w-[328px] whitespace-nowrap',
     text: '다른 친구가 편집하고 있어요. 나중에 다시 시도해 주세요.',
-    icon: '/icon-fail.svg',
+    icon: '/icon/icon-fail.svg',
     textStyle: 'text-red-100 text-14sb mo:text-12sb',
   },
   success: {
     style:
       'bg-green-100 border-green-200 fixed left-1/2 transform -translate-x-1/2 top-[120px] mx-auto mo:bottom-[80px] mo:top-auto w-[247px] mo:w-[210px] whitespace-nowrap',
     text: '내 위키 링크가 복사되었습니다.',
-    icon: '/icon-success.svg',
+    icon: '/icon/icon-success.svg',
     textStyle: 'text-green-300 text-14sb mo:text-12sb',
   },
   info: {
     style: 'bg-background border-white',
     text: '앞 사람의 편집이 끝나면 위키 참여가 가능합니다.',
-    icon: '/icon-info.svg',
+    icon: '/icon/icon-info.svg',
     textStyle: 'text-gray-500 text-14 mo:text-12',
   },
   null: {
