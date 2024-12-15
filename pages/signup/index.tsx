@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+
 import InputField from '@/components/Input';
 
 const SignUp: React.FC = () => {
