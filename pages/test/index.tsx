@@ -61,6 +61,12 @@ export default function Test() {
               {snackState !== 'null' && <SnackBar state={snackState} />}
             </td>
           </tr>
+          <tr>
+            <td className={commonCellClass}>LinkBar</td>
+            <td className={commonRowClass}>
+              <LinkBar link="https://www.google.com" />
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
