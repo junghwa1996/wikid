@@ -1,6 +1,26 @@
+import { useState } from 'react';
+
+import SnackBar from '@/components/SnackBar';
+
 export default function Test() {
   const commonCellClass = 'border-r border-gray-300';
   const commonRowClass = 'flex flex-wrap items-end gap-2';
+
+  // ----snackBar(start)----
+  const [snackState, setSnackState] = useState<
+    'fail' | 'success' | 'info' | 'null'
+  >('null');
+
+  const handleSuccess = () => {
+    setSnackState('success');
+    setTimeout(() => setSnackState('null'), 1500);
+  };
+
+  const handleFail = () => {
+    setSnackState('fail');
+    setTimeout(() => setSnackState('null'), 1500);
+  };
+  // ----snackBar(end)----
 
   return (
     <div className="px-4 py-10">
@@ -13,8 +33,13 @@ export default function Test() {
         </thead>
         <tbody>
           <tr>
-            <td className={commonCellClass}>컴포넌트명 입력</td>
-            <td className={commonRowClass}>{/* 컴포넌트를 추가해주세요 */}</td>
+            <td className={commonCellClass}>SnackBar</td>
+            <td className={commonRowClass}>
+              <SnackBar state="info" />
+              <button onClick={handleSuccess}>복사</button>
+              <button onClick={handleFail}>에러</button>
+              {snackState !== 'null' && <SnackBar state={snackState} />}
+            </td>
           </tr>
           <tr>
             <td className={commonCellClass}>컴포넌트명 입력</td>
