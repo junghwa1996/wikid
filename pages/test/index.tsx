@@ -15,7 +15,7 @@ export default function Test() {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr className="border-b border-gray-300">
             <td className={commonCellClass}>Button</td>
             <td className={commonRowClass}>
               <Button size="small">small</Button>
