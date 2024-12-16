@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
-import axios from 'axios';
 import Menu from './Menu';
 import useOutsideClick from '../hooks/useOutsideClick';
 
@@ -9,6 +8,7 @@ export default function GNB() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 임시 로그인 상태(추후 업데이트예정)
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [profileImage, setProfileImage] = useState(null); // 추후 업데이트 예정
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
   const router = useRouter();
   const profileMenuRef = useRef<HTMLDivElement>(null);
@@ -48,14 +48,11 @@ export default function GNB() {
   const updateProfileMenu = () => {
     if (!isLoggedIn && isMobile) {
       return ['로그인', '위키목록', '자유게시판'];
-    }
-    if (isLoggedIn && !isMobile) {
+    } else if (isLoggedIn && !isMobile) {
       return ['마이페이지', '로그아웃'];
-    }
-    if (isLoggedIn && isMobile) {
+    } else if (isLoggedIn && isMobile) {
       return ['위키목록', '자유게시판', '알림', '마이페이지', '로그아웃'];
-    }
-    return [];
+    } else return [];
   };
 
   useEffect(() => {
@@ -90,7 +87,7 @@ export default function GNB() {
           )}
           <button className="relative" onClick={() => setIsOpen(!isOpen)}>
             <img
-              src="/icon/icon-profile.svg"
+              src={profileImage || '/icon/icon-profile.svg'}
               className="mo:hidden"
               alt="프로필 아이콘"
             />

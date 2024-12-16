@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Button from '@/components/Button';
 import Dropdown from '@/components/Dropdown';
 import LinkBar from '@/components/LinkBar';
@@ -61,9 +63,7 @@ export default function Test() {
         <tbody>
           <tr>
             <td className={commonCellClass}>inputfield</td>
-            <td className={commonRowClass}>
-              <Signup />
-            </td>
+            <td className={commonRowClass}>{/* <Signup /> */}</td>
           </tr>
           <tr className="border-b border-gray-300">
             <td className={commonCellClass}>Button</td>
@@ -98,9 +98,7 @@ export default function Test() {
               <LinkBar link="https://www.google.com" />
 
               <td className={commonCellClass}>inputfield</td>
-              <td className={commonRowClass}>
-                <Signup />
-              </td>
+              <td className={commonRowClass}>{/* <Signup /> */}</td>
             </td>
           </tr>
           <tr className="border-b border-gray-300">
