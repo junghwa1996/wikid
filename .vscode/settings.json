@@ -3,5 +3,12 @@
   "editor.formatOnSave": true, // 저장 시 자동으로 포맷팅
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
-  }
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["className\\s*=\\s*\"([^\"]*)\"", "className"]
+  ],
+  "css.validate": false
 }
