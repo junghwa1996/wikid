@@ -1,7 +1,7 @@
+import useOutsideClick from 'hooks/useOutsideClick';
 import { useRef, useState } from 'react';
 
 import Menu from './Menu';
-import useOutsideClick from 'hooks/useOutsideClick';
 
 interface DropdownProps {
   options: string[];
