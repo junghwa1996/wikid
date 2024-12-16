@@ -18,7 +18,6 @@ interface Props {
  * @param {object} props
  * @param {string} props.value - 초기 값
  * @param {function} props.onChange - 값 변경시 콜백 함수
- * @returns {JSX.Element}
  */
 export default function TextEditor({ value = '', onChange }: Props) {
   const modules = {
