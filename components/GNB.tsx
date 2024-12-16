@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
 
-import Menu from './Menu';
 import useOutsideClick from '../hooks/useOutsideClick';
+import Menu from './Menu';
 
 export default function GNB() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 임시 로그인 상태(추후 업데이트예정)
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [profileImage, setProfileImage] = useState(null); // 추후 업데이트 예정
+  const profileImage = null; // 추후 업데이트 예정
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
   const router = useRouter();
   const profileMenuRef = useRef<HTMLDivElement>(null);
