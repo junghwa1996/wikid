@@ -64,7 +64,7 @@ body {
     @apply left-0 not-italic text-gray-400;
   }
   .ql-container {
-    @apply overflow-auto font-sans text-16;
+    @apply overflow-y-auto font-sans text-16;
   }
   .ql-container.ql-snow {
     @apply border-0;
