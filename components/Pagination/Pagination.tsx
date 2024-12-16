@@ -66,25 +66,33 @@ export default function Pagination({
     return pages;
   };
 
+  const arrowStyles = 'h-[24px] w-[24px] mo:h-[18px] mo:w-[18px]';
+
   return (
     <div className="flex items-center justify-center gap-[15px] mo:gap-[10px]">
       {/* 이전 페이지 버튼 - 현재 페이지가 1일 경우 disabled*/}
       <PaginationButton onClick={handlePrev} disabled={currentPage === 1}>
-        <img src="/icon/icon-arrow.svg" alt="이전 페이지로 이동" />
+        <img
+          src="/icon/icon-arrow.svg"
+          alt="이전 페이지로 이동"
+          className={arrowStyles}
+        />
       </PaginationButton>
 
       {/* 페이지 버튼 목록 */}
-      {getPages().map((pageNumber) => (
-        <PaginationButton
-          key={pageNumber}
-          onClick={() => onPageChange(pageNumber)}
-          className={
-            pageNumber === currentPage ? 'text-green-200' : 'text-gray-400'
-          }
-        >
-          {pageNumber}
-        </PaginationButton>
-      ))}
+      <div className="flex items-center justify-center gap-[10px] mo:gap-[5px]">
+        {getPages().map((pageNumber) => (
+          <PaginationButton
+            key={pageNumber}
+            onClick={() => onPageChange(pageNumber)}
+            className={
+              pageNumber === currentPage ? 'text-green-200' : 'text-gray-400'
+            }
+          >
+            {pageNumber}
+          </PaginationButton>
+        ))}
+      </div>
 
       {/* 다음 페이지 버튼 - 현재 페이지가 totalPages와 같으면 disabled*/}
       <PaginationButton
@@ -94,7 +102,7 @@ export default function Pagination({
         <img
           src="/icon/icon-arrow.svg"
           alt="다음 페이지로 이동"
-          className="rotate-180"
+          className={`${arrowStyles} rotate-180`}
         />
       </PaginationButton>
     </div>
