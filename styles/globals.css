@@ -51,3 +51,36 @@ body {
   color: var(--gray-500);
   background: var(--background);
 }
+
+/* quill editor custom style */
+.quill-custom {
+  @apply grid h-full w-full;
+  grid-template-rows: 1fr max-content;
+
+  .ql-editor {
+    @apply p-0;
+  }
+  .ql-editor.ql-blank::before {
+    @apply left-0 not-italic text-gray-400;
+  }
+  .ql-container {
+    @apply overflow-y-auto font-sans text-16;
+  }
+  .ql-container.ql-snow {
+    @apply border-0;
+  }
+  .ql-toolbar.ql-snow {
+    @apply order-last rounded-full border-gray-200 text-gray-400;
+  }
+  .ql-snow .ql-stroke {
+    stroke: var(--gray-400);
+  }
+  .ql-snow .ql-fill,
+  .ql-snow .ql-stroke.ql-fill {
+    fill: var(--gray-400);
+  }
+  .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+  .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+    color: var(--gray-400);
+  }
+}
