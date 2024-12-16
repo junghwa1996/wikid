@@ -1,5 +1,6 @@
+import useCheckMobile from 'hooks/useCheckMobile';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Alarm from './Alarm';
 import GNB from './GNB';
@@ -8,7 +9,7 @@ import Login from './Login';
 export default function Headers() {
   // TODO 임시 로그인 상태(추후 업데이트예정)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useCheckMobile();
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
@@ -16,16 +17,6 @@ export default function Headers() {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 767);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
 
   return (
     <header className="z-100 fixed left-0 top-0 flex h-20 w-full items-center justify-between bg-background px-20 py-5 shadow-custom">
