@@ -1,11 +1,15 @@
+import { useState } from 'react';
+
 import Button from '@/components/Button';
 import Dropdown from '@/components/Dropdown';
 import LinkBar from '@/components/LinkBar';
+import SnackBar from '@/components/SnackBar';
 
 export default function Test() {
   const commonCellClass = 'border-r border-gray-300';
   const commonRowClass = 'flex flex-wrap items-end gap-2';
 
+<<<<<<< HEAD
   const options = ['옵션1', '옵션2', '옵션3'];
 
   const handleOption1 = () => {
@@ -29,6 +33,23 @@ export default function Test() {
       handleOption3();
     }
   };
+=======
+  // ----snackBar(start)----
+  const [snackState, setSnackState] = useState<
+    'fail' | 'success' | 'info' | 'null'
+  >('null');
+
+  const handleSuccess = () => {
+    setSnackState('success');
+    setTimeout(() => setSnackState('null'), 1500);
+  };
+
+  const handleFail = () => {
+    setSnackState('fail');
+    setTimeout(() => setSnackState('null'), 1500);
+  };
+  // ----snackBar(end)----
+>>>>>>> 80673d06f45286dccbce653622b22a476cbd1ed6
 
   return (
     <div className="px-4 py-10">
@@ -59,6 +80,18 @@ export default function Test() {
             </td>
           </tr>
           <tr className="border-b border-gray-300">
+<<<<<<< HEAD
+=======
+            <td className={commonCellClass}>SnackBar</td>
+            <td className={commonRowClass}>
+              <SnackBar state="info" />
+              <Button onClick={handleSuccess}>복사</Button>
+              <Button onClick={handleFail}>에러</Button>
+              {snackState !== 'null' && <SnackBar state={snackState} />}
+            </td>
+          </tr>
+          <tr className="border-b border-gray-300">
+>>>>>>> 80673d06f45286dccbce653622b22a476cbd1ed6
             <td className={commonCellClass}>LinkBar</td>
             <td className={commonRowClass}>
               <LinkBar link="https://www.google.com" />
