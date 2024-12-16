@@ -27,6 +27,10 @@ module.exports = [
       import: importPlugin, // Import 관련 규칙 활성화
       'simple-import-sort': simpleImportSortPlugin, // Import 정렬 관련 규칙 활성화
     },
+    extends: [
+      'plugin:prettier/recommended', // Prettier 권장 설정 포함
+      'prettier', // Prettier와 충돌하는 ESLint 규칙 비활성화
+    ],
     rules: {
       // Prettier 관련 규칙
       'prettier/prettier': ['error', { endOfLine: 'auto' }],

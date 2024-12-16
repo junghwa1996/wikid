@@ -20,7 +20,7 @@ export default function PaginationButton({
 }: PaginationButtonProps) {
   return (
     <button
-      className={`${className} dark:shadow-custom-dark flex h-[45px] w-[45px] items-center justify-center rounded-custom bg-background text-18 text-gray-400 shadow-custom mo:h-[40px] mo:w-[40px] mo:text-12`}
+      className={`${className} flex h-[45px] w-[45px] items-center justify-center rounded-custom bg-background text-18 text-gray-400 shadow-custom dark:shadow-custom-dark`}
       onClick={onClick}
       disabled={disabled}
     >
