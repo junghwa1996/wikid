@@ -5,7 +5,6 @@ import Dropdown from '@/components/Dropdown';
 import LinkBar from '@/components/LinkBar';
 import SnackBar from '@/components/SnackBar';
 
-
 export default function Test() {
   const commonCellClass = 'border-r border-gray-300';
   const commonRowClass = 'flex flex-wrap items-end gap-2';
