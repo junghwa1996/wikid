@@ -41,7 +41,7 @@ export default function SnackBar({ state }: SnackBarProps) {
 
   return (
     <div
-      className={`rounded-custom ${style} animate-fadeIn flex items-center gap-[15px] border px-5 py-[11px] mo:px-[15px] mo:py-[11px]`}
+      className={`rounded-custom ${style} animate-fadeIn flex items-center gap-[15px] border px-5 py-[11px] shadow-custom mo:px-[15px] mo:py-[11px]`}
     >
       {icon && <img src={icon} alt="snackbar icon" className="h-5 w-5" />}
       <p className={`${textStyle} break-words mo:break-words`}>{text}</p>
