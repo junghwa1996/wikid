@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import Button from '@/components/Button';
+import Dropdown from '@/components/Dropdown';
 import LinkBar from '@/components/LinkBar';
 import SnackBar from '@/components/SnackBar';
 
@@ -23,6 +24,32 @@ export default function Test() {
     setTimeout(() => setSnackState('null'), 1500);
   };
   // ----snackBar(end)----
+
+  //-----dropdown(start)-----
+  const options = ['옵션1', '옵션2', '옵션3'];
+
+  const handleOption1 = () => {
+    console.log('옵션1');
+  };
+
+  const handleOption2 = () => {
+    console.log('옵션2');
+  };
+
+  const handleOption3 = () => {
+    console.log('옵션3');
+  };
+
+  const handleOptionSelect = (option: string) => {
+    if (option === '옵션1') {
+      handleOption1();
+    } else if (option === '옵션2') {
+      handleOption2();
+    } else if (option === '옵션3') {
+      handleOption3();
+    }
+  };
+  //-----dropdown(end)-----
 
   return (
     <div className="px-4 py-10">
@@ -65,6 +92,16 @@ export default function Test() {
             <td className={commonCellClass}>LinkBar</td>
             <td className={commonRowClass}>
               <LinkBar link="https://www.google.com" />
+            </td>
+          </tr>
+          <tr className="border-b border-gray-300">
+            <td className={commonCellClass}>Dropdown</td>
+            <td className={commonRowClass}>
+              <Dropdown
+                options={options}
+                onSelect={handleOptionSelect}
+                dropdownSize="w-40"
+              />
             </td>
           </tr>
         </tbody>
