@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import Menu from './Menu';
 import useOutsideClick from 'hooks/useOutsideClick';
