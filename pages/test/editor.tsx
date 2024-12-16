@@ -9,7 +9,7 @@ export default function Editor() {
   const [value, setValue] = useState('');
 
   const handleChange = (v: string) => {
-    console.log('value', v);
+    // console.log('value', v);
     setValue(v);
   };
 
