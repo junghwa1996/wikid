@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useValidation } from 'hooks/useValidation';
+import CustomDayPicker from './DayPicker';
 
 interface InputFieldProps {
   value: string;
@@ -8,6 +9,7 @@ interface InputFieldProps {
   placeholder?: string;
   label?: string;
   compareValue?: string;
+  layout?: 'vertical' | 'horizontal';
 }
 
 function InputField({
@@ -17,57 +19,98 @@ function InputField({
   placeholder,
   label,
   compareValue,
+  layout = 'vertical',
 }: InputFieldProps) {
   const { errorMessage, validate } = useValidation({
     type,
     compareValue,
   });
 
+  const [showDayPicker, setShowDayPicker] = useState(false);
+
+  const handleFocus = () => {
+    if (layout === 'horizontal' && label === '생일') {
+      setShowDayPicker(true);
+    }
+  };
+
+  const closeDayPicker = () => {
+    setShowDayPicker(false);
+  };
+
   const handleBlur = () => {
-    validate(value);
+    if (layout === 'vertical')
+      // 가로모드 에러 확인 비활성화
+      validate(value);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e);
-    if (errorMessage) {
+    if (layout === 'vertical' && errorMessage) {
       validate(e.target.value);
     }
   };
-
+  const getInputType = () => {
+    if (type === 'name') {
+      return 'text';
+    } else if (type === 'passwordConfirm') {
+      return 'password';
+    }
+    return type;
+  };
   //스타일에 따른 클래스
   const variantClass = {
-    container: 'mb-[24px] flex flex-col gap-[10px]',
-    label: 'text-14 text-gray-500',
+    containerVertical: 'mb-[24px] flex flex-col gap-[10px]',
+    containerHorizontal: 'mb-[24px] w-[239px] flex items-center gap-[10px]',
+    labelVertical: 'text-14 text-gray-500',
+    labelHorizontal: 'text-14 text-gray-400 w-[60px] flex-shrink-0',
     base: 'px-[20px] py-[10px] h-[45px] w-[400px] rounded-md text-[14px] text-gray-500 placeholder:text-14 focus:outline-none mo:w-[355px]',
     error: 'border border-red-100 bg-red-50',
     normal:
       'bg-gray-100 focus:border-green-200 focus:ring-1 focus:ring-green-200',
     errorText: 'text-12 text-red-100',
   };
+  const labelClass =
+    layout === 'horizontal'
+      ? variantClass.labelHorizontal
+      : variantClass.labelVertical;
 
   const inputClass = `${variantClass.base} ${
-    errorMessage ? variantClass.error : variantClass.normal
+    layout === 'vertical' && errorMessage
+      ? variantClass.error
+      : variantClass.normal
   }`;
 
   return (
-    <div className={variantClass.container}>
-      {label && <label className={variantClass.label}>{label}</label>}
+    <div
+      className={
+        layout === 'horizontal'
+          ? `${variantClass.containerHorizontal} relative`
+          : `${variantClass.containerVertical} relative`
+      }
+    >
+      {label && <label className={labelClass}>{label}</label>}
       <input
-        type={
-          type === 'name'
-            ? 'text'
-            : type === 'passwordConfirm'
-              ? 'password'
-              : type
-        }
+        type={getInputType()}
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
         onBlur={handleBlur}
+        onFocus={handleFocus}
         className={inputClass}
       />
-      {errorMessage && (
+      {layout === 'vertical' && errorMessage && (
         <span className={variantClass.errorText}>{errorMessage}</span>
+      )}
+      {showDayPicker && (
+        <div className="absolute left-0 top-full z-50 mt-2 rounded bg-white p-4 shadow-md">
+          <p>
+            <CustomDayPicker />
+          </p>
+          <button onClick={closeDayPicker} className="mt-2 text-gray-500">
+            닫기
+          </button>
+        </div>
       )}
     </div>
   );
