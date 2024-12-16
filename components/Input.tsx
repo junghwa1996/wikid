@@ -104,9 +104,9 @@ function InputField({
       )}
       {showDayPicker && (
         <div className="absolute left-0 top-full z-50 mt-2 rounded bg-white p-4 shadow-md">
-          <p>
+          <div>
             <CustomDayPicker />
-          </p>
+          </div>
           <button onClick={closeDayPicker} className="mt-2 text-gray-500">
             닫기
           </button>
