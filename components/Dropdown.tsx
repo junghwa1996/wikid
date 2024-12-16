@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import Menu from './Menu';
+import useOutsideClick from 'hooks/useOutsideClick';
 
 interface DropdownProps {
   options: string[];
@@ -32,21 +33,7 @@ export default function Dropdown({
   };
 
   //외부 클릭시 드롭다운 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  useOutsideClick(dropdownRef, () => setIsOpen(false));
 
   return (
     <div className="relative" ref={dropdownRef}>

@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
+import axios from 'axios';
 import Menu from './Menu';
+import useOutsideClick from '../hooks/useOutsideClick';
 
 export default function GNB() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 임시 로그인 상태(추후 업데이트예정)
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
@@ -27,7 +29,7 @@ export default function GNB() {
     } else if (option === '마이페이지') {
       router.push('/mypage');
     } else if (option === '로그인') {
-      handleLogin();
+      handleLogin(); // 추후 업데이트 예정
     } else if (option === '로그아웃') {
       handleLogout();
     }
@@ -43,39 +45,24 @@ export default function GNB() {
     };
   }, []);
 
-  useEffect(() => {
+  const updateProfileMenu = () => {
     if (!isLoggedIn && isMobile) {
-      setProfileMenu(['로그인', '위키목록', '자유게시판']);
-    } else if (isLoggedIn && !isMobile) {
-      setProfileMenu(['마이페이지', '로그아웃']);
-    } else if (isLoggedIn && isMobile) {
-      setProfileMenu([
-        '위키목록',
-        '자유게시판',
-        '알림',
-        '마이페이지',
-        '로그아웃',
-      ]);
-    } else {
-      setProfileMenu([]);
+      return ['로그인', '위키목록', '자유게시판'];
     }
+    if (isLoggedIn && !isMobile) {
+      return ['마이페이지', '로그아웃'];
+    }
+    if (isLoggedIn && isMobile) {
+      return ['위키목록', '자유게시판', '알림', '마이페이지', '로그아웃'];
+    }
+    return [];
+  };
+
+  useEffect(() => {
+    setProfileMenu(updateProfileMenu());
   }, [isLoggedIn, isMobile]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        profileMenuRef.current &&
-        !profileMenuRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  useOutsideClick(profileMenuRef, () => setIsOpen(false));
 
   return (
     <div
@@ -142,7 +129,7 @@ export default function GNB() {
           ) : (
             <button onClick={handleLogin} className="mo:hidden">
               로그인
-            </button>
+            </button> // 추후 업데이트 예정
           )}
         </>
       )}
