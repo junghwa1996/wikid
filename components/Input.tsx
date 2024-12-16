@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import { useValidation } from 'hooks/useValidation';
+import React, { useState } from 'react';
+
 import CustomDayPicker from './DayPicker';
 
 interface InputFieldProps {

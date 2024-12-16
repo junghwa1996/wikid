@@ -1,6 +1,7 @@
-import { DayPicker } from 'react-day-picker';
-import 'react-day-picker/dist/style.css';
 import { ko } from 'date-fns/locale';
+import { DayPicker } from 'react-day-picker';
+
+import 'react-day-picker/dist/style.css';
 
 interface CustomDayPickerProps {
   selected?: Date;
