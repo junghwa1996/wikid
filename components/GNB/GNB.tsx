@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
+import Alarm from './Alarm';
 import Header from './Header';
 import Login from './Login';
-import Alarm from './Alarm';
 import ProfileIcon from './ProfileIcon';
 
 export default function GNB() {

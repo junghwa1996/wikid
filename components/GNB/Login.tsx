@@ -1,9 +1,8 @@
+import useOutsideClick from 'hooks/useOutsideClick';
 import { useRouter } from 'next/router';
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import Menu from '../Menu';
-
-import useOutsideClick from 'hooks/useOutsideClick';
 
 interface LoginProps {
   login: () => void;
