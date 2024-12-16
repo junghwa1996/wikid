@@ -59,11 +59,13 @@ function SearchInput({
       onSubmit={handleSubmit}
       className="flex items-center rounded-lg bg-gray-100 px-[20px]"
     >
+     <label htmlFor="searchInput">
       <img
         src="/icon/icon-search.svg"
         alt="검색 아이콘"
         className="h-[22px] w-[22px]"
       />
+    </label>
       <input
         className={inputStyles}
         type="text"
