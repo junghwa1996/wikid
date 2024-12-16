@@ -1,4 +1,4 @@
-import GNB from '@/components/GNB';
+import GNB from '@/components/GNB/GNB';
 
 export default function GNBtest() {
   return (
