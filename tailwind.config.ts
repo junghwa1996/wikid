@@ -51,6 +51,7 @@ export default {
       },
       boxShadow: {
         custom: '0px 4px 20px 0px rgba(0, 0, 0, 0.08)',
+        'custom-dark': '0px 4px 20px 0px rgba(255, 255, 255, 0.08)',
       },
       fontSize: {
         // 12px
