@@ -9,7 +9,23 @@ export default function Test() {
   const commonCellClass = 'border-r border-gray-300';
   const commonRowClass = 'flex flex-wrap items-end gap-2';
 
-<<<<<<< HEAD
+  // ----snackBar(start)----
+  const [snackState, setSnackState] = useState<
+    'fail' | 'success' | 'info' | 'null'
+  >('null');
+
+  const handleSuccess = () => {
+    setSnackState('success');
+    setTimeout(() => setSnackState('null'), 1500);
+  };
+
+  const handleFail = () => {
+    setSnackState('fail');
+    setTimeout(() => setSnackState('null'), 1500);
+  };
+  // ----snackBar(end)----
+
+  //-----dropdown(start)-----
   const options = ['옵션1', '옵션2', '옵션3'];
 
   const handleOption1 = () => {
@@ -33,23 +49,7 @@ export default function Test() {
       handleOption3();
     }
   };
-=======
-  // ----snackBar(start)----
-  const [snackState, setSnackState] = useState<
-    'fail' | 'success' | 'info' | 'null'
-  >('null');
-
-  const handleSuccess = () => {
-    setSnackState('success');
-    setTimeout(() => setSnackState('null'), 1500);
-  };
-
-  const handleFail = () => {
-    setSnackState('fail');
-    setTimeout(() => setSnackState('null'), 1500);
-  };
-  // ----snackBar(end)----
->>>>>>> 80673d06f45286dccbce653622b22a476cbd1ed6
+  //-----dropdown(end)-----
 
   return (
     <div className="px-4 py-10">
@@ -80,8 +80,6 @@ export default function Test() {
             </td>
           </tr>
           <tr className="border-b border-gray-300">
-<<<<<<< HEAD
-=======
             <td className={commonCellClass}>SnackBar</td>
             <td className={commonRowClass}>
               <SnackBar state="info" />
@@ -91,7 +89,6 @@ export default function Test() {
             </td>
           </tr>
           <tr className="border-b border-gray-300">
->>>>>>> 80673d06f45286dccbce653622b22a476cbd1ed6
             <td className={commonCellClass}>LinkBar</td>
             <td className={commonRowClass}>
               <LinkBar link="https://www.google.com" />

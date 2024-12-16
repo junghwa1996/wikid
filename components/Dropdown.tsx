@@ -52,7 +52,7 @@ export default function Dropdown({
     <div ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`${dropdownSize} flex items-center justify-between rounded-xl border border-gray-300 bg-white px-5 py-3.5 text-14 leading-none text-gray-400 hover:border-green-200 focus:ring-1 focus:ring-green-200 dark:text-gray-100`}
+        className={`${dropdownSize} flex items-center justify-between rounded-xl border border-gray-300 bg-background px-5 py-3.5 text-14 leading-none text-gray-400 hover:border-green-200 focus:ring-1 focus:ring-green-200`}
       >
         {selectedOption}
         <img
