@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
 import Menu from '../Menu';
+import Link from 'next/link';
 
 interface LoginProps {
   login: () => void;
@@ -92,11 +93,7 @@ export default function Login({
   ) : isMobile ? (
     <div ref={loginMenuRef} className="flex">
       <button className="relative" onClick={() => setIsOpen(!isOpen)}>
-        <img
-          src="/icon/icon-menu.svg"
-          className="hidden mo:block"
-          alt="메뉴 아이콘"
-        />
+        <img src="/icon/icon-menu.svg" alt="메뉴 아이콘" />
         {isOpen && (
           <Menu
             options={profileMenu}
@@ -107,8 +104,6 @@ export default function Login({
       </button>
     </div>
   ) : (
-    <div className="mo:hidden" onClick={login}>
-      로그인
-    </div>
+    <button onClick={login}>로그인</button>
   );
 }
