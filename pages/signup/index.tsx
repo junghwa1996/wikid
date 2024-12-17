@@ -112,11 +112,11 @@ function SignUp(): React.ReactElement {
             disabled={!isFormValid}
             isLoading={isSubmitting}
             variant="primary"
-            className="mt-[30px] h-[45px] w-[400px] mo:w-[355px]"
+            className="mt-[6px] h-[45px] w-[400px] mo:w-[355px]"
           >
             가입하기
           </Button>
-          <div className="mt-[40px] text-center">
+          <div className="mt-[16px] text-center">
             <span className="text-14 text-gray-400">이미 회원이신가요?</span>{' '}
             <Link
               href="/login"
