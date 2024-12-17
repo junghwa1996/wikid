@@ -11,6 +11,7 @@ interface InputFieldProps {
   label?: string;
   compareValue?: string;
   layout?: 'vertical' | 'horizontal';
+  onValidation?: (isValid: boolean) => void;
 }
 
 function InputField({
@@ -21,6 +22,7 @@ function InputField({
   label,
   compareValue,
   layout = 'vertical',
+  onValidation,
 }: InputFieldProps) {
   const { errorMessage, validate } = useValidation({
     type,
@@ -40,17 +42,20 @@ function InputField({
   };
 
   const handleBlur = () => {
-    if (layout === 'vertical')
-      // 가로모드 에러 확인 비활성화
-      validate(value);
+    if (layout === 'vertical') {
+      const error = validate(value);
+      onValidation?.(!error && value.length > 0);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e);
     if (layout === 'vertical' && errorMessage) {
-      validate(e.target.value);
+      const error = validate(e.target.value);
+      onValidation?.(!error && e.target.value.length > 0);
     }
   };
+
   const getInputType = () => {
     if (type === 'name') {
       return 'text';
@@ -59,6 +64,7 @@ function InputField({
     }
     return type;
   };
+
   //스타일에 따른 클래스
   const variantClass = {
     containerVertical: 'mb-[24px] flex flex-col gap-[10px]',
@@ -71,6 +77,7 @@ function InputField({
       'bg-gray-100 focus:border-green-200 focus:ring-1 focus:ring-green-200',
     errorText: 'text-12 text-red-100',
   };
+
   const labelClass =
     layout === 'horizontal'
       ? variantClass.labelHorizontal
