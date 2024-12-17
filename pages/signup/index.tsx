@@ -2,14 +2,19 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import InputField from '@/components/Input';
 import Button from '@/components/Button';
-import { getSignupData } from 'api/signup';
 
-const SignUp: React.FC = () => {
+function SignUp(): React.ReactElement {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [name, setName] = useState('');
+  const [validFields, setValidFields] = useState({
+    name: false,
+    email: false,
+    password: false,
+    passwordConfirm: false,
+  });
   const router = useRouter();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,35 +35,34 @@ const SignUp: React.FC = () => {
     setName(e.target.value);
   };
 
+  const handleValidation = (field: string, isValid: boolean) => {
+    setValidFields((prev) => ({
+      ...prev,
+      [field]: isValid,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
+    if (isSubmitting || !isFormValid) return;
 
+    setIsSubmitting(true);
     try {
-      setIsSubmitting(true);
-      const response = await getSignupData({
+      console.log('Form submitted:', {
         email,
         password,
+        passwordConfirm,
         name,
       });
-
-      if (response.success) {
-        alert('회원가입이 완료되었습니다.');
-        router.push('/login');
-      } else {
-        alert(response.message || '회원가입에 실패했습니다.');
-      }
+      router.push('/login');
     } catch (error) {
-      alert('회원가입 중 오류가 발생했습니다.');
-      console.error('Signup error:', error);
+      console.error('회원가입 중 오류가 발생했습니다:', error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const isFormValid = Boolean(
-    email && password && passwordConfirm && name && password === passwordConfirm
-  );
+  const isFormValid = Object.values(validFields).every(Boolean);
 
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -72,6 +76,7 @@ const SignUp: React.FC = () => {
           value={name}
           onChange={handleNameChange}
           placeholder="이름을 입력해 주세요"
+          onValidation={(isValid) => handleValidation('name', isValid)}
         />
 
         <InputField
@@ -80,6 +85,7 @@ const SignUp: React.FC = () => {
           value={email}
           onChange={handleEmailChange}
           placeholder="이메일을 입력해 주세요"
+          onValidation={(isValid) => handleValidation('email', isValid)}
         />
 
         <InputField
@@ -88,6 +94,7 @@ const SignUp: React.FC = () => {
           value={password}
           onChange={handlePasswordChange}
           placeholder="비밀번호를 입력해 주세요"
+          onValidation={(isValid) => handleValidation('password', isValid)}
         />
 
         <InputField
@@ -97,11 +104,14 @@ const SignUp: React.FC = () => {
           onChange={handlePasswordConfirmChange}
           placeholder="비밀번호를 다시 입력해 주세요"
           compareValue={password}
+          onValidation={(isValid) =>
+            handleValidation('passwordConfirm', isValid)
+          }
         />
         <Button
           type="submit"
-          disabled={!isFormValid || isSubmitting}
-          isActive={isFormValid && !isSubmitting}
+          disabled={!isFormValid}
+          isLoading={isSubmitting}
           variant="primary"
           className="mt-[30px] h-[45px] w-[400px] mo:w-[355px]"
         >
@@ -116,6 +126,6 @@ const SignUp: React.FC = () => {
       </form>
     </div>
   );
-};
+}
 
 export default SignUp;
