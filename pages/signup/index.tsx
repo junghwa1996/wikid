@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
-import Link from 'next/link';
 
 function SignUp(): React.ReactElement {
   const [email, setEmail] = useState('');
