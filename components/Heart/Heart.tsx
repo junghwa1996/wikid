@@ -29,15 +29,18 @@ export default function Heart({ initialCount, onClick }: HeartProps) {
     icon: isClicked ? 'var(--red-100)' : 'var(--gray-400)',
     text: isClicked && 'text-red-100',
   };
+
+  const Wrapper = onClick ? 'button' : 'div';
+
   return (
-    <div
-      className="flex cursor-pointer items-center gap-1"
-      onClick={handleClick}
+    <Wrapper
+      className={`flex items-center gap-1 ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick ? handleClick : undefined}
     >
       <HeartIcon fill={clickStyles.icon} />
       <span className={`text-14 text-gray-400 mo:text-12 ${clickStyles.text}`}>
         {count}
       </span>
-    </div>
+    </Wrapper>
   );
 }
