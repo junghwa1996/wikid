@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
-import InputField from '@/components/Input';
+import { useState } from 'react';
+
 import Button from '@/components/Button';
+import InputField from '@/components/Input';
 
 function SignUp(): React.ReactElement {
   const [email, setEmail] = useState('');
