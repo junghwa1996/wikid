@@ -22,7 +22,7 @@ export default function Headers() {
     <header className="z-100 fixed left-0 top-0 flex h-20 w-full items-center justify-between bg-background px-20 py-5 shadow-custom">
       <div className="flex gap-10">
         <Link href="/">
-          <img src="/logo.svg" alt="위키드 로고" />
+          <img src="/images/logo.svg" alt="위키드 로고" />
         </Link>
         <GNB />
       </div>
