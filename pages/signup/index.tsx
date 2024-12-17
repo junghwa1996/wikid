@@ -119,7 +119,7 @@ function SignUp(): React.ReactElement {
         </Button>
         <div className="mt-[40px] text-center">
           <span className="text-14 text-gray-400">이미 회원이신가요?</span>{' '}
-          <a href="/login" className="text-14 text-green-300 hover:underline">
+          <a href="/login" className="text-14 text-green-200 hover:underline">
             로그인하기
           </a>
         </div>
