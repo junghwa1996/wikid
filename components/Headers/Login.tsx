@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
 import Menu from '../Menu';
-import Link from 'next/link';
 
 interface LoginProps {
   login: () => void;
