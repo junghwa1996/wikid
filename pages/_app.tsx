@@ -1,13 +1,13 @@
 import type { AppProps } from 'next/app';
 
-import DarkModeToggle from '@/components/DarkmodeToggle';
-
+// TODO - 나중에 주석 풀어야 함
+// import DarkModeToggle from '@/components/DarkmodeToggle';
 import '@/styles/globals.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <DarkModeToggle />
+      {/* <DarkModeToggle /> */}
       <Component {...pageProps} />
     </>
   );
