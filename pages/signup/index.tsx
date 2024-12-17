@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import InputField from '@/components/Input';
 import Button from '@/components/Button';
+import { getSignupData } from 'api/signup';
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -29,11 +30,35 @@ const SignUp: React.FC = () => {
     setName(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return; // 이미 요청 중인 경우 중복 요청 방지
-    alert('가입이 완료되었습니다');
+    if (isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+      const response = await getSignupData({
+        email,
+        password,
+        name,
+      });
+
+      if (response.success) {
+        alert('회원가입이 완료되었습니다.');
+        router.push('/login');
+      } else {
+        alert(response.message || '회원가입에 실패했습니다.');
+      }
+    } catch (error) {
+      alert('회원가입 중 오류가 발생했습니다.');
+      console.error('Signup error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const isFormValid = Boolean(
+    email && password && passwordConfirm && name && password === passwordConfirm
+  );
 
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -75,10 +100,10 @@ const SignUp: React.FC = () => {
         />
         <Button
           type="submit"
-          disabled={true}
-          isActive={!true}
+          disabled={!isFormValid || isSubmitting}
+          isActive={isFormValid && !isSubmitting}
           variant="primary"
-          className="mt-[30px] w-[400px] mo:w-[355px]"
+          className="mt-[30px] h-[45px] w-[400px] mo:w-[355px]"
         >
           가입하기
         </Button>
