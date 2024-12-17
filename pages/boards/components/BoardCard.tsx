@@ -13,13 +13,22 @@ interface BoardCardProps {
   likeCount: number;
 }
 
+/**
+ * 게시글 카드 컴포넌트
+ * @param {number} id - 게시글 id
+ * @param {string} image - 게시글 이미지
+ * @param {string} title - 게시글 제목
+ * @param {string} name - 유저 이름
+ * @param {string} updatedAt - 게시글 수정일
+ * @param {number} likeCount - 게시글 좋아요 수
+ */
 export default function BoardCard({
   id,
   image,
-  title = '게시글 제목',
-  name = '유저 이름',
-  updatedAt = '2021-01-01T00:00:00.000Z',
-  likeCount = 0,
+  title,
+  name,
+  updatedAt,
+  likeCount,
 }: BoardCardProps) {
   return (
     <Link
