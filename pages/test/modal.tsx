@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import DisconnectionModal from '@/components/DisconnectionModal';
-import ImageUploadModal from '@/components/ImageUploadModal';
-import UnsavedChangesModal from '@/components/UnsavedChangesModal';
-import WikiQuizModal from '@/components/WikiQuizModal';
+import DisconnectionModal from '@/components/Modal/DisconnectionModal';
+import ImageUploadModal from '@/components/Modal/ImageUploadModal';
+import UnsavedChangesModal from '@/components/Modal/UnsavedChangesModal';
+import WikiQuizModal from '@/components/Modal/WikiQuizModal';
 
 const QUESTION = '특별히 싫어하는 음식은?';
 const ANSWER = '카레';
