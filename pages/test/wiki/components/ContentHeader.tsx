@@ -24,7 +24,7 @@ export default function ContentHeader({
 }: ContentHeaderProps) {
   return (
     <div>
-      <div className="mb-[10px] flex items-center justify-between text-40b">
+      <div className="text-48b mb-[10px] flex items-center justify-between">
         {isEditing ? (
           <InputField
             type="text"
