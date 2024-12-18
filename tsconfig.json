@@ -19,7 +19,7 @@
       "@/components/*": ["components/*"],
       "@/styles/*": ["styles/*"],
       "@/pages/*": ["pages/*"],
-      "@/services/*": ["services/*"]
+      "@/services/*": ["services/*"],
       "@/utils/*": ["utils/*"],
       "@/hooks/*": ["hooks/*"]
     }
