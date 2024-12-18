@@ -21,10 +21,10 @@ export default function Blank({ onQuizSuccess, question, answer }: BlankProps) {
   const onQuizClose = () => setIsQuizOpen(false);
 
   return (
-    <div className="flex h-48 w-full flex-col items-center justify-center gap-3 rounded-xl bg-gray-100 text-gray-400">
-      <div className="flex flex-col items-center">
-        <div>아직 작성된 내용이 없네요. </div>
-        <div>위키에 참여해 보세요!</div>
+    <div className="mo:gap-16px mt-40 flex h-[192px] w-full flex-col items-center justify-center gap-[20px] rounded-custom bg-gray-100 text-gray-400 mo:h-[184px]">
+      <div className="text-center text-16 mo:text-14">
+        <p>아직 작성된 내용이 없네요.</p>
+        <p>위키에 참여해 보세요!</p>
       </div>
       <Button onClick={() => setIsQuizOpen(true)}>시작하기</Button>
 
