@@ -8,6 +8,15 @@ export default {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    container: {
+      center: true,
+      padding: '1.25rem',
+      screens: {
+        mo: '100%',
+        ta: '100%',
+        pc: '1100px',
+      },
+    },
     extend: {
       colors: {
         background: 'var(--background)',
@@ -28,7 +37,6 @@ export default {
         red: {
           50: 'var(--red-50)',
           100: 'var(--red-100)',
-          200: 'var(--red-200)',
         },
         purple: {
           100: 'var(--purple-100)',
