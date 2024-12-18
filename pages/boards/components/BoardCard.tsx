@@ -38,12 +38,14 @@ export default function BoardCard({
       <div className="relative h-[130px] w-auto overflow-hidden bg-gray-100">
         <Image
           src={image === '' ? '/icon/icon-no-image.svg' : image}
-          alt="베스트 게시글 이미지"
+          alt={`${title} 썸네일`}
           fill
         />
       </div>
       <div className="bg-background px-[20px] pb-[14px] pt-[20px] mo:pt-[11px]">
-        <h3 className="mb-[6px] text-18sb mo:mb-0 mo:text-16sb">{title}</h3>
+        <h3 className="mb-[6px] truncate text-18sb mo:mb-0 mo:text-16sb">
+          {title}
+        </h3>
         <div className="flex items-center gap-2 text-14 text-gray-300 mo:text-12">
           <p>{name}</p>
           <span className="flex-1">{dateConversion(updatedAt)}</span>
