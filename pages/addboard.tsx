@@ -1,4 +1,5 @@
 import instance from 'lib/axios-client';
+import Head from 'next/head';
 import { FormEvent, useState } from 'react';
 
 import Button from '@/components/Button';
@@ -60,9 +61,13 @@ export default function Addboard() {
 
   return (
     <div className="min-h-svh">
+      <Head>
+        <title>게시물 등록하기 | wikied</title>
+      </Head>
+
       <main>
-        <div className="container pt-20">
-          <div className="mb-5 mt-[54px] rounded-custom px-[30px] py-[30px] shadow-custom dark:shadow-custom-dark">
+        <div className="container pt-20 mo:px-0 mo:pt-[60px]">
+          <div className="mb-5 mt-[54px] rounded-custom px-[30px] py-[30px] shadow-custom dark:shadow-custom-dark mo:mt-0 mo:px-5 mo:py-4 mo:shadow-none">
             <header className="my-4 flex items-center justify-between">
               <h1 className="mo:text-16sb ta:text-20sb pc:text-24sb">
                 게시물 등록하기
@@ -86,31 +91,31 @@ export default function Addboard() {
               className="mt-[33px] mo:mt-5 ta:mt-6"
               onSubmit={handleSubmit}
             >
-              <fieldset className="my-5 flex items-center justify-between border-y border-gray-200">
+              <fieldset className="my-5 flex items-center justify-between border-y border-gray-200 mo:mb-4">
                 <label htmlFor="title" className="sr-only">
                   제목
                 </label>
                 <input
                   id="title"
-                  className="w-0 flex-1 bg-transparent py-3 text-20md focus-visible:outline-green-200"
+                  className="w-0 flex-1 bg-transparent py-3 text-20md focus-visible:outline-green-200 mo:text-16md"
                   type="text"
                   maxLength={MAX_TITLE}
                   value={title}
                   onChange={handleInputChange}
                   placeholder="제목을 입력해주세요"
                 />
-                <div className="ml-4 w-10 text-14md">
+                <div className="ml-4 w-10 text-14md mo:text-13md">
                   {title.length}/
                   <span className="text-green-200">{MAX_TITLE}</span>
                 </div>
               </fieldset>
 
-              <p className="mb-2 mt-5 text-16md mo:text-14md">
+              <p className="mb-[10px] mt-5 text-16md mo:my-4 mo:text-14md">
                 공백포함 : 총 {textContent.length}자 | 공백제외 총{' '}
                 {textContent.replaceAll(' ', '').length}자
               </p>
 
-              <div className="h-[520px] mo:h-[320px] ta:h-[480px]">
+              <div className="h-[520px] mo:h-[50vh] ta:h-[480px]">
                 <TextEditor value={content} onChange={handleContentChange} />
               </div>
             </form>
