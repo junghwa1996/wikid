@@ -19,7 +19,7 @@ export default function Headers() {
   };
 
   return (
-    <header className="z-100 fixed left-0 top-0 flex h-20 w-full items-center justify-between bg-background px-20 py-5 shadow-custom">
+    <header className="fixed left-0 top-0 z-50 flex w-full items-center justify-between bg-background py-5 shadow-custom mo:h-[60px] mo:px-[2rem] ta:h-[60px] ta:px-[20px] pc:h-[80px] pc:px-[80px]">
       <div className="flex gap-10">
         <Link href="/">
           <img src="/images/logo.svg" alt="위키드 로고" />
