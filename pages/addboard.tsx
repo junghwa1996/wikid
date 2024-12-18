@@ -1,3 +1,4 @@
+import instance from 'lib/axios-client';
 import { FormEvent, useState } from 'react';
 
 import Button from '@/components/Button';
@@ -29,10 +30,19 @@ export default function Addboard() {
     // console.log('value:', value);
     setContent(value);
   };
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('form submit!');
-    // TODO - API 연결 및 처리
+    console.log('submit work!');
+    // API 연결 및 처리
+    // TODO - 로그인 및 인증되면 그때 다시 테스트
+    instance
+      .post('/articles', {
+        image: '',
+        content,
+        title,
+      })
+      .then((res) => console.log('subtmi:res:', res))
+      .catch((err) => console.log('submit:err:', err));
   };
 
   return (
@@ -46,7 +56,11 @@ export default function Addboard() {
               <h1 className="mo:text-16sb ta:text-20sb pc:text-24sb">
                 게시물 등록하기
               </h1>
-              <Button className="w-[140px] mo:w-auto" disabled={submitDisabled}>
+              <Button
+                form="write-form"
+                className="w-[140px] mo:w-auto"
+                disabled={submitDisabled}
+              >
                 등록하기
               </Button>
             </header>
@@ -55,7 +69,11 @@ export default function Addboard() {
               등록일<span className="ml-3 mo:ml-2">2000. 00. 00.</span>
             </div>
 
-            <form className="mt-[33px] mo:mt-5 ta:mt-6" onSubmit={handleSubmit}>
+            <form
+              id="write-form"
+              className="mt-[33px] mo:mt-5 ta:mt-6"
+              onSubmit={handleSubmit}
+            >
               <fieldset className="my-5 flex items-center justify-between border-y border-gray-200">
                 <label htmlFor="title" className="sr-only">
                   제목
