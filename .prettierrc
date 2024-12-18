@@ -10,5 +10,5 @@
   "bracketSameLine": false,
   "plugins": ["prettier-plugin-tailwindcss"],
   "endOfLine": "auto",
-  "tailwindConfig": "./tailwind.config.js"
+  "tailwindConfig": "./tailwind.config.ts"
 }
