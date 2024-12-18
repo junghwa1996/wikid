@@ -84,4 +84,12 @@ module.exports = [
   {
     ignores: ['.next'], // .next 폴더를 전역적으로 무시
   },
+  // ESLint 권장 규칙
+  'eslint:recommended',
+  // React 권장 규칙
+  'plugin:react/recommended',
+  // TypeScript 권장 규칙
+  'plugin:@typescript-eslint/recommended',
+  // Prettier와 ESLint 통합 규칙
+  'plugin:prettier/recommended',
 ];
