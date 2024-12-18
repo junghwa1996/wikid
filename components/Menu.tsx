@@ -14,7 +14,7 @@ interface MenuProps {
 export default function Menu({ options, onSelect, menuSize }: MenuProps) {
   return (
     <ul
-      className={`${menuSize} absolute z-10 mt-2 rounded-xl border border-gray-300 bg-background p-1 text-14 shadow-custom`}
+      className={`${menuSize} absolute right-1/2 z-10 mt-2 translate-x-1/2 rounded-xl border border-gray-300 bg-background p-1 text-14 shadow-custom`}
     >
       {options.map((option, index) => (
         <li
