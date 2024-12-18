@@ -9,6 +9,13 @@ interface BlankProps {
   answer: string;
 }
 
+/**
+ * 내 위키가 비어있을 때 띄우는 컴포넌트
+ * @param onQuizSuccess 퀴즈 성공 후 호출되는 함수
+ * @param question 퀴즈에 사용되는 질문
+ * @param answer 퀴즈에 대한 답변
+ */
+
 export default function Blank({ onQuizSuccess, question, answer }: BlankProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const onQuizClose = () => setIsQuizOpen(false);
