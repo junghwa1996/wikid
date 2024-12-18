@@ -47,7 +47,7 @@ export default function Pagination({
     const half = Math.floor(maxPages / 2); // 현재 페이지 중심 버튼 배치 기준점(중앙 배치를 위해 /2)
 
     let start = Math.max(currentPage - half, 1); // 시작 페이지 계산
-    let end = Math.min(start + maxPages - 1, totalPages); // 끝 페이지 계산
+    const end = Math.min(start + maxPages - 1, totalPages); // 끝 페이지 계산
 
     /**
      * 시작 페이지 조정
