@@ -12,11 +12,11 @@ export default function BoardList({ data }: { data: any[] }) {
   return (
     <div className="w-full text-center mo:text-left">
       <div className={`${tableStyles} border-t text-gray-400 mo:hidden`}>
-        <p>번호</p>
-        <p>제목</p>
-        <p>작성자</p>
-        <p>좋아요</p>
-        <p>날짜</p>
+        <span>번호</span>
+        <span>제목</span>
+        <span>작성자</span>
+        <span>좋아요</span>
+        <span>날짜</span>
       </div>
       {data.map((item) => (
         <BoardItem
