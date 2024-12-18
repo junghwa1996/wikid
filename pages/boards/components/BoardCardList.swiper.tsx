@@ -4,7 +4,24 @@ import BoardCard from './BoardCard';
 
 import 'swiper/css';
 
-export default function BoardCardListSwiper({ data }: { data: any[] }) {
+interface BoardCardData {
+  id: number;
+  title: string;
+  image: string;
+  writer: {
+    name: string;
+  };
+  likeCount: number;
+  updatedAt: string;
+}
+
+interface BoardCardListSwiperProps {
+  data: BoardCardData[];
+}
+
+export default function BoardCardListSwiper({
+  data,
+}: BoardCardListSwiperProps) {
   return (
     <Swiper slidesPerView="auto" spaceBetween={16} className="-my-5 !p-5">
       {data.map((item) => (

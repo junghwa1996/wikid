@@ -101,7 +101,7 @@ export default function Boards() {
   const pxTablet = 'ta:px-[60px]';
 
   return (
-    <main className="tamo:pt-[60px] pt-[80px]">
+    <main className="pt-[80px] tamo:pt-[60px]">
       <div className="flex flex-col gap-[60px] py-[60px] mo:gap-10 mo:py-10">
         <header
           className={`container flex items-center justify-between ${pxTablet}`}
