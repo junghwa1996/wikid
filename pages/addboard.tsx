@@ -2,7 +2,6 @@ import instance from 'lib/axios-client';
 import { FormEvent, useState } from 'react';
 
 import Button from '@/components/Button';
-import Headers from '@/components/Headers/Headers';
 import TextEditor from '@/components/TextEditor';
 
 // 제목 글자수 제한
@@ -61,8 +60,6 @@ export default function Addboard() {
 
   return (
     <div className="min-h-svh">
-      <Headers />
-
       <main>
         <div className="container pt-20">
           <div className="mb-5 mt-[54px] rounded-custom px-[30px] py-[30px] shadow-custom dark:shadow-custom-dark">
