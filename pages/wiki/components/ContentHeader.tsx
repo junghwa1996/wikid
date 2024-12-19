@@ -25,6 +25,7 @@ export default function ContentHeader({
   return (
     <div>
       <div className="mb-[32px] flex items-center justify-between text-48sb text-gray-500 mo:mb-[24px] mo:text-32sb">
+        {/*TODO 인풋 스타일은 일단 임시로 잡아놨습니다*/}
         {isEditing ? (
           <InputField
             type="text"
