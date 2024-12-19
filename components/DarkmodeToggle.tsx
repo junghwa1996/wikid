@@ -14,7 +14,7 @@ export default function DarkModeToggle() {
 
   return (
     <button
-      className="rounded p-2"
+      className="fixed bottom-0 left-0 rounded p-2"
       style={{
         backgroundColor: 'var(--gray-200)',
         color: 'var(--gray-600)',
