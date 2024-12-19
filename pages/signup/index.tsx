@@ -14,10 +14,10 @@ function SignUp() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [name, setName] = useState('');
   const [validFields, setValidFields] = useState({
-    name: false,
-    email: false,
-    password: false,
-    passwordConfirm: false,
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
   });
   const router = useRouter();
 
