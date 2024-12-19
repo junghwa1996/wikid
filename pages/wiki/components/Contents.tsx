@@ -17,6 +17,8 @@ const LINK = 'https://www.wikid.kr/codeit';
 const CONTENT: string | null = null;
 
 //TODO API 연동작업
+//TODO 다른 사람이 수정 중이면 수정 금지 기능
+
 export default function Contents() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isUCOpen, setIsUCOpen] = useState(false);
