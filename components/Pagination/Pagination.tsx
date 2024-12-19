@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import PaginationButton from './PaginationButton';
 
 interface PaginationProps {
@@ -72,7 +74,7 @@ export default function Pagination({
     <div className="flex items-center justify-center gap-[15px] mo:gap-[10px]">
       {/* 이전 페이지 버튼 - 현재 페이지가 1일 경우 disabled*/}
       <PaginationButton onClick={handlePrev} disabled={currentPage === 1}>
-        <img
+        <Image
           src="/icon/icon-arrow.svg"
           alt="이전 페이지로 이동"
           className={arrowStyles}
@@ -99,7 +101,7 @@ export default function Pagination({
         onClick={handleNext}
         disabled={currentPage === totalPages}
       >
-        <img
+        <Image
           src="/icon/icon-arrow.svg"
           alt="다음 페이지로 이동"
           className={`${arrowStyles} rotate-180`}
