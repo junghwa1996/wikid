@@ -1,7 +1,8 @@
+import { useState } from 'react';
+
 import InputField from '@/components/Input';
 import LinkBar from '@/components/LinkBar';
 import SnackBar from '@/components/SnackBar';
-import { useState } from 'react';
 
 interface ContentHeaderProps {
   name: string;
@@ -33,7 +34,7 @@ export default function ContentHeader({
         setSnackState('success');
         setTimeout(() => setSnackState('null'), 1500);
       })
-      .catch((error) => {
+      .catch(() => {
         alert('링크 복사에 실패했습니다.');
       });
   };
