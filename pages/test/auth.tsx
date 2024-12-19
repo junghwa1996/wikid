@@ -35,7 +35,7 @@ function authtest() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center">
+    <div className="flex size-full flex-col items-center justify-center">
       <button onClick={handleSignUp}>회원가입</button>
       <button onClick={handleSignIn}>로그인</button>
     </div>

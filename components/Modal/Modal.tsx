@@ -20,7 +20,6 @@ interface ModalProps {
  * @param closeOnEsc ESC 키로 닫기 여부 (기본값: true)
  * @returns Modal 컴포넌트
  */
-
 const Modal = ({
   isOpen,
   onClose,
@@ -29,16 +28,6 @@ const Modal = ({
   closeOnBackgroundClick = false,
   closeOnEsc = true,
 }: ModalProps) => {
-  // 모달이 닫혀있으면 null 반환
-  if (!isOpen) return null;
-
-  // 배경 클릭시 모달 닫기
-  const handleBackGroundClick = (e: React.MouseEvent) => {
-    if (closeOnBackgroundClick && e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   // esc 키로 모달 닫기
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -51,20 +40,41 @@ const Modal = ({
       window.addEventListener('keydown', handleEsc);
       return () => window.removeEventListener('keydown', handleEsc);
     }
+    // closeOnEsc만 의존성으로 필요함. onClose는 모달 생명주기 동안 안정적일 것으로 예상
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [closeOnEsc]);
+
+  // 모달이 닫혀있으면 null 반환
+  if (!isOpen) return null;
+
+  // 배경 클릭시 모달 닫기
+  const handleBackGroundClick = (e: React.MouseEvent) => {
+    if (closeOnBackgroundClick && e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-      onClick={handleBackGroundClick}
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex items-center justify-center"
     >
+      {/* 배경 클릭 이벤트를 처리할 버튼 */}
+      <button
+        className="absolute inset-0 cursor-default bg-black/50"
+        onClick={handleBackGroundClick}
+        aria-label="배경 클릭시 모달 닫기"
+      />
+
       <div
         className={`${width} relative max-h-[90vh] overflow-y-auto rounded-lg bg-white shadow-xl`}
       >
         {/* 닫기 버튼 영역 */}
-        <div
+        <button
           className="absolute right-0 top-0 m-2 cursor-pointer"
           onClick={onClose}
+          aria-label="모달 닫기"
         >
           <Image
             src="/icon/icon-close.svg"
@@ -72,7 +82,7 @@ const Modal = ({
             width={22}
             height={22}
           />
-        </div>
+        </button>
         {/* 컨텐츠 영역 */}
         <div className="px-5 pb-6 pt-16">{children}</div>
       </div>

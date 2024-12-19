@@ -2,11 +2,17 @@
  * Heart icon
  * @param {string} fill - 색상
  */
-export default function HeartIcon({ fill = '#8F95B2' }: { fill?: string }) {
+export default function HeartIcon({
+  fill = '#8F95B2',
+  iconSize,
+}: {
+  fill?: string;
+  iconSize?: string;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-[18px] w-[18px] mo:h-4 mo:w-4"
+      className={`size-[18px] mo:size-4 ${iconSize}`}
       viewBox="0 0 18 18"
       fill="none"
     >
