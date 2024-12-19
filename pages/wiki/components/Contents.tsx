@@ -1,24 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/Button';
+import DisconnectionModal from '@/components/DisconnectionModal';
 import TextEditor from '@/components/TextEditor';
 import UnsavedChangesModal from '@/components/UnsavedChangesModal';
 import WikiQuizModal from '@/components/WikiQuizModal';
 
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
-import DisconnectionModal from '@/components/DisconnectionModal';
 
+//TODO API 연동 후 삭제
 const QUESTION = '특별히 싫어하는 음식은?';
 const ANSWER = '카레';
 const NAME = '코드잇';
 const LINK = 'https://www.wikid.kr/codeit';
 const CONTENT: string | null = null;
 
+//TODO API 연동작업
 export default function Contents() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isUCOpen, setIsUCOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(CONTENT || '');
   const [newName, setNewName] = useState<string>(NAME);
 
@@ -27,21 +30,14 @@ export default function Contents() {
 
   const isEmpty = newContent === null || newContent === '';
 
-  const [isDMOpen, setIsDMOpen] = useState(false);
-
-  const onDMClose = () => {
-    setIsDMOpen(false);
-    setIsEditing(false);
-    setNewContent(previousContent.current);
-    setNewName(previousName.current);
-  };
-
+  //퀴즈 성공 후 위키 편집모드
   const handleQuizSuccess = () => {
     alert('퀴즈를 성공하셨습니다.');
     setIsQuizOpen(false);
     setIsEditing(true);
   };
 
+  //위키 제목과 내용 편집
   const handleContentChange = (value: string) => {
     setNewContent(value);
   };
@@ -50,12 +46,14 @@ export default function Contents() {
     setNewName(value);
   };
 
+  //편집된 내용 저장 후 편집모드 종료
   const saveContent = () => {
     previousContent.current = newContent;
     previousName.current = newName;
     setIsEditing(false);
   };
 
+  //TODO 편집모드에서 수정 중 취소버튼으로 수정 취소하기 (현재 모달을 닫기만 하면 수정이 취소되는 오류있음)
   const onUCClose = () => {
     setIsUCOpen(false);
     setIsEditing(false);
@@ -63,8 +61,17 @@ export default function Contents() {
     setNewName(previousName.current);
   };
 
+  //5분동안 미기입시 뒤로가기
   const handleInactivityWarning = () => {
     setIsDMOpen(true);
+  };
+
+  //연결 끊김 모달 (수정중인 내용 취소, 기존 내용으로 복구)
+  const onDMClose = () => {
+    setIsDMOpen(false);
+    setIsEditing(false);
+    setNewContent(previousContent.current);
+    setNewName(previousName.current);
   };
 
   useEffect(() => {
