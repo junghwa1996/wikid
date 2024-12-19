@@ -1,10 +1,13 @@
 import instance from '../../lib/axios-client';
 
-export default async function fetchUserData() {
+/**
+ * 게시글 목록을 불러오는 API
+ */
+export default async function getBoards() {
   try {
-    const response = await instance.get('/user/profile');
-    console.log('User Data:', response.data);
+    const response = await instance.get('/articles');
+    return response.data;
   } catch (error) {
-    console.error('Failed to fetch user data:', error);
+    console.error('게시글을 불러오지 못했습니다.', error);
   }
 }
