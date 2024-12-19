@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import Comment from '../boards/components/Comment';
+
+import Comment from '@/pages/boards/components/Comment';
 
 const data = {
   nextCursor: 0,
