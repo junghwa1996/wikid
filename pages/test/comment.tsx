@@ -84,21 +84,23 @@ export default function CommentTest() {
   }, [update, comments]);
 
   return (
-    <ul className="flex flex-col gap-6 mo:gap-[14px] ta:gap-4">
-      {comments.map((item) => (
-        <li key={item.id}>
-          <Comment
-            name={item.writer.name}
-            content={item.content}
-            date={item.updatedAt}
-            onclick={{
-              update: () => handleUpdate(item.id, 'Updated content'),
-              delete: () => handleDelete(item.id),
-            }}
-            isOwner={item.writer.id === userId}
-          />
-        </li>
-      ))}
-    </ul>
+    <div className="px-5 pt-24">
+      <ul className="flex flex-col gap-6 mo:gap-[14px] ta:gap-4">
+        {comments.map((item) => (
+          <li key={item.id}>
+            <Comment
+              name={item.writer.name}
+              content={item.content}
+              date={item.updatedAt}
+              onclick={{
+                update: () => handleUpdate(item.id, 'Updated content'),
+                delete: () => handleDelete(item.id),
+              }}
+              isOwner={item.writer.id === userId}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
