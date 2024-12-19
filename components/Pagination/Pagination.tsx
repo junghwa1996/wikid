@@ -68,7 +68,8 @@ export default function Pagination({
     return pages;
   };
 
-  const arrowStyles = 'h-[24px] w-[24px] mo:h-[18px] mo:w-[18px]';
+  const arrowStyles = 'mo:size-[18px]';
+  const imageSize = 24;
 
   return (
     <div className="flex items-center justify-center gap-[15px] mo:gap-[10px]">
@@ -78,6 +79,8 @@ export default function Pagination({
           src="/icon/icon-arrow.svg"
           alt="이전 페이지로 이동"
           className={arrowStyles}
+          width={imageSize}
+          height={imageSize}
         />
       </PaginationButton>
 
@@ -105,6 +108,8 @@ export default function Pagination({
           src="/icon/icon-arrow.svg"
           alt="다음 페이지로 이동"
           className={`${arrowStyles} rotate-180`}
+          width={imageSize}
+          height={imageSize}
         />
       </PaginationButton>
     </div>

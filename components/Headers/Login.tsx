@@ -79,6 +79,8 @@ export default function Login({
           src="/icon/icon-menu.svg"
           className="hidden mo:block"
           alt="메뉴 아이콘"
+          width={32}
+          height={32}
         />
 
         {isOpen && (
@@ -93,7 +95,12 @@ export default function Login({
   ) : isMobile ? (
     <div ref={loginMenuRef} className="flex">
       <button className="relative" onClick={() => setIsOpen(!isOpen)}>
-        <Image src="/icon/icon-menu.svg" alt="메뉴 아이콘" />
+        <Image
+          src="/icon/icon-menu.svg"
+          alt="메뉴 아이콘"
+          width={24}
+          height={24}
+        />
         {isOpen && (
           <Menu
             options={profileMenu}
