@@ -23,7 +23,12 @@ export default function Headers() {
     <header className="fixed left-0 top-0 z-10 flex h-20 w-full items-center justify-between bg-background px-20 py-5 shadow-custom">
       <div className="flex gap-10">
         <Link href="/">
-          <Image src="/images/logo.svg" alt="위키드 로고" />
+          <Image
+            src="/images/logo.svg"
+            alt="위키드 로고"
+            width={107}
+            height={30}
+          />
         </Link>
         <GNB />
       </div>
