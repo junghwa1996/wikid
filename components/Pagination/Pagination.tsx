@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import PaginationButton from './PaginationButton';
 
 interface PaginationProps {
@@ -47,7 +49,7 @@ export default function Pagination({
     const half = Math.floor(maxPages / 2); // 현재 페이지 중심 버튼 배치 기준점(중앙 배치를 위해 /2)
 
     let start = Math.max(currentPage - half, 1); // 시작 페이지 계산
-    let end = Math.min(start + maxPages - 1, totalPages); // 끝 페이지 계산
+    const end = Math.min(start + maxPages - 1, totalPages); // 끝 페이지 계산
 
     /**
      * 시작 페이지 조정
@@ -72,7 +74,7 @@ export default function Pagination({
     <div className="flex items-center justify-center gap-[15px] mo:gap-[10px]">
       {/* 이전 페이지 버튼 - 현재 페이지가 1일 경우 disabled*/}
       <PaginationButton onClick={handlePrev} disabled={currentPage === 1}>
-        <img
+        <Image
           src="/icon/icon-arrow.svg"
           alt="이전 페이지로 이동"
           className={arrowStyles}
@@ -99,7 +101,7 @@ export default function Pagination({
         onClick={handleNext}
         disabled={currentPage === totalPages}
       >
-        <img
+        <Image
           src="/icon/icon-arrow.svg"
           alt="다음 페이지로 이동"
           className={`${arrowStyles} rotate-180`}

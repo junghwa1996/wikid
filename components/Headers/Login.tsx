@@ -1,6 +1,7 @@
 import useOutsideClick from 'hooks/useOutsideClick';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Menu from '../Menu';
 
@@ -33,7 +34,7 @@ export default function Login({
   const router = useRouter();
   const loginMenuRef = useRef<HTMLDivElement>(null);
 
-  const updateProfileMenu = () => {
+  const updateProfileMenu = useCallback(() => {
     if (!isLoggedIn) {
       if (isMobile) return ['로그인', '위키목록', '자유게시판'];
     } else if (isMobile) {
@@ -42,11 +43,11 @@ export default function Login({
       return ['마이페이지', '로그아웃'];
     }
     return [];
-  };
+  }, [isLoggedIn, isMobile]); // 의존성 배열에 필요한 값만 포함
 
   useEffect(() => {
     setProfileMenu(updateProfileMenu());
-  }, [isLoggedIn, isMobile]);
+  }, [updateProfileMenu]); // updateProfileMenu가 변경될 때만 실행
 
   const handleLoginMenu = (option: string) => {
     if (option === '위키목록') {
@@ -69,12 +70,12 @@ export default function Login({
   return isLoggedIn ? (
     <div ref={loginMenuRef} className="flex">
       <button className="relative" onClick={() => setIsOpen(!isOpen)}>
-        <img
+        <Image
           src={profileImage || '/icon/icon-profile.svg'}
           className="mo:hidden"
           alt="프로필 아이콘"
         />
-        <img
+        <Image
           src="/icon/icon-menu.svg"
           className="hidden mo:block"
           alt="메뉴 아이콘"
@@ -92,7 +93,7 @@ export default function Login({
   ) : isMobile ? (
     <div ref={loginMenuRef} className="flex">
       <button className="relative" onClick={() => setIsOpen(!isOpen)}>
-        <img src="/icon/icon-menu.svg" alt="메뉴 아이콘" />
+        <Image src="/icon/icon-menu.svg" alt="메뉴 아이콘" />
         {isOpen && (
           <Menu
             options={profileMenu}

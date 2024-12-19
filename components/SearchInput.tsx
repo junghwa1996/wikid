@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 interface SearchInputProps {
@@ -60,7 +61,7 @@ function SearchInput({
       className="flex items-center rounded-lg bg-gray-100 px-[20px]"
     >
       <label htmlFor="searchInput">
-        <img src="/icon/icon-search.svg" alt="검색" />
+        <Image src="/icon/icon-search.svg" alt="검색" />
       </label>
       <input
         id="searchInput"
