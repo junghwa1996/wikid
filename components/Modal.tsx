@@ -32,7 +32,8 @@ const Modal = ({
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 의존성을 추가하지 않는 이유: 초기 렌더링에서만 실행되도록 의도함
 
   // 모달이 닫혀있으면 null 반환
   if (!isOpen) return null;
@@ -46,12 +47,17 @@ const Modal = ({
 
   return (
     <div
-      role="dialog" // 역할 : 모달
-      aria-modal="true" // 모달임을 알림
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-      onClick={handleBackGroundClick}
-      tabIndex={0} // 포커스 가능하도록
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex items-center justify-center"
     >
+      {/* 배경 클릭 이벤트를 처리할 버튼 */}
+      <button
+        className="absolute inset-0 cursor-default bg-black/50"
+        onClick={handleBackGroundClick}
+        aria-label="배경 클릭시 모달 닫기"
+      />
+
       <div
         className={`${width} relative max-h-[90vh] overflow-y-auto rounded-lg bg-white shadow-xl`}
       >

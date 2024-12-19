@@ -78,8 +78,8 @@ if (typeof window !== 'undefined') {
       }
       return config;
     },
-    (error: AxiosError) => {
-      return Promise.reject(error);
+    (_error: AxiosError) => {
+      return Promise.reject(_error);
     }
   );
 
