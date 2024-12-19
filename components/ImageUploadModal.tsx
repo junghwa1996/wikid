@@ -157,7 +157,7 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
               <div className="flex items-center justify-center">
                 <span className="mr-2">확인 중</span>
                 <svg
-                  className="h-5 w-5 animate-spin"
+                  className="size-5 animate-spin"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
