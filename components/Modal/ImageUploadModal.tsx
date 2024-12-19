@@ -44,24 +44,24 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
 
   // 드래그 관련 이벤트
   // 드래그 시작
-  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragEnter = (e: React.DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation(); // 이벤트 전파 중지
     setIsDragging(true);
   };
   // 드래그가 영역을 벗어날 때
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragLeave = (e: React.DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
   };
   // 드래그 중
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: React.DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
   };
   // 드래그로 파일을 드랍했을 때
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: React.DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -76,7 +76,7 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
   const handleImageUpload = async () => {
     try {
       setIsUpload(true);
-      // 이미지 업로그 api 통신 로직
+      // 이미지 업로드 api 통신 로직
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsUpload(false);
       alert('이미지 업로드 성공');
@@ -109,6 +109,7 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
           onChange={handleFileChange}
           accept="image/*"
           className="hidden"
+          aria-label="파일 선택"
         />
 
         {previewUrl ? (
@@ -121,7 +122,8 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
             />
           </div>
         ) : (
-          <div
+          <button
+            type="button"
             onClick={handleCameraClick}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
@@ -132,6 +134,7 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
                 ? 'border-green-400 bg-green-50'
                 : 'border-gray-300 bg-gray-100 hover:border-gray-400'
             }`}
+            aria-label="이미지 업로드"
           >
             <Image
               src="/icon/icon-camera.svg"
@@ -142,13 +145,14 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
             <p className="text-sm text-gray-500">
               클릭 또는 이미지를 드래그하여 올려주세요
             </p>
-          </div>
+          </button>
         )}
         <div className="flex justify-end">
           <Button
-            onClick={handleImageUpload}
-            isLoading={isUpload}
+            type="button"
             disabled={!previewUrl}
+            isLoading={isUpload}
+            onClick={handleImageUpload}
             className="w-40"
           >
             삽입하기
