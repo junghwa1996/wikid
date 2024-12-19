@@ -41,6 +41,13 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
     }
   };
 
+  // 엔터 또는 스페이스 키 입력시 카메라 클릭 이벤트 발생(포커스되어있을 때)
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleCameraClick();
+    }
+  };
+
   // 드래그 관련 이벤트
   // 드래그 시작
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
@@ -121,6 +128,9 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
           </div>
         ) : (
           <div
+            role="button"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
             onClick={handleCameraClick}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
