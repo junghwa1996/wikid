@@ -67,6 +67,9 @@ module.exports = {
         paths: ['.'],
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
+      typescript: {
+        project: './tsconfig.json',
+      },
     },
   },
   ignorePatterns: ['node_modules', '.next', 'dist'], // 린트 제외 경로
