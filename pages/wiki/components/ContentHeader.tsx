@@ -1,5 +1,7 @@
 import InputField from '@/components/Input';
 import LinkBar from '@/components/LinkBar';
+import SnackBar from '@/components/SnackBar';
+import { useState } from 'react';
 
 interface ContentHeaderProps {
   name: string;
@@ -22,6 +24,19 @@ export default function ContentHeader({
   onNameChange,
   isEditing,
 }: ContentHeaderProps) {
+  const [snackState, setSnackState] = useState<'success' | 'null'>('null');
+
+  const handleLinkClick = () => {
+    navigator.clipboard
+      .writeText(link)
+      .then(() => {
+        setSnackState('success');
+        setTimeout(() => setSnackState('null'), 1500);
+      })
+      .catch((error) => {
+        alert('링크 복사에 실패했습니다.');
+      });
+  };
   return (
     <div>
       <div className="mb-[32px] flex items-center justify-between text-48sb text-gray-500 mo:mb-[24px] mo:text-32sb">
@@ -36,7 +51,9 @@ export default function ContentHeader({
           <span>{name}</span>
         )}
       </div>
-      {!isEditing && <LinkBar link={link} />}
+      {!isEditing && <LinkBar link={link} onClick={handleLinkClick} />}
+
+      {snackState !== 'null' && <SnackBar state={snackState} />}
     </div>
   );
 }
