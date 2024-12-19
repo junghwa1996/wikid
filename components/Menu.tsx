@@ -17,13 +17,17 @@ export default function Menu({ options, onSelect, menuSize }: MenuProps) {
       className={`${menuSize} absolute right-1/2 z-10 mt-2 translate-x-1/2 rounded-xl border border-gray-300 bg-background p-1 text-14 shadow-custom`}
     >
       {options.map((option, index) => (
-        <li
+        <button
           key={index}
+          tabIndex={0}
           onClick={() => onSelect(option)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') onSelect(option);
+          }}
           className={`w-auto cursor-pointer rounded-md px-3 py-2.5 hover:bg-green-100`}
         >
           {option}
-        </li>
+        </button>
       ))}
     </ul>
   );
