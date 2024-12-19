@@ -20,7 +20,9 @@ export default function LinkBar({ link, onClick }: LinkBarProps) {
       <Image
         src="icon/icon-link.svg"
         alt="링크 아이콘"
-        className="size-5 mo:size-4"
+        className="mo:size-4"
+        width={20}
+        height={20}
       />
       <p className="text-14 text-green-200 mo:text-12">{link}</p>
     </button>
