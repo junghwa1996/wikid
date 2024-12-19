@@ -67,6 +67,7 @@ function SignUp() {
       if (error instanceof Error) {
         alert(error.message);
         setErrorMessage(error.message);
+        console.log(errorMessage);
       } else {
         alert('회원가입 중 오류가 발생했습니다.');
       }
