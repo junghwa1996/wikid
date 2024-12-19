@@ -45,7 +45,7 @@ export default function SnackBar({ state }: SnackBarProps) {
     <div
       className={`rounded-custom ${style} flex items-center gap-[15px] border px-5 py-[11px] shadow-custom mo:px-[15px] mo:py-[11px]`}
     >
-      {icon && <Image src={icon} alt="snackbar icon" className="size-5" />}
+      {icon && <Image src={icon} alt="snackbar icon" width={20} height={20} />}
       <p className={`${textStyle} break-words mo:break-words`}>{text}</p>
     </div>
   );
