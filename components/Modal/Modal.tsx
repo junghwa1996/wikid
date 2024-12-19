@@ -30,6 +30,7 @@ const Modal = ({
 }: ModalProps) => {
   // esc 키로 모달 닫기
   useEffect(() => {
+    if (!closeOnEsc) return; // early return
     const handleEsc = (e: KeyboardEvent) => {
       if (closeOnEsc && e.key === 'Escape') {
         onClose();

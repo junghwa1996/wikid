@@ -19,7 +19,9 @@ interface WarningTextProps {
 const WarningText = ({ warning }: WarningTextProps) => {
   if (!warning) return null;
   return (
-    <p className="text-xs text-red-500">정답이 아닙니다. 다시 입력해 주세요.</p>
+    <p id="warning-message" className="text-xs text-red-500">
+      정답이 아닙니다. 다시 입력해 주세요.
+    </p>
   );
 };
 
@@ -32,7 +34,6 @@ const WarningText = ({ warning }: WarningTextProps) => {
  * @param onQuizComplete 퀴즈 완료 함수
  * @returns WikiQuizModal 컴포넌트
  */
-
 const WikiQuizModal = ({
   isOpen,
   onClose,
@@ -40,10 +41,13 @@ const WikiQuizModal = ({
   securityAnswer,
   onQuizComplete,
 }: WikiQuizModalProps) => {
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [userAnswer, setUserAnswer] = useState('');
-  const [warning, setWarning] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // 통합된 상태 관리
+  const [state, setState] = useState({
+    isCorrect: false,
+    warning: false,
+    isSubmitting: false,
+    userAnswer: '',
+  });
 
   // 모바일 대응
   const [isMobile, setIsMobile] = useState(false);
@@ -51,6 +55,16 @@ const WikiQuizModal = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  // 상태 초기화 함수
+  const resetModal = () => {
+    setState({
+      isCorrect: false,
+      warning: false,
+      isSubmitting: false,
+      userAnswer: '',
+    });
+  };
 
   // 모바일 여부 감지
   useEffect(() => {
@@ -97,25 +111,32 @@ const WikiQuizModal = ({
   // 모달 초기화
   useEffect(() => {
     if (isOpen) {
+      resetModal();
       inputRef.current?.focus();
-      setIsCorrect(false);
-      setUserAnswer('');
-      setWarning(false);
     }
   }, [isOpen]);
 
   // 정답 타이핑 관리 함수
   const handleUserAnswer = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserAnswer(e.target.value);
-    setWarning(false); // 타이핑시 경고문 제거
+    setState((prev) => ({
+      ...prev,
+      userAnswer: e.target.value,
+      warning: false, // 타이핑시 경고문 제거
+    }));
+  };
+
+  // 답변 검증 로직
+  const validateAnswer = (userAnswer: string, correctAnswer: string) => {
+    return userAnswer.trim() === correctAnswer.trim();
   };
 
   const handleQuizSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 새로고침 방지
     try {
-      if (!userAnswer) return;
+      if (!state.userAnswer) return;
 
-      setIsSubmitting(true); // 제출 시 로딩 ui 표시
+      setState((prev) => ({ ...prev, isSubmitting: true })); // 제출 시 로딩 ui 표시
+
       // api 통신 로직
       await new Promise((resolve) => setTimeout(resolve, 1000)); // 실제 통신 대신 시뮬레이션션
       // 정답이면
@@ -128,42 +149,31 @@ const WikiQuizModal = ({
       //   "message": "보안 답변이 일치하지 않습니다."
       // }
 
-      // 답변 비교 전에 trim()
-      const cleanUserAnswer = userAnswer.trim();
-      const cleanSecurityAnswer = securityAnswer?.trim() || '';
-      if (cleanUserAnswer === cleanSecurityAnswer) {
-        setIsCorrect(true);
-        setWarning(false);
+      const isValid = validateAnswer(state.userAnswer, securityAnswer);
+      if (isValid) {
+        setState((prev) => ({ ...prev, isCorrect: true }));
         onQuizComplete();
       } else {
-        setWarning(true);
-        setUserAnswer(''); // 오답시 입력값 초기화
+        setState((prev) => ({
+          ...prev,
+          warning: true,
+          userAnswer: '', // 오답시 입력값 초기화
+        }));
         inputRef.current?.focus(); // 오답시 input에 포커스
       }
     } catch (error) {
       console.error('Quiz 제출 error:', error);
       alert('퀴즈 제출 중 오류가 발생했습니다.');
     } finally {
-      setIsSubmitting(false); // 제출 완료 시 로딩 종료
+      setState((prev) => ({ ...prev, isSubmitting: false })); // 제출 완료 시 로딩 종료
     }
   };
-
-  useEffect(() => {
-    // 모달 오픈시 input 포커스
-    if (isOpen) {
-      inputRef.current?.focus();
-    }
-    setIsCorrect(false); // 모달 오픈시 정답 초기화
-    setUserAnswer(''); // 모달 오픈시 입력값 초기화
-    setWarning(false); // 모달 오픈시 경고문 초기화
-    setIsCorrect(false); // 모달 오픈시 정답 초기화
-  }, [isOpen]);
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      closeOnBackgroundClick={!keyboardVisible && !userAnswer.trim()}
+      closeOnBackgroundClick={false} // 배경 클릭으로 닫히지 않도록 설정
     >
       <form
         ref={formRef}
@@ -197,19 +207,21 @@ const WikiQuizModal = ({
             type="text"
             placeholder="답변을 입력해 주세요."
             ref={inputRef}
-            value={userAnswer}
+            value={state.userAnswer}
             onChange={handleUserAnswer}
+            aria-invalid={state.warning}
+            aria-describedby={state.warning ? 'warning-message' : undefined}
             className={`mt-4 min-h-[44px] w-full rounded-lg p-2 text-base focus:outline-none focus:ring-2 ${
-              warning
+              state.warning
                 ? 'bg-red-300 focus:ring-red-200'
                 : 'bg-gray-100 focus:ring-green-200'
             }`}
           />
-          <WarningText warning={warning} />
+          <WarningText warning={state.warning} />
           <Button
             type="submit"
-            disabled={!userAnswer.trim() || isCorrect}
-            isLoading={isSubmitting}
+            disabled={!state.userAnswer.trim() || state.isCorrect}
+            isLoading={state.isSubmitting}
             className="mt-4 min-h-[44px] w-full"
           >
             확인
