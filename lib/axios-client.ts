@@ -57,6 +57,7 @@ const refreshToken = async (): Promise<string | null> => {
     localStorage.setItem('accessToken', newAccessToken);
     return newAccessToken;
   } catch (error) {
+    console.error('Failed to refresh token:', error);
     // 리프레시 토큰도 만료된 경우
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
