@@ -39,7 +39,7 @@ export default function BoardCard({
         <Image
           src={image === '' ? '/icon/icon-no-image.svg' : image}
           alt={`${title} 썸네일`}
-          objectFit="cover"
+          style={{ objectFit: 'cover' }}
           fill
         />
       </div>
