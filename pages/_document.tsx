@@ -8,7 +8,6 @@ export default function Document() {
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
           rel="stylesheet"
         />
-        <title>wikid</title>
       </Head>
       <body className="font-sans">
         <Main />

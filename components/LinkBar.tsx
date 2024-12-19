@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 interface LinkBarProps {
   link: string;
   onClick?: () => void;
@@ -15,10 +17,10 @@ export default function LinkBar({ link, onClick }: LinkBarProps) {
       onClick={onClick}
       className="flex cursor-pointer items-center gap-[5px] rounded-custom bg-green-100 px-[10px] py-[3px] mo:py-1"
     >
-      <img
+      <Image
         src="icon/icon-link.svg"
         alt="링크 아이콘"
-        className="h-5 w-5 mo:h-4 mo:w-4"
+        className="size-5 mo:size-4"
       />
       <p className="text-14 text-green-200 mo:text-12">{link}</p>
     </button>

@@ -12,7 +12,7 @@ export default function HeartIcon({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`h-[18px] w-[18px] mo:h-4 mo:w-4 ${iconSize}`}
+      className={`size-[18px] mo:size-4 ${iconSize}`}
       viewBox="0 0 18 18"
       fill="none"
     >

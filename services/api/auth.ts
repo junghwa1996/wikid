@@ -1,6 +1,6 @@
-import instance from '../../lib/axios-client';
-
 import { AxiosError } from 'axios';
+
+import instance from '../../lib/axios-client';
 
 interface ErrorResponse {
   message: string;

@@ -67,7 +67,7 @@ export default function Addboard() {
 
       <main>
         <div className="container pt-20 mo:px-0 mo:pt-[60px]">
-          <div className="mb-5 mt-[54px] rounded-custom px-[30px] py-[30px] shadow-custom dark:shadow-custom-dark mo:mt-0 mo:px-5 mo:py-4 mo:shadow-none">
+          <div className="mb-5 mt-[54px] rounded-custom p-[30px] shadow-custom dark:shadow-custom-dark mo:mt-0 mo:px-5 mo:py-4 mo:shadow-none">
             <header className="my-4 flex items-center justify-between">
               <h1 className="mo:text-16sb ta:text-20sb pc:text-24sb">
                 게시물 등록하기

@@ -1,4 +1,5 @@
 import useOutsideClick from 'hooks/useOutsideClick';
+import Image from 'next/image';
 import { useRef, useState } from 'react';
 
 import Menu from './Menu';
@@ -42,9 +43,10 @@ export default function Dropdown({
         className={`${dropdownSize} flex items-center justify-between text-nowrap rounded-xl border border-gray-300 bg-background px-5 py-3.5 text-14 leading-none text-gray-400 hover:border-green-200 focus:ring-1 focus:ring-green-200`}
       >
         {selectedOption}
-        <img
+        <Image
           src="/icon/icon-arrowdown.svg"
-          className={`h-4 w-4 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+          className={`size-4 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+          alt="드롭다운 화살표"
         />
       </button>
 
