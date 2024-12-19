@@ -8,7 +8,7 @@ import WikiQuizModal from '@/components/WikiQuizModal';
 const QUESTION = '특별히 싫어하는 음식은?';
 const ANSWER = '카레';
 
-function disconnect() {
+function ModalTest() {
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [isUCOpen, setIsUCOpen] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
@@ -24,7 +24,7 @@ function disconnect() {
   };
 
   return (
-    <div className="flex size-full flex-col items-center justify-center">
+    <div className="flex size-full flex-col items-center justify-center pt-40">
       <button
         onClick={() => setIsDMOpen(true)}
         className="rounded-custom bg-green-200 px-6 py-2 text-background"
@@ -63,4 +63,4 @@ function disconnect() {
   );
 }
 
-export default disconnect;
+export default ModalTest;

@@ -23,16 +23,6 @@ const Modal = ({
   children,
   width = 'w-11/12 ta:w-3/4 pc:w-1/2',
 }: ModalProps) => {
-  // 모달이 닫혀있으면 null 반환
-  if (!isOpen) return null;
-
-  // 배경 클릭시 모달 닫기
-  const handleBackGroundClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   // esc 키로 모달 닫기
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -44,18 +34,32 @@ const Modal = ({
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
+  // 모달이 닫혀있으면 null 반환
+  if (!isOpen) return null;
+
+  // 배경 클릭시 모달 닫기
+  const handleBackGroundClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      role="dialog" // 역할 : 모달
+      aria-modal="true" // 모달임을 알림
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
       onClick={handleBackGroundClick}
+      tabIndex={0} // 포커스 가능하도록
     >
       <div
         className={`${width} relative max-h-[90vh] overflow-y-auto rounded-lg bg-white shadow-xl`}
       >
         {/* 닫기 버튼 영역 */}
-        <div
+        <button
           className="absolute right-0 top-0 m-2 cursor-pointer"
           onClick={onClose}
+          aria-label="모달 닫기"
         >
           <Image
             src="/icon/icon-close.svg"
@@ -63,7 +67,7 @@ const Modal = ({
             width={22}
             height={22}
           />
-        </div>
+        </button>
         {/* 컨텐츠 영역 */}
         <div className="p-6">{children}</div>
       </div>
