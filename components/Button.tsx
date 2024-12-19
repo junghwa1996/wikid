@@ -50,7 +50,11 @@ interface Props {
   isLoading?: boolean;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   children: ReactNode;
-  [property: string]: any;
+  [property: string]:
+    | string
+    | boolean
+    | ReactNode
+    | ((e: React.MouseEvent<HTMLElement>) => void);
 }
 
 /**
