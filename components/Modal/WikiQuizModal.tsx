@@ -19,7 +19,7 @@ interface WarningTextProps {
 const WarningText = ({ warning }: WarningTextProps) => {
   if (!warning) return null;
   return (
-    <p id="warning-message" className="text-xs text-red-500">
+    <p id="warning-message" className="mt-1 text-12 text-red-100">
       정답이 아닙니다. 다시 입력해 주세요.
     </p>
   );
@@ -190,13 +190,13 @@ const WikiQuizModal = ({
                 height={isMobile ? 16 : 20}
                 priority
               />
-              <p className="mt-2 text-sm">다음 퀴즈를 맞추고</p>
-              <p className="text-sm">위키를 작성해 보세요.</p>
+              <p className="mt-2 text-14">다음 퀴즈를 맞추고</p>
+              <p className="text-14">위키를 작성해 보세요.</p>
             </div>
           )}
 
           <div
-            className={`w-full text-left text-lg font-bold ${
+            className={`w-full text-left text-18b ${
               keyboardVisible ? 'mt-1' : 'mt-4'
             }`}
           >
@@ -211,18 +211,20 @@ const WikiQuizModal = ({
             onChange={handleUserAnswer}
             aria-invalid={state.warning}
             aria-describedby={state.warning ? 'warning-message' : undefined}
-            className={`mt-4 min-h-[44px] w-full rounded-lg p-2 text-base focus:outline-none focus:ring-2 ${
+            className={`mt-4 min-h-[44px] w-full rounded-custom border p-2 text-16 focus:outline-none focus:ring-2 ${
               state.warning
-                ? 'bg-red-300 focus:ring-red-200'
+                ? 'bg-red-50 focus:ring-red-100'
                 : 'bg-gray-100 focus:ring-green-200'
             }`}
           />
-          <WarningText warning={state.warning} />
+          <div className="min-h-[50px] w-full pt-1">
+            <WarningText warning={state.warning} />
+          </div>
           <Button
             type="submit"
             disabled={!state.userAnswer.trim() || state.isCorrect}
             isLoading={state.isSubmitting}
-            className="mt-4 min-h-[44px] w-full"
+            className="min-h-[44px] w-full rounded-custom"
           >
             확인
           </Button>
@@ -231,10 +233,12 @@ const WikiQuizModal = ({
 
       {!keyboardVisible && (
         <div className="mt-2 px-4 text-center">
-          <p className="text-xs">
+          <p className="text-12 text-gray-500">
             위키드는 지인들과 함께하는 즐거운 공간입니다.
           </p>
-          <p className="text-xs">지인에게 상처를 주지 않도록 작성해 주세요.</p>
+          <p className="text-12 text-gray-500">
+            지인에게 상처를 주지 않도록 작성해 주세요.
+          </p>
         </div>
       )}
     </Modal>

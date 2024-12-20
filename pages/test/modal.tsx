@@ -18,6 +18,16 @@ function ModalTest() {
   const onQuizClose = () => setIsQuizOpen(false);
   const onImageClose = () => setIsImageOpen(false);
 
+  const closeAndNoSave = () => {
+    alert('저장하지 않고 나가기를 선택하셨습니다.');
+    setIsUCOpen(false);
+  };
+
+  const confirmReset = () => {
+    alert('접속 끊김 확인을 선택하셨습니다.');
+    setIsDMOpen(false);
+  };
+
   const handleQuizSuccess = () => {
     alert('퀴즈를 성공하셨습니다.');
     setIsQuizOpen(false);
@@ -49,8 +59,16 @@ function ModalTest() {
       >
         이미지 업로드
       </button>
-      <DisconnectionModal isOpen={isDMOpen} onClose={onDMClose} />
-      <UnsavedChangesModal isOpen={isUCOpen} onClose={onUCClose} />
+      <DisconnectionModal
+        confirmReset={confirmReset}
+        isOpen={isDMOpen}
+        onClose={onDMClose}
+      />
+      <UnsavedChangesModal
+        isOpen={isUCOpen}
+        closeAndNoSave={closeAndNoSave}
+        onClose={onUCClose}
+      />
       <ImageUploadModal isOpen={isImageOpen} onClose={onImageClose} />
       <WikiQuizModal
         isOpen={isQuizOpen}
