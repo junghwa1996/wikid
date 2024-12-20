@@ -1,79 +1,74 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { instance } from '@/lib/axios-client';
 
 import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
-import ListItem from './ListItem';
 import Image from 'next/image';
+import ListItem from './ListItem';
 
-const dummyData = {
-  totalCount: 78,
-  list: [
-    {
-      id: 1,
-      name: '홍길동',
-      nationality: '대한민국',
-      city: '서울',
-      job: '대학생',
-      code: 'gildong',
-      image: '',
-    },
-    {
-      id: 2,
-      name: '김철수',
-      nationality: '대한민국',
-      city: '부산',
-      job: '직장인',
-      code: 'chulsoo',
-      image: '',
-    },
-    {
-      id: 3,
-      name: '이영희',
-      nationality: '대한민국',
-      city: '대구',
-      job: '학생',
-      code: 'yeonghee',
-      image: '',
-    },
-    {
-      id: 4,
-      name: '박민수',
-      nationality: '대한민국',
-      city: '인천',
-      job: '대학생',
-      code: 'minsu',
-      image: '',
-    },
-    {
-      id: 5,
-      name: '정미영',
-      nationality: '대한민국',
-      city: '대전',
-      job: '직장인',
-      code: 'miyoung',
-      image: '',
-    },
-  ],
-};
+// 위키 목록 페이지 프로필 데이터 타입
+export interface ProfileProps {
+  id: number;
+  name: string;
+  code: string;
+  image: string;
+  city: string;
+  nationality: string;
+  job: string;
+}
 
+// 위키 목록 페이지 리스트 데이터 타입
+interface ListProps {
+  totalCount: number;
+  list: ProfileProps[];
+}
+
+// 페이지당 목록 개수
 const PAGE_SIZE = 5;
 
+/**
+ * 위키 목록 페이지 컴포넌트
+ */
 export default function WikiList() {
   const [searchValue, setSearchValue] = useState('');
   const [submitValue, setSubmitValue] = useState('');
+  const [profiles, setProfiles] = useState<ListProps | null>(null);
   const [page, setPage] = useState(1);
-  const hasList = dummyData.list.length > 0;
+  const hasList = (profiles?.totalCount ?? 0) > 0;
 
+  // 검색 인풋 값 변경 핸들러 함수
   const handleChange = (value: string) => {
     setSearchValue(value);
   };
+  // 검색 제출 핸들러 함수
   const handleSubmit = () => {
     setSubmitValue(searchValue);
   };
+  // 페이지 변경 핸들러 함수
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
   };
+
+  useEffect(() => {
+    // 프로필 목록 데이터 요청 함수
+    const getProfiles = async () => {
+      try {
+        const { data } = await instance.get('/profiles', {
+          params: {
+            page,
+            pageSize: PAGE_SIZE,
+            name: submitValue,
+          },
+        });
+        setProfiles(data);
+      } catch (error) {
+        console.error('--- getProfiles:error:', error);
+      }
+    };
+
+    getProfiles();
+  }, [submitValue, page]);
 
   return (
     <div className="min-h-svh">
@@ -83,7 +78,7 @@ export default function WikiList() {
         </title>
       </Head>
 
-      <div className="container pt-20 mo:pt-10">
+      <div className="container pb-5 pt-20 mo:pt-10">
         <div className="mt-20 px-20 mo:px-0">
           <SearchInput
             size="large"
@@ -94,37 +89,32 @@ export default function WikiList() {
           {submitValue && (
             <p className="mt-4 text-16 text-gray-400">
               {`“${submitValue}”님을 총 `}
-              <span className="text-green-200">{dummyData.list.length}</span>명
+              <span className="text-green-200">{profiles?.totalCount}</span>명
               찾았습니다.
             </p>
           )}
 
-          <ul className="my-[57px] flex flex-col gap-6 mo:my-10">
-            {hasList ? (
-              dummyData.list.map((data) => (
-                <ListItem key={data.id} data={data} />
-              ))
-            ) : (
-              <li className="flex flex-col items-center justify-center gap-8">
-                <p className="text-20sb text-gray-400">
-                  {submitValue === ''
-                    ? '위키 목록이 없어요.'
-                    : `${submitValue}와(과) 일치하는 검색 결과가 없어요.`}
-                </p>
-                <Image
-                  src="/images/empty.png"
-                  alt=""
-                  width="144"
-                  height="144"
-                />
-              </li>
-            )}
-          </ul>
+          {hasList ? (
+            <ul className="my-[57px] flex flex-col gap-6 mo:my-10 mo:gap-2">
+              {profiles?.list.map((profile) => (
+                <ListItem key={profile.id} data={profile} />
+              ))}
+            </ul>
+          ) : (
+            <div className="my-52 flex flex-col items-center justify-center gap-8">
+              <p className="text-20sb text-gray-400">
+                {submitValue === ''
+                  ? '위키 목록이 없어요.'
+                  : `${submitValue}와(과) 일치하는 검색 결과가 없어요.`}
+              </p>
+              <Image src="/images/empty.png" alt="" width="144" height="144" />
+            </div>
+          )}
 
           {hasList && (
             <div className="my-[120px] flex justify-center mo:my-10">
               <Pagination
-                totalCount={dummyData.totalCount}
+                totalCount={profiles?.totalCount || 0}
                 currentPage={page}
                 pageSize={PAGE_SIZE}
                 onPageChange={handlePageChange}
