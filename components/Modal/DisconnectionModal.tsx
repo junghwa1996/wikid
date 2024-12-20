@@ -1,4 +1,5 @@
-import Modal from './Modal';
+import Button from '../Button';
+import ModalDefault from './ModalDefault';
 
 interface DisconnectionModalProps {
   isOpen: boolean;
@@ -6,31 +7,22 @@ interface DisconnectionModalProps {
   confirmReset: () => void;
 }
 
-const DisconnectionModal = ({
-  isOpen,
+function DisconnectionModal({
   confirmReset,
+  isOpen,
   onClose,
-}: DisconnectionModalProps) => {
+}: DisconnectionModalProps) {
   return (
-    <Modal closeOnBackgroundClick={true} isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-2">
-        <p className="text-lg font-bold">
-          5분 이상 글을 쓰지 않아 접속이 끊어졌어요.
-        </p>
-        <p className="text-sm">
-          위키 참여하기를 통해 다시 위키를 수정해 주세요.
-        </p>
-        <div className="flex justify-end">
-          <button
-            onClick={confirmReset}
-            className="mt-2 w-20 rounded-custom bg-green-200 px-6 py-2 text-background"
-          >
-            확인
-          </button>
-        </div>
-      </div>
-    </Modal>
+    <ModalDefault
+      title="5분 이상 글을 쓰지 않아 접속이 끊어졌어요."
+      text="위키 참여하기를 통해 다시 위키를 수정해 주세요."
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnBackgroundClick={true}
+    >
+      <Button onClick={confirmReset}>확인</Button>
+    </ModalDefault>
   );
-};
+}
 
 export default DisconnectionModal;
