@@ -101,8 +101,8 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-4">
-        <p className="text-lg font-bold">이미지</p>
+      <div className="flex flex-col gap-5">
+        <p className="text-center text-18sb">이미지</p>
         <input
           type="file"
           ref={fileInputRef}
@@ -139,10 +139,10 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
             <Image
               src="/icon/icon-camera.svg"
               alt="카메라 아이콘"
-              width={40}
-              height={40}
+              width={36}
+              height={36}
             />
-            <p className="text-sm text-gray-500">
+            <p className="mt-2 text-14 text-gray-400">
               클릭 또는 이미지를 드래그하여 올려주세요
             </p>
           </button>
@@ -153,7 +153,6 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
             disabled={!previewUrl}
             isLoading={isUpload}
             onClick={handleImageUpload}
-            className="w-40"
           >
             삽입하기
           </Button>
