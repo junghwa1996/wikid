@@ -93,11 +93,6 @@ export default function Boards() {
       setTotalCount(res.totalCount);
     }
   };
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      handleSearchSubmit();
-    }
-  };
 
   // 정렬 옵션
   const options = ['최신순', '인기순'];
@@ -137,7 +132,7 @@ export default function Boards() {
                 value={value}
                 onChange={(value) => setValue(value)}
                 placeholder="제목을 검색해 주세요"
-                onKeyPress={handleKeyPress}
+                onSubmit={handleSearchSubmit}
               />
             </div>
             <Button onClick={handleSearchSubmit}>검색</Button>
