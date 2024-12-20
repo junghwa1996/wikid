@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import CommentForm from '../boards/components/CommentForm';
+import CommentForm from '@/pages/boards/components/CommentForm';
 
 export default function CommentFormTest() {
   const [value, setValue] = useState('');
