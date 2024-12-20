@@ -1,70 +1,17 @@
 import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 
 import Button from '@/components/Button';
 import Dropdown from '@/components/Dropdown';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
 import useCheckMobile from '@/hooks/useCheckMobile';
+import instance from '@/lib/axios-client';
 
 import BoardCardList from './components/BoardCardList';
 import BoardList from './components/BoardList';
 
 import 'swiper/css';
-
-// TODO - API 연결 후 데이터 수정
-const data = {
-  totalCount: 1,
-  list: [
-    {
-      updatedAt: '2024-12-17T08:25:07.098Z',
-      createdAt: '2024-12-17T08:25:07.098Z',
-      likeCount: 0,
-      writer: {
-        name: '이름',
-        id: 1,
-      },
-      image: 'https://via.placeholder.com/1000',
-      title: '게시글 제목입니다.',
-      id: 1,
-    },
-    {
-      updatedAt: '2024-12-17T08:25:07.098Z',
-      createdAt: '2024-12-17T08:25:07.098Z',
-      likeCount: 0,
-      writer: {
-        name: '이름',
-        id: 2,
-      },
-      image: 'https://via.placeholder.com/1000',
-      title: '게시글 제목입니다.',
-      id: 2,
-    },
-    {
-      updatedAt: '2024-12-17T08:25:07.098Z',
-      createdAt: '2024-12-17T08:25:07.098Z',
-      likeCount: 0,
-      writer: {
-        name: '이름',
-        id: 3,
-      },
-      image: 'https://via.placeholder.com/1000',
-      title: '게시글 제목입니다.',
-      id: 3,
-    },
-    {
-      updatedAt: '2024-12-17T08:25:07.098Z',
-      createdAt: '2024-12-17T08:25:07.098Z',
-      likeCount: 0,
-      writer: {
-        name: '이름',
-        id: 4,
-      },
-      image: 'https://via.placeholder.com/1000',
-      title: '게시글 제목입니다.',
-      id: 4,
-    },
-  ],
-};
 
 const BoardCardList_Swiper = dynamic(
   () => import('./components/BoardCardList.swiper'),
@@ -74,28 +21,84 @@ const BoardCardList_Swiper = dynamic(
 );
 
 /**
+ * 게시글 목록을 불러오는 API
+ */
+const getBoards = async (query: string) => {
+  try {
+    const response = await instance.get(`/articles?${query}`);
+    return response.data;
+  } catch (error) {
+    console.error('게시글을 불러오지 못했습니다.', error);
+  }
+};
+
+/**
  * 게시판 페이지
  */
 export default function Boards() {
+  const [boards, setBoards] = useState([]);
+  const [likeBoards, setLikeBoards] = useState([]);
+
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentData, setCurrentData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [selectedOption, setSelectedOption] = useState('최신순');
+
+  const [value, setValue] = useState('');
+
   const isMobile = useCheckMobile();
+  const PAGE_SIZE = 10;
 
-  const options = ['최신순', '인기순'];
+  // 베스트 게시글 GET
+  useEffect(() => {
+    const fetchBoardsLike = async () => {
+      const res = await getBoards('orderBy=like&pageSize=4');
+      if (res) {
+        setLikeBoards(res.list);
+      }
+    };
 
-  // TODO - API 연결 후 수정
-  const handleOption1 = () => {
-    console.log('최신순');
-  };
+    fetchBoardsLike();
+  }, []);
 
-  const handleOption2 = () => {
-    console.log('인기순');
-  };
+  // 모든 게시글 GET
+  useEffect(() => {
+    const fetchBoards = async () => {
+      const orderBy = selectedOption === '최신순' ? 'recent' : 'like';
+      const res = await getBoards(
+        `orderBy=${orderBy}&pageSize=${PAGE_SIZE}&page=${currentPage}`
+      );
+      if (res) {
+        setBoards(res.list);
+        setTotalCount(res.totalCount);
+      }
+    };
 
-  const handleOptionSelect = (option: string) => {
-    if (option === '최신순') {
-      handleOption1();
-    } else if (option === '인기순') {
-      handleOption2();
+    fetchBoards();
+  }, [currentPage, selectedOption]);
+
+  // 게시글 목록 업데이트
+  useEffect(() => {
+    setCurrentData(boards);
+  }, [boards]);
+
+  // 검색 이벤트
+  const handleSearchSubmit = async () => {
+    const res = await getBoards(
+      `keyword=${value}&pageSize=${PAGE_SIZE}&page=${currentPage}`
+    );
+    if (res) {
+      setBoards(res.list);
+      setTotalCount(res.totalCount);
     }
+  };
+
+  // 정렬 옵션
+  const options = ['최신순', '인기순'];
+  const handleOptionSelect = (option: string) => {
+    setSelectedOption(option);
+    setCurrentPage(1);
   };
 
   const pxTablet = 'ta:px-[60px]';
@@ -110,24 +113,29 @@ export default function Boards() {
           <Button href="/addboard">게시물 등록하기</Button>
         </header>
 
+        {/* 베스트 게시글 */}
         <div className={`container mo:px-0 ${pxTablet}`}>
           {!isMobile ? (
-            <BoardCardList data={data.list} />
+            <BoardCardList data={likeBoards} />
           ) : (
-            <BoardCardList_Swiper data={data.list} />
+            <BoardCardList_Swiper data={likeBoards} />
           )}
         </div>
 
+        {/* 전체 게시글 */}
         <div className={`container ${pxTablet}`}>
+          {/* search, dropdown bar */}
           <div className="mb-5 flex items-center gap-5 mo:mb-[30px] mo:flex-wrap mo:gap-x-[15px]">
             <div className="flex-1 basis-8/12">
               <SearchInput
                 size="full"
-                onChange={() => console.log('demo')}
+                value={value}
+                onChange={(value) => setValue(value)}
                 placeholder="제목을 검색해 주세요"
+                onSubmit={handleSearchSubmit}
               />
             </div>
-            <Button>검색</Button>
+            <Button onClick={handleSearchSubmit}>검색</Button>
             <Dropdown
               options={options}
               onSelect={handleOptionSelect}
@@ -135,15 +143,17 @@ export default function Boards() {
             />
           </div>
 
-          <BoardList data={data.list} />
+          {/* 게시글 목록 */}
+          <BoardList data={currentData} />
         </div>
 
+        {/* 페이지네이션 */}
         <div className="mo:-mt-2">
           <Pagination
-            totalCount={data.totalCount}
-            currentPage={1}
-            pageSize={1}
-            onPageChange={() => console.log('페이지 변경')}
+            totalCount={totalCount}
+            currentPage={currentPage}
+            pageSize={PAGE_SIZE}
+            onPageChange={(page) => setCurrentPage(page)}
           />
         </div>
       </div>
