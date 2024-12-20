@@ -24,6 +24,7 @@ function authtest() {
         email: 'apple3@example.com',
         password: 'password',
       });
+
       alert('로그인 성공');
     } catch (error) {
       if (error instanceof Error) {
