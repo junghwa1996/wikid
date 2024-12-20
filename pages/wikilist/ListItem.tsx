@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import LinkBar from '@/components/LinkBar';
-
 import type { ProfileProps } from '@/pages/wikilist';
 
 interface ListItemProps {
