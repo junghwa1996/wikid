@@ -15,10 +15,15 @@ interface ListItemProps {
   };
 }
 
+/**
+ * 위키 목록 페이지 리스트 아이템 컴포넌트
+ * @param data - 목록에 출력할 프로필 데이터
+ */
 export default function ListItem({ data }: ListItemProps) {
   const { name, code, image, city, nationality, job } = data;
   const url = `https://www.wikied.kr/${code}`;
 
+  // 링크바 클릭 핸들러 함수
   const handleLinkClick = () => {
     navigator.clipboard.writeText(url);
     // TODO: 스낵바로 변경
