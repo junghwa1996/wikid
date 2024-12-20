@@ -18,9 +18,11 @@ export default function LinkBar({ link, onClick }: LinkBarProps) {
       className="flex cursor-pointer items-center gap-[5px] rounded-custom bg-green-100 px-[10px] py-[3px] mo:py-1"
     >
       <Image
-        src="icon/icon-link.svg"
+        src="/icon/icon-link.svg"
         alt="링크 아이콘"
-        className="size-5 mo:size-4"
+        className="mo:size-4"
+        width={20}
+        height={20}
       />
       <p className="text-14 text-green-200 mo:text-12">{link}</p>
     </button>
