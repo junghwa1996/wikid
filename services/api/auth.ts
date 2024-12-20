@@ -33,6 +33,12 @@ export const AuthAPI = {
   signin: async (data: { email: string; password: string }) => {
     try {
       const res = await instance.post('/auth/signIn', data);
+
+      // 로그인 성공 시 토큰 저장
+      const { accessToken, refreshToken } = res.data;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+
       return res.data;
     } catch (error) {
       if (error instanceof AxiosError) {
