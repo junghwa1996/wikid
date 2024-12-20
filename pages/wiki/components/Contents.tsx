@@ -77,14 +77,13 @@ export default function Contents({ profile }: ProfileProps) {
   //TODO 편집모드에서 수정 중 취소버튼으로 수정 취소하기 (현재 모달을 닫기만 하면 수정이 취소되는 오류있음)
   const onUCClose = () => {
     setIsUCOpen(false);
-    setIsEditing(false);
-    setNewContent(previousContent.current);
-    setNewName(previousName.current);
   };
 
   const closeAndNoSave = () => {
-    alert('저장하지 않고 나가기를 선택하셨습니다.');
     setIsUCOpen(false);
+    setIsEditing(false);
+    setNewContent(previousContent.current);
+    setNewName(previousName.current);
   };
 
   //5분동안 미기입시 뒤로가기
