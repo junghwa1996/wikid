@@ -3,9 +3,14 @@ import Modal from './Modal';
 interface DisconnectionModalProps {
   isOpen: boolean;
   onClose: () => void;
+  confirmReset: () => void;
 }
 
-const DisconnectionModal = ({ isOpen, onClose }: DisconnectionModalProps) => {
+const DisconnectionModal = ({
+  isOpen,
+  confirmReset,
+  onClose,
+}: DisconnectionModalProps) => {
   return (
     <Modal closeOnBackgroundClick={true} isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-2">
@@ -17,7 +22,7 @@ const DisconnectionModal = ({ isOpen, onClose }: DisconnectionModalProps) => {
         </p>
         <div className="flex justify-end">
           <button
-            onClick={onClose}
+            onClick={confirmReset}
             className="mt-2 w-20 rounded-custom bg-green-200 px-6 py-2 text-background"
           >
             확인
