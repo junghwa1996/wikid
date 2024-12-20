@@ -24,7 +24,7 @@ const Modal = ({
   isOpen,
   onClose,
   children,
-  width = 'w-3/4 mo:w-11/12 pc:w-[395px]',
+  width = 'mo:w-[20.938rem] w-[395px]',
   closeOnBackgroundClick = false,
   closeOnEsc = true,
 }: ModalProps) => {
@@ -73,19 +73,19 @@ const Modal = ({
       >
         {/* 닫기 버튼 영역 */}
         <button
-          className="absolute right-0 top-0 m-2 cursor-pointer"
+          className="absolute right-0 top-0 cursor-pointer p-5"
           onClick={onClose}
           aria-label="모달 닫기"
         >
           <Image
             src="/icon/icon-close.svg"
             alt="닫기 아이콘"
-            width={22}
-            height={22}
+            width={20}
+            height={20}
           />
         </button>
         {/* 컨텐츠 영역 */}
-        <div className="px-5 pb-6 pt-16">{children}</div>
+        <div className="px-5 pb-5 pt-[60px]">{children}</div>
       </div>
     </div>
   );
