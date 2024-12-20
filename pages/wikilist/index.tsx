@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-
-import { instance } from '@/lib/axios-client';
+import { useEffect, useState } from 'react';
 
 import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
+import { instance } from '@/lib/axios-client';
+
 import ListItem from './ListItem';
 
 // 위키 목록 페이지 프로필 데이터 타입
