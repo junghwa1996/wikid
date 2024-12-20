@@ -28,7 +28,6 @@ export interface Profile {
 const getProfileData = async (code: string) => {
   try {
     const res = await instance.get(`/profiles/${code}`);
-    console.log(res);
     return res.data;
   } catch (e) {
     console.error('프로필을 불러오지 못했습니다.', e);

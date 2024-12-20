@@ -58,7 +58,6 @@ export default function Contents({ profile }: ProfileProps) {
       // PATCH 요청을 보내는 코드
       const updatedProfile = {
         content: newContent, // 새로운 내용
-        name: newName, // 새로운 이름
       };
 
       // 프로필 수정 API 호출 ("/profiles/{code}"에 PATCH 요청)
