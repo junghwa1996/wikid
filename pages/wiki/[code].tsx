@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import instance from '@/lib/axios-client';
 
-import Content from './components/Contents';
+import Contents from './components/Contents';
 
 export interface Profile {
   id: number;
@@ -25,9 +25,10 @@ export interface Profile {
   name: string;
 }
 
-const getProfile = async (code: string) => {
+const getProfileData = async (code: string) => {
   try {
     const res = await instance.get(`/profiles/${code}`);
+    console.log(res);
     return res.data;
   } catch (e) {
     console.error('프로필을 불러오지 못했습니다.', e);
@@ -42,9 +43,9 @@ export default function Wiki() {
   const { code } = router.query;
 
   useEffect(() => {
-    if (code) {
+    if (code && typeof code === 'string') {
       const fetchProfile = async () => {
-        const profileData = await getProfile(code as string); // code를 문자열로 변환
+        const profileData = await getProfileData(code as string); // code를 문자열로 변환
         if (profileData) {
           setProfile(profileData); // 프로필 상태 업데이트
         } else {
@@ -59,7 +60,7 @@ export default function Wiki() {
   return (
     <>
       <div className="mt-[160px] w-full px-[100px]">
-        {profile ? <Content profile={profile} /> : <p>불러오는 중입니다...</p>}
+        {profile ? <Contents profile={profile} /> : <p>불러오는 중입니다...</p>}
         <div>프로필 컴포넌트</div>
       </div>
     </>

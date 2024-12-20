@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/Button';
-import DisconnectionModal from '@/components/DisconnectionModal';
+import DisconnectionModal from '@/components/Modal/DisconnectionModal';
+import UnsavedChangesModal from '@/components/Modal/UnsavedChangesModal';
+import WikiQuizModal from '@/components/Modal/WikiQuizModal';
 import TextEditor from '@/components/TextEditor';
-import UnsavedChangesModal from '@/components/UnsavedChangesModal';
-import WikiQuizModal from '@/components/WikiQuizModal';
 import instance from '@/lib/axios-client';
 
 import { Profile } from '../[code]';
@@ -82,6 +82,11 @@ export default function Contents({ profile }: ProfileProps) {
     setNewName(previousName.current);
   };
 
+  const closeAndNoSave = () => {
+    alert('저장하지 않고 나가기를 선택하셨습니다.');
+    setIsUCOpen(false);
+  };
+
   //5분동안 미기입시 뒤로가기
   const handleInactivityWarning = () => {
     setIsDMOpen(true);
@@ -141,7 +146,11 @@ export default function Contents({ profile }: ProfileProps) {
               <Button variant="secondary" onClick={() => setIsUCOpen(true)}>
                 취소
               </Button>
-              <UnsavedChangesModal isOpen={isUCOpen} onClose={onUCClose} />
+              <UnsavedChangesModal
+                isOpen={isUCOpen}
+                closeAndNoSave={closeAndNoSave}
+                onClose={onUCClose}
+              />
               <Button onClick={saveContent}>저장</Button>
             </div>
           )}
@@ -179,7 +188,11 @@ export default function Contents({ profile }: ProfileProps) {
         )}
       </div>
 
-      <DisconnectionModal isOpen={isDMOpen} onClose={onDMClose} />
+      <DisconnectionModal
+        isOpen={isDMOpen}
+        onClose={onDMClose}
+        confirmReset={onDMClose}
+      />
     </div>
   );
 }

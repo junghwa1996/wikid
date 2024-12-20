@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import Button from '@/components/Button';
-import WikiQuizModal from '@/components/WikiQuizModal';
+import WikiQuizModal from '@/components/Modal/WikiQuizModal';
 
 interface BlankProps {
   onQuizSuccess: () => void;
