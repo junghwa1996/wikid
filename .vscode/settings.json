@@ -39,5 +39,7 @@
     "**/node_modules": true,
     "**/.next": true,
     "**/dist": true
-  }
+  },
+  "javascript.format.enable": false,
+  "eslint.format.enable": true
 }
