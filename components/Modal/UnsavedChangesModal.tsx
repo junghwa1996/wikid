@@ -1,4 +1,5 @@
-import Modal from './Modal';
+import Button from '../Button';
+import ModalDefault from './ModalDefault';
 
 interface UnsavedChangesModalProps {
   isOpen: boolean;
@@ -6,27 +7,24 @@ interface UnsavedChangesModalProps {
   closeAndNoSave: () => void;
 }
 
-const UnsavedChangesModal = ({
+function UnsavedChangesModal({
   isOpen,
   closeAndNoSave,
   onClose,
-}: UnsavedChangesModalProps) => {
+}: UnsavedChangesModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} closeOnBackgroundClick={true}>
-      <div className="flex flex-col gap-2">
-        <p className="text-lg font-bold">저장하지 않고 나가시겠어요?</p>
-        <p className="text-sm">작성하신 모든 내용이 사라집니다.</p>
-        <div className="flex justify-end">
-          <button
-            onClick={closeAndNoSave}
-            className="mt-2 w-40 rounded-custom bg-red-100 px-6 py-2 text-background"
-          >
-            페이지 나가기
-          </button>
-        </div>
-      </div>
-    </Modal>
+    <ModalDefault
+      title="저장하지 않고 나가시겠어요?"
+      text="작성하신 모든 내용이 사라집니다."
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnBackgroundClick={false}
+    >
+      <Button onClick={closeAndNoSave} variant="danger">
+        페이지 나가기
+      </Button>
+    </ModalDefault>
   );
-};
+}
 
 export default UnsavedChangesModal;

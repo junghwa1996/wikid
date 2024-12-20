@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
+import InputField from '@/components/Input';
+
 import Button from '../Button';
 import Modal from './Modal';
 
@@ -12,19 +14,6 @@ interface WikiQuizModalProps {
   onQuizComplete: () => void; // 퀴즈 완료 함수
 }
 
-interface WarningTextProps {
-  warning: boolean;
-}
-
-const WarningText = ({ warning }: WarningTextProps) => {
-  if (!warning) return null;
-  return (
-    <p id="warning-message" className="mt-1 text-12 text-red-100">
-      정답이 아닙니다. 다시 입력해 주세요.
-    </p>
-  );
-};
-
 /**
  * 위키 퀴즈 모달 컴포넌트
  * @param isOpen 모달 오픈 여부
@@ -34,13 +23,13 @@ const WarningText = ({ warning }: WarningTextProps) => {
  * @param onQuizComplete 퀴즈 완료 함수
  * @returns WikiQuizModal 컴포넌트
  */
-const WikiQuizModal = ({
+function WikiQuizModal({
   isOpen,
   onClose,
   securityQuestion,
   securityAnswer,
   onQuizComplete,
-}: WikiQuizModalProps) => {
+}: WikiQuizModalProps) {
   // 통합된 상태 관리
   const [state, setState] = useState({
     isCorrect: false,
@@ -178,32 +167,33 @@ const WikiQuizModal = ({
       <form
         ref={formRef}
         onSubmit={handleQuizSubmit}
-        className="mx-auto flex max-w-md flex-col items-center px-4 ta:px-6"
+        className={`mb-5 flex flex-col gap-9 ${keyboardVisible && '!gap-5'}`}
       >
-        <div className={`w-full ${keyboardVisible ? 'pt-1' : 'pt-4'}`}>
-          {!keyboardVisible && (
-            <div className="flex flex-col items-center">
-              <Image
-                src="/icon/icon-lock.svg"
-                alt="자물쇠 아이콘"
-                width={isMobile ? 16 : 20}
-                height={isMobile ? 16 : 20}
-                priority
-              />
-              <p className="mt-2 text-14">다음 퀴즈를 맞추고</p>
-              <p className="text-14">위키를 작성해 보세요.</p>
-            </div>
-          )}
-
+        <div
+          className={`flex flex-col items-center gap-[10px] ${keyboardVisible && '!flex-row justify-center'}`}
+        >
           <div
-            className={`w-full text-left text-18b ${
-              keyboardVisible ? 'mt-1' : 'mt-4'
-            }`}
+            className={`flex size-[42px] items-center justify-center rounded-full bg-white ${keyboardVisible && '!size-auto'}`}
           >
-            {securityQuestion}
+            <Image
+              src="/icon/icon-lock.svg"
+              alt="자물쇠 아이콘"
+              width={20}
+              height={20}
+              priority
+            />
           </div>
+          <p className="text-center text-14 text-gray-400">
+            다음 퀴즈를 맞추고
+            <br className={`${keyboardVisible ? 'mo:hidden' : ''}`} />
+            위키를 작성해 보세요.
+          </p>
+        </div>
 
-          <input
+        <div className="flex flex-col gap-[10px]">
+          <p className="text-18b">{securityQuestion}</p>
+
+          <InputField
             type="text"
             placeholder="답변을 입력해 주세요."
             ref={inputRef}
@@ -211,38 +201,34 @@ const WikiQuizModal = ({
             onChange={handleUserAnswer}
             aria-invalid={state.warning}
             aria-describedby={state.warning ? 'warning-message' : undefined}
-            className={`mt-4 min-h-[44px] w-full rounded-custom border p-2 text-16 focus:outline-none focus:ring-2 ${
-              state.warning
-                ? 'bg-red-50 focus:ring-red-100'
-                : 'bg-gray-100 focus:ring-green-200'
-            }`}
           />
-          <div className="min-h-[50px] w-full pt-1">
-            <WarningText warning={state.warning} />
-          </div>
-          <Button
-            type="submit"
-            disabled={!state.userAnswer.trim() || state.isCorrect}
-            isLoading={state.isSubmitting}
-            className="min-h-[44px] w-full rounded-custom"
-          >
-            확인
-          </Button>
+
+          {state.warning && (
+            <p id="warning-message" className="text-12 text-red-100">
+              정답이 아닙니다. 다시 입력해 주세요.
+            </p>
+          )}
         </div>
+
+        <Button
+          type="submit"
+          disabled={!state.userAnswer.trim() || state.isCorrect}
+          isLoading={state.isSubmitting}
+          size="small"
+          className="w-full"
+        >
+          확인
+        </Button>
       </form>
 
       {!keyboardVisible && (
-        <div className="mt-2 px-4 text-center">
-          <p className="text-12 text-gray-500">
-            위키드는 지인들과 함께하는 즐거운 공간입니다.
-          </p>
-          <p className="text-12 text-gray-500">
-            지인에게 상처를 주지 않도록 작성해 주세요.
-          </p>
+        <div className="mt-2 px-4 text-center text-12 text-gray-400">
+          <p>위키드는 지인들과 함께하는 즐거운 공간입니다.</p>
+          <p>지인에게 상처를 주지 않도록 작성해 주세요.</p>
         </div>
       )}
     </Modal>
   );
-};
+}
 
 export default WikiQuizModal;
