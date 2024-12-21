@@ -4,18 +4,20 @@ import { useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
+import { AuthAPI } from '@/services/api/auth';
 
-function SignUp(): React.ReactElement {
+function SignUp() {
+  const [errorMessage, setErrorMessage] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [name, setName] = useState('');
   const [validFields, setValidFields] = useState({
-    name: false,
-    email: false,
-    password: false,
-    passwordConfirm: false,
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
   });
   const router = useRouter();
 
@@ -49,16 +51,26 @@ function SignUp(): React.ReactElement {
     if (isSubmitting || !isFormValid) return;
 
     setIsSubmitting(true);
+
     try {
-      console.log('Form submitted:', {
+      await AuthAPI.signup({
         email,
         password,
-        passwordConfirm,
+        passwordConfirmation: passwordConfirm,
         name,
       });
+
+      // 회원가입 성공 시 로그인 페이지로 이동
       router.push('/login');
     } catch (error) {
-      console.error('회원가입 중 오류가 발생했습니다:', error);
+      // 에러 발생 시 처리
+      if (error instanceof Error) {
+        alert(error.message);
+        setErrorMessage(error.message);
+        console.log(errorMessage);
+      } else {
+        alert('회원가입 중 오류가 발생했습니다.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -67,8 +79,8 @@ function SignUp(): React.ReactElement {
   const isFormValid = Object.values(validFields).every(Boolean);
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <form onSubmit={handleSubmit}>
+    <div className="flex min-h-screen justify-center pt-[233px] mo:pt-[108px]">
+      <form onSubmit={handleSubmit} className="w-[400px] mo:w-[355px]">
         <div className="flex flex-col items-center gap-[24px]">
           <h2 className="mb-[40px] text-center text-24sb text-gray-500 mo:mb-[8px] ta:mb-[24px]">
             회원가입
@@ -77,6 +89,7 @@ function SignUp(): React.ReactElement {
             label="이름"
             type="name"
             value={name}
+            width="100%"
             onChange={handleNameChange}
             placeholder="이름을 입력해 주세요"
             onValidation={(isValid) => handleValidation('name', isValid)}
@@ -85,6 +98,7 @@ function SignUp(): React.ReactElement {
             label="이메일"
             type="email"
             value={email}
+            width="100%"
             onChange={handleEmailChange}
             placeholder="이메일을 입력해 주세요"
             onValidation={(isValid) => handleValidation('email', isValid)}
@@ -93,6 +107,7 @@ function SignUp(): React.ReactElement {
             label="비밀번호"
             type="password"
             value={password}
+            width="100%"
             onChange={handlePasswordChange}
             placeholder="비밀번호를 입력해 주세요"
             onValidation={(isValid) => handleValidation('password', isValid)}
@@ -101,6 +116,7 @@ function SignUp(): React.ReactElement {
             label="비밀번호 확인"
             type="passwordConfirm"
             value={passwordConfirm}
+            width="100%"
             onChange={handlePasswordConfirmChange}
             placeholder="비밀번호를 다시 입력해 주세요"
             compareValue={password}
@@ -113,7 +129,7 @@ function SignUp(): React.ReactElement {
             disabled={!isFormValid}
             isLoading={isSubmitting}
             variant="primary"
-            className="mt-[6px] h-[45px] w-[400px] mo:w-[355px]"
+            className="mt-[6px] h-[45px] w-full"
           >
             가입하기
           </Button>

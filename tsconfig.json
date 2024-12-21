@@ -21,7 +21,8 @@
       "@/pages/*": ["pages/*"],
       "@/services/*": ["services/*"],
       "@/utils/*": ["utils/*"],
-      "@/hooks/*": ["hooks/*"]
+      "@/hooks/*": ["hooks/*"],
+      "@/lib/*": ["lib/*"]
     }
   },
   "include": [
@@ -30,7 +31,9 @@
     "components/**/*.ts",
     "components/**/*.tsx",
     "utils/**/*.ts",
-    "utils/**/*.tsx"
+    "utils/**/*.tsx",
+    "lib/**/*.ts",
+    "lib/**/*.tsx"
   ],
   "exclude": ["node_modules", "dist", ".next"]
 }
