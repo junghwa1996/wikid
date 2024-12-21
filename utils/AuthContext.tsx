@@ -60,7 +60,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const profileData = res.data.profile ?? null;
 
       if (!profileData) {
-        console.warn('Profile data is null or undefined.');
         setProfile(null);
         return;
       }
@@ -68,9 +67,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const code = profileData.code ?? null;
 
       if (!code) {
-        console.warn(
-          'Code is null, setting profile without additional request.'
-        );
         setProfile(profileData);
         return;
       }
@@ -82,8 +78,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       });
 
       setProfile(profileRes.data);
-    } catch (error) {
-      console.error('Error fetching profile:', error);
+    } catch {
       setProfile(null);
     }
   };
@@ -150,7 +145,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('AuthProvider로 감싸져야 합니다');
   }
   return context;
 };
