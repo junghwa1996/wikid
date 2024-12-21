@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import useOutsideClick from 'hooks/useOutsideClick';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 import Menu from './Menu';
 
@@ -32,32 +34,21 @@ export default function Dropdown({
   };
 
   //외부 클릭시 드롭다운 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  useOutsideClick(dropdownRef, () => setIsOpen(false));
 
   return (
-    <div ref={dropdownRef}>
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`${dropdownSize} flex items-center justify-between rounded-xl border border-gray-300 bg-background px-5 py-3.5 text-14 leading-none text-gray-400 hover:border-green-200 focus:ring-1 focus:ring-green-200`}
+        className={`${dropdownSize} flex items-center justify-between text-nowrap rounded-xl border border-gray-300 bg-background px-5 py-3.5 text-14 leading-none text-gray-400 hover:border-green-200 focus:ring-1 focus:ring-green-200`}
       >
         {selectedOption}
-        <img
+        <Image
           src="/icon/icon-arrowdown.svg"
-          className={`h-4 w-4 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+          className={`size-4 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+          alt="드롭다운 화살표"
+          width={7}
+          height={4}
         />
       </button>
 

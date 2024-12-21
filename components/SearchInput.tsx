@@ -1,7 +1,8 @@
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 interface SearchInputProps {
-  size: 'large' | 'medium';
+  size: 'large' | 'medium' | 'full';
   value?: string;
   onSubmit?: (value: string) => void;
   onChange: (value: string) => void;
@@ -25,6 +26,10 @@ function SearchInput({
     },
     medium: {
       container: 'w-[800px] h-[40px] ',
+      padding: 'p-[20px] pl-[15px]',
+    },
+    full: {
+      container: 'w-full h-[40px] ',
       padding: 'p-[20px] pl-[15px]',
     },
   };
@@ -60,7 +65,7 @@ function SearchInput({
       className="flex items-center rounded-lg bg-gray-100 px-[20px]"
     >
       <label htmlFor="searchInput">
-        <img src="/icon/icon-search.svg" alt="검색" />
+        <Image src="/icon/icon-search.svg" alt="검색" width={22} height={22} />
       </label>
       <input
         id="searchInput"

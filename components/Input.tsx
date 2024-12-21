@@ -11,6 +11,8 @@ interface InputFieldProps {
   label?: string;
   compareValue?: string;
   layout?: 'vertical' | 'horizontal';
+  onValidation?: (isValid: boolean) => void;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 function InputField({
@@ -21,6 +23,9 @@ function InputField({
   label,
   compareValue,
   layout = 'vertical',
+  onValidation,
+  ref,
+  ...props
 }: InputFieldProps) {
   const { errorMessage, validate } = useValidation({
     type,
@@ -40,17 +45,20 @@ function InputField({
   };
 
   const handleBlur = () => {
-    if (layout === 'vertical')
-      // 가로모드 에러 확인 비활성화
-      validate(value);
+    if (layout === 'vertical') {
+      const error = validate(value);
+      onValidation?.(!error && value.length > 0);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e);
     if (layout === 'vertical' && errorMessage) {
-      validate(e.target.value);
+      const error = validate(e.target.value);
+      onValidation?.(!error && e.target.value.length > 0);
     }
   };
+
   const getInputType = () => {
     if (type === 'name') {
       return 'text';
@@ -59,18 +67,20 @@ function InputField({
     }
     return type;
   };
+
   //스타일에 따른 클래스
   const variantClass = {
-    containerVertical: 'mb-[24px] flex flex-col gap-[10px]',
-    containerHorizontal: 'mb-[24px] w-[239px] flex items-center gap-[10px]',
+    containerVertical: 'flex flex-col gap-[10px]',
+    containerHorizontal: 'w-[239px] flex items-center gap-[10px]',
     labelVertical: 'text-14 text-gray-500',
     labelHorizontal: 'text-14 text-gray-400 w-[60px] flex-shrink-0',
-    base: 'px-[20px] py-[10px] h-[45px] w-[400px] rounded-md text-[14px] text-gray-500 placeholder:text-14 focus:outline-none mo:w-[355px]',
+    base: 'px-[20px] py-[10px] h-[45px] w-full rounded-md text-[14px] text-gray-500 placeholder:text-14 focus:outline-none',
     error: 'border border-red-100 bg-red-50',
     normal:
       'bg-gray-100 focus:border-green-200 focus:ring-1 focus:ring-green-200',
     errorText: 'text-12 text-red-100',
   };
+
   const labelClass =
     layout === 'horizontal'
       ? variantClass.labelHorizontal
@@ -99,6 +109,8 @@ function InputField({
         onBlur={handleBlur}
         onFocus={handleFocus}
         className={inputClass}
+        ref={ref}
+        {...props}
       />
       {layout === 'vertical' && errorMessage && (
         <span className={variantClass.errorText}>{errorMessage}</span>

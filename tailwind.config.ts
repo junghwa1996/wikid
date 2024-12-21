@@ -8,6 +8,15 @@ export default {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    container: {
+      center: true,
+      padding: '1.25rem',
+      screens: {
+        mo: '100%',
+        ta: '100%',
+        pc: '1100px',
+      },
+    },
     extend: {
       colors: {
         background: 'var(--background)',
@@ -107,9 +116,10 @@ export default {
       },
     },
     screens: {
-      mo: { max: '767px' },
-      ta: { min: '768px', max: '1023px' },
+      mo: { max: '743px' },
+      ta: { min: '744px', max: '1023px' },
       pc: { min: '1024px' },
+      tamo: { max: '1024px' },
     },
   },
   plugins: [],
