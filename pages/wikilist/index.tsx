@@ -1,7 +1,7 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+import EmptyList from '@/components/EmptyList';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
 import { instance } from '@/lib/axios-client';
@@ -37,6 +37,10 @@ export default function WikiList() {
   const [profiles, setProfiles] = useState<ListProps | null>(null);
   const [page, setPage] = useState(1);
   const hasList = (profiles?.totalCount ?? 0) > 0;
+  const emptyListText =
+    submitValue === ''
+      ? '위키 목록이 없어요.'
+      : `${submitValue}와(과) 일치하는 검색 결과가 없어요.`;
 
   // 검색 인풋 값 변경 핸들러 함수
   const handleChange = (value: string) => {
@@ -87,7 +91,7 @@ export default function WikiList() {
             onChange={handleChange}
             onSubmit={handleSubmit}
           />
-          {submitValue && (
+          {submitValue && hasList && (
             <p className="mt-4 text-16 text-gray-400">
               {`“${submitValue}”님을 총 `}
               <span className="text-green-200">{profiles?.totalCount}</span>명
@@ -102,14 +106,7 @@ export default function WikiList() {
               ))}
             </ul>
           ) : (
-            <div className="my-52 flex flex-col items-center justify-center gap-8">
-              <p className="text-20sb text-gray-400">
-                {submitValue === ''
-                  ? '위키 목록이 없어요.'
-                  : `${submitValue}와(과) 일치하는 검색 결과가 없어요.`}
-              </p>
-              <Image src="/images/empty.png" alt="" width="144" height="144" />
-            </div>
+            <EmptyList classNames="my-52" text={emptyListText} />
           )}
 
           {hasList && (
