@@ -121,74 +121,87 @@ function MyPage(): React.ReactElement {
 
   const isWikiFormValid = question.trim() !== '' && answer.trim() !== '';
 
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col items-center gap-[32px] px-[16px] py-[48px]">
-          <h2 className="mb-[40px] text-center text-24sb text-gray-500 mo:mb-[8px] ta:mb-[24px]">
-            계정설정
-          </h2>
-          <div className="flex flex-col items-center gap-[8px]">
-            <InputField
-              label="비밀번호 변경"
-              type="password"
-              value={currentPassword}
-              onChange={handleCurrentPasswordChange}
-              placeholder="기존 비밀번호"
-            />
-            <InputField
-              label=""
-              type="password"
-              value={newPassword}
-              onChange={handleNewPasswordChange}
-              placeholder="새 비밀번호"
-            />
-            <InputField
-              label=""
-              type="password"
-              value={newPasswordConfirm}
-              onChange={handleNewPasswordConfirmChange}
-              placeholder="새 비밀번호 확인"
-            />
+  const inputSectionStyle = 'flex w-full flex-col items-center gap-[8px]';
+  const inputContainerStyle = 'flex w-full flex-col gap-[8px]';
 
-            <Button
-              type="submit"
-              disabled={!isPasswordFormValid}
-              isLoading={isSubmitting}
-              variant="primary"
-              size="small"
-              className="mt-[8px] self-end"
-            >
-              변경하기
-            </Button>
-            {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+  return (
+    <div className="flex min-h-screen justify-center pt-[221px] mo:pt-[108px]">
+      <form onSubmit={handleSubmit} className="w-[400px] mo:w-[355px]">
+        <div className="flex w-full flex-col items-center gap-[32px]">
+          <h2 className="mb-[32px] text-center text-24sb text-gray-500">
+            계정설정
+          </h2>{' '}
+          <div className={inputSectionStyle}>
+            <div className={inputContainerStyle}>
+              <InputField
+                label="비밀번호 변경"
+                type="password"
+                value={currentPassword}
+                width="100%"
+                onChange={handleCurrentPasswordChange}
+                placeholder="기존 비밀번호"
+              />
+              <InputField
+                label=""
+                type="password"
+                value={newPassword}
+                width="100%"
+                onChange={handleNewPasswordChange}
+                placeholder="새 비밀번호"
+              />
+              <InputField
+                label=""
+                type="password"
+                value={newPasswordConfirm}
+                width="100%"
+                onChange={handleNewPasswordConfirmChange}
+                placeholder="새 비밀번호 확인"
+              />
+
+              <Button
+                type="submit"
+                disabled={!isPasswordFormValid}
+                isLoading={isSubmitting}
+                variant="primary"
+                size="small"
+                className="mt-[8px] self-end"
+              >
+                변경하기
+              </Button>
+              {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+            </div>{' '}
           </div>
-          <div className="flex flex-col items-center gap-[8px]">
-            <InputField
-              label="위키 생성하기"
-              type="text"
-              value={question}
-              onChange={handleQuestionChange}
-              placeholder="질문을 입력해 주세요"
-            />
-            <InputField
-              label=""
-              type="text"
-              value={answer}
-              onChange={handleAnswerChange}
-              placeholder="답을 입력해 주세요"
-            />
-            <Button
-              type="submit"
-              disabled={!isWikiFormValid}
-              isLoading={isSubmitting}
-              variant="primary"
-              size="small"
-              className="mt-[8px] self-end"
-              onClick={(e) => handleWikiSubmit(e)}
-            >
-              생성하기
-            </Button>{' '}
+          <div className="w-full border-b border-gray-200"></div>
+          <div className={inputSectionStyle}>
+            <div className={inputContainerStyle}>
+              <InputField
+                label="위키 생성하기"
+                type="text"
+                value={question}
+                width="100%"
+                onChange={handleQuestionChange}
+                placeholder="질문을 입력해 주세요"
+              />
+              <InputField
+                label=""
+                type="text"
+                value={answer}
+                width="100%"
+                onChange={handleAnswerChange}
+                placeholder="답을 입력해 주세요"
+              />
+              <Button
+                type="submit"
+                disabled={!isWikiFormValid}
+                isLoading={isSubmitting}
+                variant="primary"
+                size="small"
+                className="mt-[8px] self-end"
+                onClick={(e) => handleWikiSubmit(e)}
+              >
+                생성하기
+              </Button>{' '}
+            </div>
           </div>
         </div>
       </form>
