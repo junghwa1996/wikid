@@ -73,7 +73,7 @@ function InputField({
   //스타일에 따른 클래스
   const variantClass = {
     containerVertical: 'flex flex-col gap-[10px]',
-    containerHorizontal: 'w-[239px] flex items-center gap-[10px]',
+    containerHorizontal: 'flex items-center gap-[10px]',
     labelVertical: 'text-14 text-gray-500',
     labelHorizontal: 'text-14 text-gray-400 w-[60px] flex-shrink-0',
     base: 'px-[20px] py-[10px] h-[45px] w-full rounded-md text-[14px] text-gray-500 placeholder:text-14 focus:outline-none',
@@ -101,6 +101,7 @@ function InputField({
           ? `${variantClass.containerHorizontal} relative`
           : `${variantClass.containerVertical} relative`
       }
+      style={width ? { width } : undefined}
     >
       {label && <label className={labelClass}>{label}</label>}
       <input
