@@ -54,22 +54,43 @@ export default function Contents({ profile }: ProfileProps) {
 
   //편집된 내용 저장 후 편집모드 종료
   const saveContent = async () => {
-    try {
-      // PATCH 요청을 보내는 코드
-      const updatedProfile = {
-        content: newContent, // 새로운 내용
-      };
+    const refreshToken = localStorage.getItem('refreshToken');
 
-      // 프로필 수정 API 호출 ("/profiles/{code}"에 PATCH 요청)
-      await instance.patch(`/profiles/${profile?.code}`, updatedProfile);
+    if (!refreshToken) {
+      try {
+        // PATCH 요청을 보내는 코드
+        const updatedProfile = {
+          content: newContent, // 새로운 내용
+        };
 
-      // 수정이 완료되면 상태 업데이트
-      previousContent.current = newContent;
-      previousName.current = newName;
-      setIsEditing(false);
-    } catch (error) {
-      console.error('프로필을 저장하는 데 실패했습니다.', error);
-      // 요청 실패시 오류 처리 추가 (예: 사용자에게 알림)
+        // 프로필 수정 API 호출 ("/profiles/{code}"에 PATCH 요청)
+        await instance.patch(`/profiles/${profile?.code}`, updatedProfile);
+
+        // 수정이 완료되면 상태 업데이트
+        previousContent.current = newContent;
+        setIsEditing(false);
+      } catch (error) {
+        console.error('프로필을 저장하는 데 실패했습니다.', error);
+        // 요청 실패시 오류 처리 추가 (예: 사용자에게 알림)
+      }
+    } else {
+      try {
+        // refreshToken이 있을떼(로그인 상태일때)
+        const updatedProfile = {
+          content: newContent, // 새로운 내용
+          //TODO 프로필 컴포넌트 상태 업데이트
+        };
+
+        // 프로필 수정 API 호출 ("/profiles/{code}"에 PATCH 요청)
+        await instance.patch(`/profiles/${profile?.code}`, updatedProfile);
+
+        // 수정이 완료되면 상태 업데이트
+        previousContent.current = newContent;
+        setIsEditing(false);
+      } catch (error) {
+        console.error('프로필을 저장하는 데 실패했습니다.', error);
+        // 요청 실패시 오류 처리 추가 (예: 사용자에게 알림)
+      }
     }
   };
 
