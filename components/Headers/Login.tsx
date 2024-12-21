@@ -6,8 +6,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Menu from '../Menu';
 
 interface LoginProps {
-  login: () => void;
-  logout: () => void;
   isMobile: boolean;
   isLoggedIn: boolean;
 }
@@ -20,12 +18,7 @@ interface LoginProps {
  * @param isLoggedIn 로그인 여부 판별
  */
 
-export default function Login({
-  login,
-  logout,
-  isMobile,
-  isLoggedIn,
-}: LoginProps) {
+export default function Login({ isMobile, isLoggedIn }: LoginProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
 
@@ -59,9 +52,11 @@ export default function Login({
     }
     //TODO 로그인 처리 (추후 업데이트)
     else if (option === '로그인') {
-      login();
+      router.push('/login');
     } else if (option === '로그아웃') {
-      logout();
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      router.push('/');
     }
   };
 
@@ -113,7 +108,10 @@ export default function Login({
       </button>
     </div>
   ) : (
-    <button onClick={login} className="text-14 text-gray-400">
+    <button
+      onClick={() => router.push('/login')}
+      className="text-14 text-gray-400"
+    >
       로그인
     </button>
   );
