@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import Button from '@/components/Button';
+import EditorViewer from '@/components/EditorViewer';
 import Heart from '@/components/Heart/Heart';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import instance from '@/lib/axios-client';
@@ -105,10 +106,7 @@ export default function BoardDetailCard({
           height={300}
           className="mb-5 mo:mb-[15px] mo:max-h-[177px] mo:max-w-[295px]"
         />
-        <div
-          dangerouslySetInnerHTML={{ __html: content }}
-          className="contentStyle"
-        />
+        <EditorViewer content={content} />
       </div>
     </div>
   );
