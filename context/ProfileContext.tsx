@@ -28,14 +28,14 @@ export interface Profile {
   id: number;
 }
 
-interface AuthContextType {
+interface ProfileContextType {
   isAuthenticated: boolean;
   profile: Profile | null;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -71,11 +71,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         return;
       }
 
-      const profileRes = await instance.get(`/profiles/${code}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const profileRes = await instance.get(`/profiles/${code}`);
 
       setProfile(profileRes.data);
     } catch {
@@ -136,16 +132,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, profile }}>
+    <ProfileContext.Provider value={{ isAuthenticated, profile }}>
       {children}
-    </AuthContext.Provider>
+    </ProfileContext.Provider>
   );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
+export const useProfileContext = () => {
+  const context = useContext(ProfileContext);
   if (!context) {
-    throw new Error('AuthProvider로 감싸져야 합니다');
+    throw new Error('ProfileProvider로 감싸져야 합니다');
   }
   return context;
 };

@@ -2,15 +2,14 @@ import useCheckMobile from 'hooks/useCheckMobile';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useAuth } from '@/utils/AuthContext';
-
+import { useProfileContext } from '../../context/ProfileContext';
 import Alarm from './Alarm';
 import GNB from './GNB';
 import Login from './Login';
 
 export default function Headers() {
   // TODO 임시 로그인 상태(추후 업데이트예정)
-  const { isAuthenticated, profile } = useAuth();
+  const { isAuthenticated, profile } = useProfileContext();
   const isMobile = useCheckMobile();
 
   return (
