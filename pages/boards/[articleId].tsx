@@ -1,3 +1,5 @@
+import Head from 'next/head';
+
 import BoardDetailCard from './components/BoardDetailCard';
 
 {
@@ -20,27 +22,32 @@ const data = {
 
 export default function boardsDetails() {
   return (
-    <main className="mt-20 py-[50px]">
-      <div className="container">
-        <BoardDetailCard
-          // TODO - api 작업 시 수정
-          isOwner={data.writer.id === 1}
-          title={data.title}
-          name={data.writer.name}
-          updatedAt={data.updatedAt}
-          likeCount={data.likeCount}
-          content={data.content}
-        />
-        {/* ANCHOR - 리뷰를 위해서 추가한 코드 */}
-        <BoardDetailCard
-          isOwner={data.writer.id === 2}
-          title={data.title}
-          name={data.writer.name}
-          updatedAt={data.updatedAt}
-          likeCount={data.likeCount}
-          content={data.content}
-        />
-      </div>
-    </main>
+    <>
+      <Head>
+        <title>게시글 제목 - 자유게시판 | wikied</title>
+      </Head>
+      <main className="mt-20 py-[50px]">
+        <div className="container">
+          <BoardDetailCard
+            // TODO - api 작업 시 수정
+            isOwner={data.writer.id === 1}
+            title={data.title}
+            name={data.writer.name}
+            updatedAt={data.updatedAt}
+            likeCount={data.likeCount}
+            content={data.content}
+          />
+          {/* ANCHOR - 리뷰를 위해서 추가한 코드 */}
+          <BoardDetailCard
+            isOwner={data.writer.id === 2}
+            title={data.title}
+            name={data.writer.name}
+            updatedAt={data.updatedAt}
+            likeCount={data.likeCount}
+            content={data.content}
+          />
+        </div>
+      </main>
+    </>
   );
 }
