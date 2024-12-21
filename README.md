@@ -58,9 +58,9 @@
 
 # 팀원 구성
 
-| 양정화                                         | 이학수                             | 김예도                                   | 김태훈                                     | 민지이                                                     |
-| ---------------------------------------------- | ---------------------------------- | ---------------------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
-| [@junghwa1996](https://github.com/junghwa1996) | [@swp91](https://github.com/swp91) | [@solprime](https://github.com/solprime) | [@horororok](https://github.com/horororok) | [@crazyupinc-design](https://github.com/crazyupinc-design) |
+| 양정화                                         | 이학수                                       | 김예도                                   | 김태훈                                     | 민지이                                                     |
+| ---------------------------------------------- | -------------------------------------------- | ---------------------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
+| [@junghwa1996](https://github.com/junghwa1996) | [@haksoo0918](https://github.com/haksoo0918) | [@solprime](https://github.com/solprime) | [@horororok](https://github.com/horororok) | [@crazyupinc-design](https://github.com/crazyupinc-design) |
 
 # 기술 스택
 
