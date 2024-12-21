@@ -51,7 +51,7 @@ export default function Addboard() {
 
     try {
       const res = await instance.post('/articles', {
-        image: 'https://ifh.cc/g/5BW0t9.png',
+        image: 'https://ifh.cc/g/V26MYS.png',
         content,
         title,
       });
