@@ -57,16 +57,9 @@ export default function BoardsDetails() {
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('accessToken');
-      await instance.post(
-        `/articles/${articleId}/comments`,
-        { content: value },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await instance.post(`/articles/${articleId}/comments`, {
+        content: value,
+      });
       setValue('');
       const res = await instance.get(
         `/articles/${articleId}/comments?limit=${LIMIT}`
@@ -80,16 +73,7 @@ export default function BoardsDetails() {
   // 댓글 수정
   const handleUpdate = async (id: number, newContent: string) => {
     try {
-      const token = localStorage.getItem('accessToken');
-      await instance.patch(
-        `/comments/${id}`,
-        { content: newContent },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await instance.patch(`/comments/${id}`, { content: newContent });
       const res = await instance.get(
         `/articles/${articleId}/comments?limit=${LIMIT}`
       );
@@ -102,12 +86,7 @@ export default function BoardsDetails() {
   // 댓글 삭제
   const handleDelete = async (id: number) => {
     try {
-      const token = localStorage.getItem('accessToken');
-      await instance.delete(`/comments/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await instance.delete(`/comments/${id}`);
       const res = await instance.get(
         `/articles/${articleId}/comments?limit=${LIMIT}`
       );

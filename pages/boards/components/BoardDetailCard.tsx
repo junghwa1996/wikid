@@ -55,12 +55,7 @@ export default function BoardDetailCard({
   // 삭제하기 버튼 클릭 시 게시글 삭제
   const handleDeleteClick = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-      await instance.delete(`/articles/${articleId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await instance.delete(`/articles/${articleId}`);
       router.push('/boards');
     } catch (error) {
       console.error('게시글을 삭제하지 못했습니다.', error);
