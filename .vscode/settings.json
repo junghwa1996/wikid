@@ -1,9 +1,11 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode", // Prettier를 기본 포맷터로 설정
-  "editor.formatOnSave": true, // 저장 시 자동으로 포맷팅
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
+  "eslint.enable": true,
+  "eslint.workingDirectories": [{ "mode": "auto" }],
   "editor.quickSuggestions": {
     "strings": true
   },
@@ -37,5 +39,7 @@
     "**/node_modules": true,
     "**/.next": true,
     "**/dist": true
-  }
+  },
+  "javascript.format.enable": false,
+  "eslint.format.enable": true
 }
