@@ -62,8 +62,8 @@ function Login(): React.ReactElement {
   const isFormValid = Object.values(validFields).every(Boolean);
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <form onSubmit={handleSubmit}>
+    <div className="flex min-h-screen justify-center pt-[233px] mo:pt-[203px]">
+      <form onSubmit={handleSubmit} className="w-[400px] mo:w-[355px]">
         <div className="flex flex-col items-center gap-[24px]">
           <h2 className="mb-[40px] text-center text-24sb text-gray-500 mo:mb-[8px] ta:mb-[24px]">
             로그인
@@ -72,6 +72,7 @@ function Login(): React.ReactElement {
             label="이메일"
             type="email"
             value={email}
+            width="100%"
             onChange={handleEmailChange}
             placeholder="이메일을 입력해 주세요"
             onValidation={(isValid) => handleValidation('email', isValid)}
@@ -80,6 +81,7 @@ function Login(): React.ReactElement {
             label="비밀번호"
             type="password"
             value={password}
+            width="100%"
             onChange={handlePasswordChange}
             placeholder="비밀번호를 입력해 주세요"
             onValidation={(isValid) => handleValidation('password', isValid)}
@@ -89,7 +91,7 @@ function Login(): React.ReactElement {
             disabled={!isFormValid}
             isLoading={isSubmitting}
             variant="primary"
-            className="mt-[6px] h-[45px] w-[400px] mo:w-[355px]"
+            className="mt-[6px] h-[45px] w-full"
           >
             로그인
           </Button>
