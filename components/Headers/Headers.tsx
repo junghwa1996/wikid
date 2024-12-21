@@ -10,7 +10,7 @@ import Login from './Login';
 
 export default function Headers() {
   // TODO 임시 로그인 상태(추후 업데이트예정)
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, profile } = useAuth();
   const isMobile = useCheckMobile();
 
   return (
@@ -29,7 +29,11 @@ export default function Headers() {
       {/* 로그인 여부에 따라 조건부로 노출 */}
       <div className="flex items-center gap-5">
         <Alarm isLoggedIn={isAuthenticated} />
-        <Login isMobile={isMobile} isLoggedIn={isAuthenticated} />
+        <Login
+          isMobile={isMobile}
+          isLoggedIn={isAuthenticated}
+          profile={profile}
+        />
       </div>
     </header>
   );

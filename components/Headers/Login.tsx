@@ -5,9 +5,30 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Menu from '../Menu';
 
+interface Profile {
+  image: string;
+  updatedAt: string;
+  securityQuestion: string;
+  teamId: string;
+  content: string;
+  nationality: string;
+  family: string;
+  bloodType: string;
+  nickname: string;
+  birthday: string;
+  sns: string;
+  job: string;
+  mbti: string;
+  city: string;
+  code: string;
+  name: string;
+  id: number;
+}
+
 interface LoginProps {
   isMobile: boolean;
   isLoggedIn: boolean;
+  profile: Profile | null;
 }
 
 /**
@@ -18,12 +39,12 @@ interface LoginProps {
  * @param isLoggedIn 로그인 여부 판별
  */
 
-export default function Login({ isMobile, isLoggedIn }: LoginProps) {
+export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
 
   //TODO 프로필 이미지 처리(추후 업데이트)
-  const profileImage = null;
+  const profileImage = profile?.image || '/icon/icon-profile.svg';
   const router = useRouter();
   const loginMenuRef = useRef<HTMLDivElement>(null);
 
@@ -65,13 +86,15 @@ export default function Login({ isMobile, isLoggedIn }: LoginProps) {
   return isLoggedIn ? (
     <div ref={loginMenuRef} className="flex">
       <button className="relative" onClick={() => setIsOpen(!isOpen)}>
-        <Image
-          src={profileImage || '/icon/icon-profile.svg'}
-          className="mo:hidden"
-          alt="프로필 아이콘"
-          width={32}
-          height={32}
-        />
+        <div className="flex size-[32px] overflow-hidden rounded-full">
+          <Image
+            src={profileImage}
+            className="object-cover mo:hidden"
+            alt="프로필 아이콘"
+            width={32}
+            height={32}
+          />
+        </div>
         <Image
           src="/icon/icon-menu.svg"
           className="hidden mo:block"
