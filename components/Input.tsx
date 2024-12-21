@@ -11,6 +11,7 @@ interface InputFieldProps {
   label?: string;
   compareValue?: string;
   layout?: 'vertical' | 'horizontal';
+  width?: string;
   onValidation?: (isValid: boolean) => void;
   ref?: React.Ref<HTMLInputElement>;
 }
@@ -23,6 +24,7 @@ function InputField({
   label,
   compareValue,
   layout = 'vertical',
+  width,
   onValidation,
   ref,
   ...props
