@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 import Button from '@/components/Button';
@@ -111,56 +112,63 @@ export default function BoardsDetails() {
   }, [update, comments]);
 
   return (
-    <main className="mt-20 py-[50px] mo:py-5 ta:py-10 tamo:mt-[60px]">
-      <div className="container flex flex-col gap-[60px] ta:px-[60px] pc:max-w-[1095px] tamo:gap-10">
-        {/* 게시글 상세 본문 */}
-        <BoardDetailCard
-          // TODO - api 작업 시 수정
-          isOwner={data.writer.id === 1}
-          title={data.title}
-          name={data.writer.name}
-          updatedAt={data.updatedAt}
-          likeCount={data.likeCount}
-          content={data.content}
-        />
+    <>
+      <Head>
+        <title>게시글 제목 - 자유게시판 | wikied</title>
+      </Head>
+      <main className="mt-20 py-[50px] mo:py-5 ta:py-10 tamo:mt-[60px]">
+        <div className="container flex flex-col gap-[60px] ta:px-[60px] pc:max-w-[1095px] tamo:gap-10">
+          {/* 게시글 상세 본문 */}
+          <BoardDetailCard
+            // TODO - api 작업 시 수정
+            isOwner={data.writer.id === 1}
+            title={data.title}
+            name={data.writer.name}
+            updatedAt={data.updatedAt}
+            likeCount={data.likeCount}
+            content={data.content}
+          />
 
-        {/* 목록으로 이동 버튼 */}
-        <div className="flex justify-center">
-          <Button href="/boards" variant="secondary" className="w-[140px]">
-            목록으로
-          </Button>
-        </div>
-
-        {/* 댓글 목록 */}
-        <div>
-          {/* 댓글 from */}
-          <div className="mb-[42px] tamo:mb-6">
-            <div className="mb-[15px] text-18sb mo:mb-2 mo:text-16sb">
-              댓글&nbsp;
-              <span className="text-green-200">{commentsData.list.length}</span>
-            </div>
-            <CommentForm value={value} onChange={handleChange} />
+          {/* 목록으로 이동 버튼 */}
+          <div className="flex justify-center">
+            <Button href="/boards" variant="secondary" className="w-[140px]">
+              목록으로
+            </Button>
           </div>
 
-          {/* 댓글 리스트 */}
-          <ul className="flex flex-col gap-6 mo:gap-[14px] ta:gap-4">
-            {comments.map((item) => (
-              <li key={item.id}>
-                <Comment
-                  name={item.writer.name}
-                  content={item.content}
-                  date={item.updatedAt}
-                  onclick={{
-                    update: () => handleUpdate(item.id, 'Updated content'),
-                    delete: () => handleDelete(item.id),
-                  }}
-                  isOwner={item.writer.id === userId}
-                />
-              </li>
-            ))}
-          </ul>
+          {/* 댓글 목록 */}
+          <div>
+            {/* 댓글 from */}
+            <div className="mb-[42px] tamo:mb-6">
+              <div className="mb-[15px] text-18sb mo:mb-2 mo:text-16sb">
+                댓글&nbsp;
+                <span className="text-green-200">
+                  {commentsData.list.length}
+                </span>
+              </div>
+              <CommentForm value={value} onChange={handleChange} />
+            </div>
+
+            {/* 댓글 리스트 */}
+            <ul className="flex flex-col gap-6 mo:gap-[14px] ta:gap-4">
+              {comments.map((item) => (
+                <li key={item.id}>
+                  <Comment
+                    name={item.writer.name}
+                    content={item.content}
+                    date={item.updatedAt}
+                    onclick={{
+                      update: () => handleUpdate(item.id, 'Updated content'),
+                      delete: () => handleDelete(item.id),
+                    }}
+                    isOwner={item.writer.id === userId}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
