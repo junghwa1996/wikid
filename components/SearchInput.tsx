@@ -65,7 +65,13 @@ function SearchInput({
       className="flex items-center rounded-lg bg-gray-100 px-[20px]"
     >
       <label htmlFor="searchInput">
-        <Image src="/icon/icon-search.svg" alt="검색" width={22} height={22} />
+        <Image
+          src="/icon/icon-search.svg"
+          alt="검색"
+          width={22}
+          height={22}
+          layout="fixed"
+        />
       </label>
       <input
         id="searchInput"
