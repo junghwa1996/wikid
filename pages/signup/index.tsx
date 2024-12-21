@@ -79,8 +79,8 @@ function SignUp() {
   const isFormValid = Object.values(validFields).every(Boolean);
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <form onSubmit={handleSubmit}>
+    <div className="flex min-h-screen justify-center pt-[233px] mo:pt-[108px]">
+      <form onSubmit={handleSubmit} className="w-[400px] mo:w-[355px]">
         <div className="flex flex-col items-center gap-[24px]">
           <h2 className="mb-[40px] text-center text-24sb text-gray-500 mo:mb-[8px] ta:mb-[24px]">
             회원가입
@@ -89,6 +89,7 @@ function SignUp() {
             label="이름"
             type="name"
             value={name}
+            width="100%"
             onChange={handleNameChange}
             placeholder="이름을 입력해 주세요"
             onValidation={(isValid) => handleValidation('name', isValid)}
@@ -97,6 +98,7 @@ function SignUp() {
             label="이메일"
             type="email"
             value={email}
+            width="100%"
             onChange={handleEmailChange}
             placeholder="이메일을 입력해 주세요"
             onValidation={(isValid) => handleValidation('email', isValid)}
@@ -105,6 +107,7 @@ function SignUp() {
             label="비밀번호"
             type="password"
             value={password}
+            width="100%"
             onChange={handlePasswordChange}
             placeholder="비밀번호를 입력해 주세요"
             onValidation={(isValid) => handleValidation('password', isValid)}
@@ -113,6 +116,7 @@ function SignUp() {
             label="비밀번호 확인"
             type="passwordConfirm"
             value={passwordConfirm}
+            width="100%"
             onChange={handlePasswordConfirmChange}
             placeholder="비밀번호를 다시 입력해 주세요"
             compareValue={password}
@@ -125,7 +129,7 @@ function SignUp() {
             disabled={!isFormValid}
             isLoading={isSubmitting}
             variant="primary"
-            className="mt-[6px] h-[45px] w-[400px] mo:w-[355px]"
+            className="mt-[6px] h-[45px] w-full"
           >
             가입하기
           </Button>
