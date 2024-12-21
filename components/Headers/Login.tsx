@@ -86,7 +86,7 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
   return isLoggedIn ? (
     <div ref={loginMenuRef} className="flex">
       <button className="relative" onClick={() => setIsOpen(!isOpen)}>
-        <div className="flex size-[32px] overflow-hidden rounded-full">
+        <div className="flex size-[32px] overflow-hidden rounded-full mo:hidden">
           <Image
             src={profileImage}
             className="object-cover mo:hidden"

@@ -14,7 +14,7 @@ export default function Headers() {
   const isMobile = useCheckMobile();
 
   return (
-    <header className="fixed left-0 top-0 z-10 flex w-full items-center justify-between bg-background py-5 shadow-custom mo:h-[60px] mo:px-8 ta:h-[60px] ta:px-[20px] pc:h-[80px] pc:px-[80px]">
+    <header className="fixed left-0 top-0 z-10 flex w-full items-center justify-between bg-background py-5 shadow-custom pc:h-[80px] pc:px-[80px] tamo:h-[60px] tamo:px-[20px]">
       <div className="flex gap-10">
         <Link href="/">
           <Image
