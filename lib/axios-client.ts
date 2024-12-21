@@ -8,11 +8,24 @@ import axios, {
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 // 토큰 인증이 필요 없는 api 경로
-const PUBLIC_ENDPOINTS = [
-  '/auth/signUp',
-  '/auth/signIn',
-  '/auth/refresh-token',
-];
+// GET /profiles
+// GET /profiles/{code}
+// GET /profiles/{code}/ping
+// GET /articles/{articleId}/cpmments
+// GET /articles
+// POST /auth/signUp
+// POST /auth/signIn
+// POST /auth/refresh-token
+const PUBLIC_ENDPOINTS = {
+  post: ['/auth/signUp', '/auth/signIn', '/auth/refresh-token'],
+  get: [
+    '/profiles',
+    '/profiles/',
+    '/articles',
+    '/articles/',
+    '/articles/*/comments', // 와일드카드 패턴 사용
+  ],
+};
 
 /**
  * 인증 처리가 포함된 커스텀 axios 인스턴스
@@ -36,9 +49,26 @@ export const instance = axios.create({
 });
 
 // 주어진 url이 공개 엔드포인트인지 확인
-const isPublicEndPoint = (url: string | undefined): boolean => {
-  if (!url) return false;
-  return PUBLIC_ENDPOINTS.some((endpoint) => url.includes(endpoint));
+const isPublicEndPoint = (
+  url: string | undefined,
+  method: string | undefined
+): boolean => {
+  if (!url || !method) return false;
+
+  const upperMethod = method.toUpperCase();
+
+  // POST 요청인 경우 auth 관련 엔드포인트만 체크
+  if (upperMethod === 'POST') {
+    return PUBLIC_ENDPOINTS.post.includes(url);
+  }
+
+  // GET 요청인 경우
+  if (upperMethod === 'GET') {
+    // /profiles 또는 /articles로 시작하는 모든 GET 요청은 public
+    return url.startsWith('/profiles') || url.startsWith('/articles');
+  }
+
+  return false; // POST, GET 이외의 요청은 모두 인증 필요
 };
 
 // 토큰 갱신 함수
@@ -61,6 +91,7 @@ const refreshToken = async (): Promise<string | null> => {
     // 리프레시 토큰도 만료된 경우
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
     window.location.href = '/login'; // 로그인 페이지로 리다이렉트
     return null;
   }
@@ -70,7 +101,7 @@ if (typeof window !== 'undefined') {
   // Request 인터셉터
   instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      if (isPublicEndPoint(config.url)) return config; // 공개 엔드포인트는 토큰 추가하지 않음
+      if (isPublicEndPoint(config.url, config.method)) return config; // 공개 엔드포인트는 토큰 추가하지 않음
 
       const token = localStorage.getItem('accessToken');
       if (token) {
@@ -96,7 +127,7 @@ if (typeof window !== 'undefined') {
       };
 
       // 공개 엔드포인트는 토큰 갱신 처리하지 않음
-      if (isPublicEndPoint(originalRequest.url)) {
+      if (isPublicEndPoint(originalRequest.url, originalRequest.method)) {
         return Promise.reject(error);
       }
 
