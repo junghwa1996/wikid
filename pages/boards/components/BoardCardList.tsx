@@ -16,7 +16,7 @@ interface BoardCardListProps {
 }
 
 export default function BoardCardList({
-  data,
+  data = [] as BoardCardListProps['data'],
 }: {
   data: BoardCardListProps['data'];
 }) {
