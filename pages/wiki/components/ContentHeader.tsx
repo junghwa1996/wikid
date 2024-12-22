@@ -1,13 +1,11 @@
 import { useState } from 'react';
 
-import InputField from '@/components/Input';
 import LinkBar from '@/components/LinkBar';
 import SnackBar from '@/components/SnackBar';
 
 interface ContentHeaderProps {
   name: string;
   link: string;
-  onNameChange: (value: string) => void;
   isEditing: boolean;
   isInfoSnackBarOpen: boolean;
 }
@@ -23,7 +21,6 @@ interface ContentHeaderProps {
 export default function ContentHeader({
   name,
   link,
-  onNameChange,
   isEditing,
   isInfoSnackBarOpen,
 }: ContentHeaderProps) {
@@ -43,16 +40,7 @@ export default function ContentHeader({
   return (
     <div>
       <div className="mb-[32px] flex items-center justify-between text-48sb text-gray-500 mo:mb-[24px] mo:text-32sb">
-        {/*TODO 인풋 스타일은 일단 임시로 잡아놨습니다*/}
-        {isEditing ? (
-          <InputField
-            type="text"
-            value={name}
-            onChange={(e) => onNameChange(e.target.value)}
-          />
-        ) : (
-          <span>{name}</span>
-        )}
+        {name}
       </div>
       {!isEditing && <LinkBar link={link} onClick={handleLinkClick} />}
       {isInfoSnackBarOpen && <SnackBar state="info" />}

@@ -28,10 +28,8 @@ export default function Contents({ profile }: ProfileProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile?.content || '');
-  const [newName, setNewName] = useState<string>(profile?.name || '');
 
   const previousContent = useRef<string>(newContent);
-  const previousName = useRef<string>(newName);
 
   const isEmpty = newContent === null || newContent === '';
 
@@ -55,10 +53,6 @@ export default function Contents({ profile }: ProfileProps) {
   //위키 제목과 내용 편집
   const handleContentChange = (value: string) => {
     setNewContent(value);
-  };
-
-  const handleNameChange = (value: string) => {
-    setNewName(value);
   };
 
   //편집된 내용 저장 후 편집모드 종료
@@ -112,7 +106,6 @@ export default function Contents({ profile }: ProfileProps) {
     setIsUCOpen(false);
     setIsEditing(false);
     setNewContent(previousContent.current);
-    setNewName(previousName.current);
   };
 
   //5분동안 미기입시 뒤로가기
@@ -125,7 +118,6 @@ export default function Contents({ profile }: ProfileProps) {
     setIsDMOpen(false);
     setIsEditing(false);
     setNewContent(previousContent.current);
-    setNewName(previousName.current);
   };
 
   useEffect(() => {
@@ -158,9 +150,8 @@ export default function Contents({ profile }: ProfileProps) {
     <div>
       <div className="flex justify-between">
         <ContentHeader
-          name={newName}
+          name={profile?.name || ''}
           link={`https://www.wikid.kr/wiki/${profile?.code}`}
-          onNameChange={handleNameChange}
           isEditing={isEditing}
           isInfoSnackBarOpen={isInfoSnackBarOpen}
         />
