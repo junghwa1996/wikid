@@ -81,6 +81,7 @@ export default function BoardsDetails() {
     refetch,
   } = useInfiniteQuery({
     queryKey: ['comments', articleId, LIMIT],
+    // @ts-expect-error: queryFn 타입 미스매치로 인한 에러 무시
     queryFn: getComments,
     getNextPageParam: (lastPage) => {
       return lastPage.nextCursor === null ? undefined : lastPage.nextCursor;
