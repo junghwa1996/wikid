@@ -46,8 +46,8 @@ const Footer = () => {
         </span>
         <span
           className={styles.link}
-          onClick={() => setIsTermsModalOpen(true)}
-          onKeyDown={(e) => e.key === 'Enter' && setIsTermsModalOpen(true)}
+          onClick={() => setIsPrivacyModalOpen(true)}
+          onKeyDown={(e) => e.key === 'Enter' && setIsPrivacyModalOpen(true)}
           role="button"
           tabIndex={0}
         >
@@ -55,8 +55,8 @@ const Footer = () => {
         </span>
         <span
           className={styles.link}
-          onClick={() => setIsTermsModalOpen(true)}
-          onKeyDown={(e) => e.key === 'Enter' && setIsTermsModalOpen(true)}
+          onClick={() => setIsFinanceModalOpen(true)}
+          onKeyDown={(e) => e.key === 'Enter' && setIsFinanceModalOpen(true)}
           role="button"
           tabIndex={0}
         >
