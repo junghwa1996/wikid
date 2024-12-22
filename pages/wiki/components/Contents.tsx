@@ -150,7 +150,7 @@ export default function Contents({ profile }: ProfileProps) {
       <div className="flex justify-between">
         <ContentHeader
           name={newName}
-          link={LINK}
+          link={`https://www.wikid.kr/wiki/${profile?.code}`}
           onNameChange={handleNameChange}
           isEditing={isEditing}
         />
