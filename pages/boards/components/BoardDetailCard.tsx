@@ -19,6 +19,7 @@ interface BoardDetailCardProps {
   content: string;
   image: string;
   isOwner: boolean;
+  isLiked: boolean;
 }
 
 /**
@@ -42,6 +43,7 @@ export default function BoardDetailCard({
   content,
   isOwner,
   image,
+  isLiked,
 }: BoardDetailCardProps) {
   const isMobile = useCheckMobile();
   const router = useRouter();
@@ -59,6 +61,18 @@ export default function BoardDetailCard({
       router.push('/boards');
     } catch (error) {
       console.error('게시글을 삭제하지 못했습니다.', error);
+    }
+  };
+
+  // 하트 클릭 시 동작
+  const handleHeartClick = async () => {
+    const method = isLiked ? 'delete' : 'post';
+
+    try {
+      const res = await instance[method](`/articles/${articleId}/like`);
+      console.log('--- handleHeartClick:res:', res);
+    } catch (error) {
+      console.error('--- handleHeartClick:error:', error);
     }
   };
 
@@ -89,7 +103,12 @@ export default function BoardDetailCard({
           <span className="flex-1">
             최근 수정일 : {dateConversion(updatedAt)}
           </span>
-          <Heart initialCount={likeCount} />
+
+          <Heart
+            initialCount={likeCount}
+            isLiked={isLiked}
+            onClick={handleHeartClick}
+          />
         </div>
       </header>
 

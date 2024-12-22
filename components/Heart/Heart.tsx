@@ -8,6 +8,7 @@ interface HeartProps {
   textSize?: string;
   iconSize?: string;
   className?: string;
+  isLiked?: boolean;
 }
 
 /**
@@ -25,28 +26,30 @@ export default function Heart({
   textSize,
   iconSize,
   className,
+  isLiked: initialIsLiked = false,
 }: HeartProps) {
-  const [isClicked, setIsClicked] = useState(false);
   const [count, setCount] = useState(initialCount);
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
 
   const handleClick = () => {
     if (onClick) {
       onClick();
-      setIsClicked((prev) => !prev);
-      setCount((prevCount) => (isClicked ? prevCount - 1 : prevCount + 1));
+      // 좋아요 선 반영
+      setCount((prevCount) => (isLiked ? prevCount - 1 : prevCount + 1));
+      setIsLiked((prevIsLiked) => !prevIsLiked);
     }
   };
 
   const clickStyles = {
-    icon: isClicked ? 'var(--red-100)' : 'var(--gray-400)',
-    text: isClicked && 'text-red-100',
+    icon: isLiked ? 'var(--red-100)' : 'var(--gray-400)',
+    text: isLiked && 'text-red-100',
   };
 
   const Wrapper = onClick ? 'button' : 'div';
 
   return (
     <Wrapper
-      className={`flex items-center gap-1 ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      className={`flex items-center gap-1 ${className}`}
       onClick={onClick ? handleClick : undefined}
     >
       <HeartIcon fill={clickStyles.icon} iconSize={iconSize} />

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Button from '@/components/Button';
 import instance from '@/lib/axios-client';
 
+// import { AuthAPI } from '@/services/api/auth';
 import BoardDetailCard from './components/BoardDetailCard';
 import Comment from './components/Comment';
 import CommentForm from './components/CommentForm';
@@ -45,7 +46,7 @@ export default function BoardsDetails() {
   const [comments, setComments] = useState<CommentsData | null>(null);
   const router = useRouter();
   const { articleId } = router.query;
-  const userId = 1909; // TODO : 임시 유저 아이디 - context로 변경 필요
+  const userId = 1908; // TODO : 임시 유저 아이디 - context로 변경 필요
   const LIMIT = 10; // TODO : 댓글 무한 스크롤 기능 시 추가
 
   // 댓글 입력창 value 변경
@@ -102,6 +103,9 @@ export default function BoardsDetails() {
       try {
         const res = await instance.get(`/articles/${articleId}`);
         return res.data;
+        // REVIEW - 2. 이렇게요..
+        // const { data } = await instance.get(`/articles/${articleId}`);
+        // if (data) setData(data);
       } catch (error) {
         console.error('게시글 상세 내용을 불러오지 못했습니다.', error);
         return null;
@@ -122,10 +126,12 @@ export default function BoardsDetails() {
     };
 
     // 게시글 상세 내용 로드
+    // REVIEW - 1. 이 부분은 getBoardDetail 안에 포함 시키는 것은 어떠세요?
     const fetchBoardsDetail = async () => {
       const res = await getBoardDetail();
       if (res) {
         setData(res);
+        console.log('--- fetchBoardsDetail:res:', res);
       }
     };
 
@@ -142,6 +148,29 @@ export default function BoardsDetails() {
       fetchComments();
     }
   }, [articleId]);
+
+  useEffect(() => {
+    // 테스트용 로그인
+    // const testSignin = async () => {
+    //   const res = await AuthAPI.signin({
+    //     email: 'haksoo@email.com',
+    //     password: '1234qwer',
+    //   });
+    //   console.log('res:', res);
+    // };
+    // testSignin();
+
+    // 테스트용 사용자 정보 - 로그인 여부 확인
+    const testRes = async () => {
+      try {
+        const res = await instance.get('/users/me');
+        console.log('--- getMe:res:', res);
+      } catch (error) {
+        console.error('--- getMe:error:', error);
+      }
+    };
+    testRes();
+  }, []);
 
   return (
     <>
@@ -161,6 +190,7 @@ export default function BoardsDetails() {
               likeCount={data.likeCount}
               content={data.content}
               image={data.image}
+              isLiked={data.isLiked}
             />
           )}
 
