@@ -60,7 +60,6 @@ export default function Wiki() {
     <>
       <div className="mt-[160px] w-full px-[100px]">
         {profile ? <Contents profile={profile} /> : <p>불러오는 중입니다...</p>}
-        <div>프로필 컴포넌트</div>
       </div>
     </>
   );

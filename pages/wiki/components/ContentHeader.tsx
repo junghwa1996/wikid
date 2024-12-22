@@ -9,6 +9,7 @@ interface ContentHeaderProps {
   link: string;
   onNameChange: (value: string) => void;
   isEditing: boolean;
+  isInfoSnackBarOpen: boolean;
 }
 
 /**
@@ -24,6 +25,7 @@ export default function ContentHeader({
   link,
   onNameChange,
   isEditing,
+  isInfoSnackBarOpen,
 }: ContentHeaderProps) {
   const [snackState, setSnackState] = useState<'success' | 'null'>('null');
 
@@ -53,6 +55,7 @@ export default function ContentHeader({
         )}
       </div>
       {!isEditing && <LinkBar link={link} onClick={handleLinkClick} />}
+      {isInfoSnackBarOpen && <SnackBar state="info" />}
 
       {snackState !== 'null' && <SnackBar state={snackState} />}
     </div>

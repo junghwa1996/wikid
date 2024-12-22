@@ -13,10 +13,8 @@ import ContentHeader from './ContentHeader';
 
 //TODO API 연동 후 삭제
 const ANSWER = '카레';
-const LINK = 'https://www.wikid.kr/codeit';
 
 //TODO API 연동작업
-
 interface ProfileProps {
   profile?: Profile | null;
 }
@@ -25,6 +23,7 @@ interface ProfileProps {
 
 export default function Contents({ profile }: ProfileProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isInfoSnackBarOpen, setIsInfoSnackBarOpen] = useState(false);
   const [isUCOpen, setIsUCOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDMOpen, setIsDMOpen] = useState(false);
@@ -35,6 +34,16 @@ export default function Contents({ profile }: ProfileProps) {
   const previousName = useRef<string>(newName);
 
   const isEmpty = newContent === null || newContent === '';
+
+  const handleQuizOpen = async () => {
+    const res = await instance.get(`/profiles/${profile?.code}/ping`);
+    if (res.status === 204) {
+      setIsInfoSnackBarOpen(false);
+      setIsQuizOpen(true);
+    } else {
+      setIsInfoSnackBarOpen(true);
+    }
+  };
 
   //퀴즈 성공 후 위키 편집모드
   const handleQuizSuccess = () => {
@@ -94,7 +103,7 @@ export default function Contents({ profile }: ProfileProps) {
     }
   };
 
-  //TODO 편집모드에서 수정 중 취소버튼으로 수정 취소하기 (현재 모달을 닫기만 하면 수정이 취소되는 오류있음)
+  //TODO 편집모드에서 수정 중 취소버튼으로 수정 취소하기
   const onUCClose = () => {
     setIsUCOpen(false);
   };
@@ -153,13 +162,12 @@ export default function Contents({ profile }: ProfileProps) {
           link={`https://www.wikid.kr/wiki/${profile?.code}`}
           onNameChange={handleNameChange}
           isEditing={isEditing}
+          isInfoSnackBarOpen={isInfoSnackBarOpen}
         />
 
         <div className="h-[30px]">
           {!isEditing ? (
-            !isEmpty && (
-              <Button onClick={() => setIsQuizOpen(true)}>위키 수정하기</Button>
-            )
+            !isEmpty && <Button onClick={handleQuizOpen}>위키 수정하기</Button>
           ) : (
             <div className="flex gap-[5px]">
               <Button variant="secondary" onClick={() => setIsUCOpen(true)}>
@@ -195,7 +203,7 @@ export default function Contents({ profile }: ProfileProps) {
       <div>
         {isEditing ? (
           <>
-            <div className="mt-[40px] h-[600px] w-full">
+            <div className="mt-[40px] h-[600px] w-full rounded-md border p-[20px] focus:border-gray-300">
               <TextEditor value={newContent} onChange={handleContentChange} />
             </div>
           </>
