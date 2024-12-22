@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/Button';
+import EditorViewer from '@/components/EditorViewer';
 import DisconnectionModal from '@/components/Modal/DisconnectionModal';
 import UnsavedChangesModal from '@/components/Modal/UnsavedChangesModal';
 import WikiQuizModal from '@/components/Modal/WikiQuizModal';
@@ -191,18 +192,17 @@ export default function Contents({ profile }: ProfileProps) {
         />
       )}
 
-      <div>
+      <div className="mt-[40px]">
         {isEditing ? (
           <>
-            <div className="mt-[40px] h-[600px] w-full rounded-md border p-[20px] focus:border-gray-300">
+            <div className="h-[600px] w-full rounded-md border p-[20px] focus:border-gray-300">
               <TextEditor value={newContent} onChange={handleContentChange} />
             </div>
           </>
         ) : (
-          <p
-            className="mt-[40px] break-words"
-            dangerouslySetInnerHTML={{ __html: newContent }}
-          ></p>
+          <div className="break-words">
+            <EditorViewer content={newContent} />
+          </div>
         )}
       </div>
 
