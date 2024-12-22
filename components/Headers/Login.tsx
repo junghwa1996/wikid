@@ -43,7 +43,6 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
 
-  //TODO 프로필 이미지 처리(추후 업데이트)
   const profileImage = profile?.image || '/icon/icon-profile.svg';
   const router = useRouter();
   const loginMenuRef = useRef<HTMLDivElement>(null);
@@ -70,9 +69,7 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
       router.push('/boards');
     } else if (option === '마이페이지') {
       router.push('/mypage');
-    }
-    //TODO 로그인 처리 (추후 업데이트)
-    else if (option === '로그인') {
+    } else if (option === '로그인') {
       router.push('/login');
     } else if (option === '로그아웃') {
       localStorage.removeItem('accessToken');

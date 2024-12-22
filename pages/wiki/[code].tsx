@@ -36,7 +36,6 @@ const getProfileData = async (code: string) => {
   }
 };
 
-//TODO 임시 페이지입니다. 프로필 컴퍼넌트 제작되면 추후 제작하겠습니다.
 export default function Wiki() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const router = useRouter();

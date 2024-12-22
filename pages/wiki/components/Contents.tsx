@@ -13,12 +13,9 @@ import { Profile } from '../[code]';
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
 
-//TODO API 연동작업
 interface ProfileProps {
   profile: Profile;
 }
-
-//TODO 다른 사람이 수정 중이면 수정 금지 기능
 
 export default function Contents({ profile }: ProfileProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
@@ -28,9 +25,7 @@ export default function Contents({ profile }: ProfileProps) {
   const [isProfileEdit, setIsProfileEdit] = useState(false);
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile?.content || '');
-  const [profileData, setProfileData] = useState<Profile>(
-    profile ?? ({} as Profile)
-  );
+  const [profileData, setProfileData] = useState<Profile>(profile);
   const [timeLeft, setTimeLeft] = useState(300);
 
   const previousContent = useRef<string>(newContent);
@@ -113,7 +108,6 @@ export default function Contents({ profile }: ProfileProps) {
     }
   };
 
-  //TODO 편집모드에서 수정 중 취소버튼으로 수정 취소하기
   const onUCClose = () => {
     setIsUCOpen(false);
   };
@@ -179,7 +173,7 @@ export default function Contents({ profile }: ProfileProps) {
           {!isEditing ? (
             !isEmpty && <Button onClick={handleQuizOpen}>위키 수정하기</Button>
           ) : (
-            <div className="flex gap-[5px]">
+            <div className="flex gap-[5px] justify-self-end">
               <Button variant="secondary" onClick={() => setIsUCOpen(true)}>
                 취소
               </Button>
@@ -219,8 +213,8 @@ export default function Contents({ profile }: ProfileProps) {
       <div className="mt-[8px]">
         {isEditing ? (
           <>
-            <div className="mb-[8px] text-right font-bold text-red-500">
-              수정가능시간 {Math.floor(timeLeft / 60)}:{timeLeft % 60}
+            <div className="mb-[8px] text-right font-bold text-red-100">
+              남은시간 {Math.floor(timeLeft / 60)}:{timeLeft % 60}
             </div>
             <div className="h-[600px] w-full rounded-md border p-[20px] focus:border-gray-300">
               <TextEditor value={newContent} onChange={handleContentChange} />
