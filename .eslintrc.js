@@ -49,6 +49,12 @@ module.exports = {
     'no-undef': 'error',
     '@typescript-eslint/no-non-null-assertion': 'error',
     '@typescript-eslint/strict-boolean-expressions': 'error',
+    '@typescript-eslint/no-misused-promises': [
+      'error',
+      {
+        checksVoidReturn: false, // void 반환을 기대하지 않는 상황에서 경고 비활성화
+      },
+    ],
 
     // Import 관련 규칙
     'import/newline-after-import': 'error', // import 문 이후 빈 줄 강제
