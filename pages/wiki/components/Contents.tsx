@@ -116,22 +116,14 @@ export default function Contents({ profile }: ProfileProps) {
         handleInactivityWarning();
       }, 300000);
 
-      const resetInactivityTimer = () => {
-        clearTimeout(inactivityTimeout);
-        setIsDMOpen(false);
-        inactivityTimeout = setTimeout(() => {
-          handleInactivityWarning();
-        }, 300000);
-      };
-      window.addEventListener('keydown', resetInactivityTimer);
-
       return () => {
         clearTimeout(inactivityTimeout);
-        window.removeEventListener('keydown', resetInactivityTimer);
       };
     }
 
-    return () => {};
+    return () => {
+      clearTimeout(inactivityTimeout);
+    };
   }, [isEditing]);
 
   return (
