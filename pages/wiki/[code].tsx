@@ -7,6 +7,7 @@ import Contents from './components/Contents';
 
 export interface Profile {
   updatedAt: string;
+  securityAnswer: string;
   securityQuestion: string;
   teamId: string;
   content: string;
@@ -58,7 +59,7 @@ export default function Wiki() {
 
   return (
     <>
-      <div className="mt-[160px] w-full px-[100px]">
+      <div className="mt-[160px] w-full pc:px-[100px] tamo:px-[20px]">
         {profile ? <Contents profile={profile} /> : <p>불러오는 중입니다...</p>}
       </div>
     </>

@@ -13,12 +13,9 @@ import { Profile } from '../[code]';
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
 
-//TODO API 연동 후 삭제
-const ANSWER = '카레';
-
 //TODO API 연동작업
 interface ProfileProps {
-  profile?: Profile | null;
+  profile: Profile;
 }
 
 //TODO 다른 사람이 수정 중이면 수정 금지 기능
@@ -31,7 +28,9 @@ export default function Contents({ profile }: ProfileProps) {
   const [isProfileEdit, setIsProfileEdit] = useState(false);
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile?.content || '');
-  const [profileData, setProfileData] = useState<Profile>(profile);
+  const [profileData, setProfileData] = useState<Profile>(
+    profile ?? ({} as Profile)
+  );
   const [timeLeft, setTimeLeft] = useState(300);
 
   const previousContent = useRef<string>(newContent);
@@ -45,7 +44,6 @@ export default function Contents({ profile }: ProfileProps) {
       setIsQuizOpen(true);
     } else {
       setIsInfoSnackBarOpen(true);
-      setIsQuizOpen(true);
     }
   };
 
@@ -86,7 +84,7 @@ export default function Contents({ profile }: ProfileProps) {
     try {
       // PATCH 요청을 보내는 코드
       const updatedProfile = {
-        securityAnswer: ANSWER,
+        securityAnswer: profile?.securityAnswer,
         securityQuestion: profile?.securityQuestion,
         nationality: profileData.nationality,
         family: profileData.family,
@@ -168,8 +166,8 @@ export default function Contents({ profile }: ProfileProps) {
   }, [isEditing]);
 
   return (
-    <div className="pc:grid pc:grid-cols-[auto_auto] pc:grid-rows-[150px_500px_400px_100px]">
-      <div className="flex justify-between">
+    <div className="pc:grid pc:grid-cols-[auto_auto] pc:grid-rows-[150px_500px_400px_100px] pc:gap-x-[30px]">
+      <div className="grid grid-cols-[auto_auto] grid-rows-[auto_auto]">
         <ContentHeader
           name={profile?.name || ''}
           link={`https://www.wikid.kr/wiki/${profile?.code}`}
@@ -198,7 +196,7 @@ export default function Contents({ profile }: ProfileProps) {
           isOpen={isQuizOpen}
           onClose={() => setIsQuizOpen(false)}
           securityQuestion={profile?.securityQuestion || ''}
-          securityAnswer={ANSWER}
+          userCode={profile?.code || ''}
           onQuizComplete={handleQuizSuccess}
         />
       </div>
@@ -214,7 +212,7 @@ export default function Contents({ profile }: ProfileProps) {
         <Blank
           onQuizSuccess={handleQuizSuccess}
           question={profile?.securityQuestion || ''}
-          answer={ANSWER}
+          code={profile?.code || ''}
         />
       )}
 
