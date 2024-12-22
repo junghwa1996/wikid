@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
+// import UnsavedChangesModal from '@/components//Modal/UnsavedChangesModal';
+import WikiQuizModal from '@/components//Modal/WikiQuizModal';
 import Button from '@/components/Button';
-import DisconnectionModal from '@/components/DisconnectionModal';
+// import DisconnectionModal from '@/components/Modal/DisconnectionModal';
 import TextEditor from '@/components/TextEditor';
-import UnsavedChangesModal from '@/components/UnsavedChangesModal';
-import WikiQuizModal from '@/components/WikiQuizModal';
 
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
@@ -21,9 +21,9 @@ const CONTENT: string | null = null;
 
 export default function Contents() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
-  const [isUCOpen, setIsUCOpen] = useState(false);
+  // const [isUCOpen, setIsUCOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [isDMOpen, setIsDMOpen] = useState(false);
+  // const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(CONTENT || '');
   const [newName, setNewName] = useState<string>(NAME);
 
@@ -56,25 +56,25 @@ export default function Contents() {
   };
 
   //TODO 편집모드에서 수정 중 취소버튼으로 수정 취소하기 (현재 모달을 닫기만 하면 수정이 취소되는 오류있음)
-  const onUCClose = () => {
-    setIsUCOpen(false);
-    setIsEditing(false);
-    setNewContent(previousContent.current);
-    setNewName(previousName.current);
-  };
+  // const onUCClose = () => {
+  //   setIsUCOpen(false);
+  //   setIsEditing(false);
+  //   setNewContent(previousContent.current);
+  //   setNewName(previousName.current);
+  // };
 
   //5분동안 미기입시 뒤로가기
   const handleInactivityWarning = () => {
-    setIsDMOpen(true);
+    // setIsDMOpen(true);
   };
 
   //연결 끊김 모달 (수정중인 내용 취소, 기존 내용으로 복구)
-  const onDMClose = () => {
-    setIsDMOpen(false);
-    setIsEditing(false);
-    setNewContent(previousContent.current);
-    setNewName(previousName.current);
-  };
+  // const onDMClose = () => {
+  //   setIsDMOpen(false);
+  //   setIsEditing(false);
+  //   setNewContent(previousContent.current);
+  //   setNewName(previousName.current);
+  // };
 
   useEffect(() => {
     let inactivityTimeout: NodeJS.Timeout;
@@ -86,7 +86,7 @@ export default function Contents() {
 
       const resetInactivityTimer = () => {
         clearTimeout(inactivityTimeout);
-        setIsDMOpen(false);
+        // setIsDMOpen(false);
         inactivityTimeout = setTimeout(() => {
           handleInactivityWarning();
         }, 300000);
@@ -119,10 +119,10 @@ export default function Contents() {
             )
           ) : (
             <div className="flex gap-[5px]">
-              <Button variant="secondary" onClick={() => setIsUCOpen(true)}>
+              {/* <Button variant="secondary" onClick={() => setIsUCOpen(true)}>
                 취소
-              </Button>
-              <UnsavedChangesModal isOpen={isUCOpen} onClose={onUCClose} />
+              </Button> */}
+              {/* <UnsavedChangesModal isOpen={isUCOpen} onClose={onUCClose} /> */}
               <Button onClick={saveContent}>저장</Button>
             </div>
           )}
@@ -160,7 +160,7 @@ export default function Contents() {
         )}
       </div>
 
-      <DisconnectionModal isOpen={isDMOpen} onClose={onDMClose} />
+      {/* <DisconnectionModal isOpen={isDMOpen} onClose={onDMClose} /> */}
     </div>
   );
 }
