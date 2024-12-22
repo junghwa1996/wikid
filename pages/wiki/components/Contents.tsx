@@ -30,6 +30,7 @@ export default function Contents({ profile }: ProfileProps) {
   const [isProfileEdit, setIsProfileEdit] = useState(false);
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile?.content || '');
+  const [timeLeft, setTimeLeft] = useState(300);
 
   const previousContent = useRef<string>(newContent);
 
@@ -110,19 +111,27 @@ export default function Contents({ profile }: ProfileProps) {
 
   useEffect(() => {
     let inactivityTimeout: NodeJS.Timeout;
+    let countdownInterval: NodeJS.Timeout;
 
     if (isEditing) {
       inactivityTimeout = setTimeout(() => {
         handleInactivityWarning();
       }, 300000);
 
+      countdownInterval = setInterval(() => {
+        setTimeLeft((prev) => Math.max(prev - 1, 0)); // 1초씩 감소, 0초로 고정
+      }, 1000);
+
       return () => {
         clearTimeout(inactivityTimeout);
+        clearInterval(countdownInterval);
       };
     }
 
     return () => {
+      setTimeLeft(300);
       clearTimeout(inactivityTimeout);
+      clearInterval(countdownInterval);
     };
   }, [isEditing]);
 
@@ -171,9 +180,12 @@ export default function Contents({ profile }: ProfileProps) {
         />
       )}
 
-      <div className="mt-[40px]">
+      <div className="mt-[8px]">
         {isEditing ? (
           <>
+            <div className="mb-[8px] text-right font-bold text-red-500">
+              수정가능시간 {Math.floor(timeLeft / 60)}:{timeLeft % 60}
+            </div>
             <div className="h-[600px] w-full rounded-md border p-[20px] focus:border-gray-300">
               <TextEditor value={newContent} onChange={handleContentChange} />
             </div>
