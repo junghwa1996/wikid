@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import Modal from '@/components/Modal/Modal';
 
 const styles = {
@@ -34,18 +35,30 @@ const Footer = () => {
         </span>
       </div>
       <div className={styles.linkContainer}>
-        <span className={styles.link} onClick={() => setIsTermsModalOpen(true)}>
+        <span
+          className={styles.link}
+          onClick={() => setIsTermsModalOpen(true)}
+          onKeyDown={(e) => e.key === 'Enter' && setIsTermsModalOpen(true)}
+          role="button"
+          tabIndex={0}
+        >
           서비스 이용약관
         </span>
         <span
           className={styles.link}
-          onClick={() => setIsPrivacyModalOpen(true)}
+          onClick={() => setIsTermsModalOpen(true)}
+          onKeyDown={(e) => e.key === 'Enter' && setIsTermsModalOpen(true)}
+          role="button"
+          tabIndex={0}
         >
           개인정보 취급방침
         </span>
         <span
           className={styles.link}
-          onClick={() => setIsFinanceModalOpen(true)}
+          onClick={() => setIsTermsModalOpen(true)}
+          onKeyDown={(e) => e.key === 'Enter' && setIsTermsModalOpen(true)}
+          role="button"
+          tabIndex={0}
         >
           전자금융거래 기본약관
         </span>

@@ -14,12 +14,12 @@ const styles = {
 
   // 콘텐츠 영역
   contentBox:
-    'Tablet:mt-20 PC:mt-[120px] Tablet:gap-[22px] PC:gap-[40px] mt-10 flex flex-col gap-[10px]',
+    'ta:mt-20 mt-[120px] ta:gap-[22px] gap-[40px] mt-10 flex flex-col gap-[10px]',
   greenImage: 'h-auto w-full',
 
   // 알림 영역
   notificationContainer:
-    'Tablet:gap-[22px] PC:gap-[40px] flex justify-between gap-[10px]',
+    'ta:gap-[22px] gap-[40px] flex justify-between gap-[10px]',
   bellBox: 'rounded-[10px] bg-purple-100',
   messageBox: '',
 };
