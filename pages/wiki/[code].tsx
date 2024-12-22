@@ -6,23 +6,23 @@ import instance from '@/lib/axios-client';
 import Contents from './components/Contents';
 
 export interface Profile {
-  id: number;
-  code: string;
-  image: string | null;
-  city: string;
-  mbti: string;
-  job: string;
-  sns: string;
-  birthday: string;
-  nickname: string;
-  bloodType: string;
-  family: string;
-  nationality: string;
-  content: string;
-  teamId: string;
-  securityQuestion: string;
   updatedAt: string;
+  securityQuestion: string;
+  teamId: string;
+  content: string;
+  nationality: string;
+  family: string;
+  bloodType: string;
+  nickname: string;
+  birthday: string;
+  sns: string;
+  job: string;
+  mbti: string;
+  city: string;
+  image: string;
+  code: string;
   name: string;
+  id: number;
 }
 
 const getProfileData = async (code: string) => {

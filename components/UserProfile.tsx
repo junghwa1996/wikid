@@ -77,7 +77,7 @@ function UserProfile({
         >
           <div className="relative flex size-fit">
             <Image
-              src={data.image}
+              src={data?.image || '/icon/icon-profile.svg'}
               alt="Profile"
               width={100}
               height={100}

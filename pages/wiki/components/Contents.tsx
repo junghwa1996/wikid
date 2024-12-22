@@ -6,6 +6,7 @@ import DisconnectionModal from '@/components/Modal/DisconnectionModal';
 import UnsavedChangesModal from '@/components/Modal/UnsavedChangesModal';
 import WikiQuizModal from '@/components/Modal/WikiQuizModal';
 import TextEditor from '@/components/TextEditor';
+import UserProfile from '@/components/UserProfile';
 import instance from '@/lib/axios-client';
 
 import { Profile } from '../[code]';
@@ -30,6 +31,7 @@ export default function Contents({ profile }: ProfileProps) {
   const [isProfileEdit, setIsProfileEdit] = useState(false);
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile?.content || '');
+  const [profileData, setProfileData] = useState<Profile>(profile);
   const [timeLeft, setTimeLeft] = useState(300);
 
   const previousContent = useRef<string>(newContent);
@@ -43,6 +45,7 @@ export default function Contents({ profile }: ProfileProps) {
       setIsQuizOpen(true);
     } else {
       setIsInfoSnackBarOpen(true);
+      setIsQuizOpen(true);
     }
   };
 
@@ -51,8 +54,13 @@ export default function Contents({ profile }: ProfileProps) {
     alert('퀴즈를 성공하셨습니다.');
     setIsQuizOpen(false);
 
-    const res = await instance.get('/users/me');
-    const userCode = res.data.code;
+    const accessToken = localStorage.getItem('accessToken');
+    const res = await instance.get('/users/me', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const userCode = res.data.profile.code;
     if (profile?.code === userCode) {
       setIsProfileEdit(true);
     } else {
@@ -66,11 +74,30 @@ export default function Contents({ profile }: ProfileProps) {
     setNewContent(value);
   };
 
+  const handleDataChange = (field: keyof Profile, value: string) => {
+    setProfileData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   //편집된 내용 저장 후 편집모드 종료
   const saveContent = async () => {
     try {
       // PATCH 요청을 보내는 코드
       const updatedProfile = {
+        securityAnswer: ANSWER,
+        securityQuestion: profile?.securityQuestion,
+        nationality: profileData.nationality,
+        family: profileData.family,
+        bloodType: profileData.bloodType,
+        nickname: profileData.nickname,
+        birthday: profileData.birthday,
+        sns: profileData.sns,
+        job: profileData.job,
+        mbti: profileData.mbti,
+        city: profileData.city,
+        image: profileData.image,
         content: newContent, // 새로운 내용
       };
 
@@ -79,7 +106,9 @@ export default function Contents({ profile }: ProfileProps) {
 
       // 수정이 완료되면 상태 업데이트
       previousContent.current = newContent;
+      setProfileData(profileData);
       setIsEditing(false);
+      setIsProfileEdit(false);
     } catch (error) {
       console.error('프로필을 저장하는 데 실패했습니다.', error);
       // 요청 실패시 오류 처리 추가 (예: 사용자에게 알림)
@@ -94,7 +123,9 @@ export default function Contents({ profile }: ProfileProps) {
   const closeAndNoSave = () => {
     setIsUCOpen(false);
     setIsEditing(false);
+    setIsProfileEdit(false);
     setNewContent(previousContent.current);
+    setProfileData(profile);
   };
 
   //5분동안 미기입시 뒤로가기
@@ -106,6 +137,7 @@ export default function Contents({ profile }: ProfileProps) {
   const onDMClose = () => {
     setIsDMOpen(false);
     setIsEditing(false);
+    setIsProfileEdit(false);
     setNewContent(previousContent.current);
   };
 
@@ -136,7 +168,7 @@ export default function Contents({ profile }: ProfileProps) {
   }, [isEditing]);
 
   return (
-    <div>
+    <div className="pc:grid pc:grid-cols-[auto_auto] pc:grid-rows-[150px_500px_400px_100px]">
       <div className="flex justify-between">
         <ContentHeader
           name={profile?.name || ''}
@@ -162,13 +194,19 @@ export default function Contents({ profile }: ProfileProps) {
             </div>
           )}
         </div>
-
         <WikiQuizModal
           isOpen={isQuizOpen}
           onClose={() => setIsQuizOpen(false)}
           securityQuestion={profile?.securityQuestion || ''}
           securityAnswer={ANSWER}
           onQuizComplete={handleQuizSuccess}
+        />
+      </div>
+      <div className="tamo:m-[20px]">
+        <UserProfile
+          data={profileData}
+          isEditing={isProfileEdit}
+          onDataChange={handleDataChange}
         />
       </div>
 
