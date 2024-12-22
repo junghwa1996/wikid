@@ -42,6 +42,10 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error'], // 사용하지 않는 변수 에러 처리
     '@typescript-eslint/explicit-module-boundary-types': 'off', // 반환 타입 강제 비활성화
 
+    'no-undef': 'error',
+    '@typescript-eslint/no-non-null-assertion': 'error',
+    '@typescript-eslint/strict-boolean-expressions': 'error',
+
     // Import 관련 규칙
     'import/newline-after-import': 'error', // import 문 이후 빈 줄 강제
     'simple-import-sort/imports': [
