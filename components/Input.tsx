@@ -11,7 +11,9 @@ interface InputFieldProps {
   label?: string;
   compareValue?: string;
   layout?: 'vertical' | 'horizontal';
+  width?: string;
   onValidation?: (isValid: boolean) => void;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 function InputField({
@@ -22,7 +24,10 @@ function InputField({
   label,
   compareValue,
   layout = 'vertical',
+  width,
   onValidation,
+  ref,
+  ...props
 }: InputFieldProps) {
   const { errorMessage, validate } = useValidation({
     type,
@@ -68,10 +73,10 @@ function InputField({
   //스타일에 따른 클래스
   const variantClass = {
     containerVertical: 'flex flex-col gap-[10px]',
-    containerHorizontal: 'w-[239px] flex items-center gap-[10px]',
+    containerHorizontal: 'flex items-center gap-[10px]',
     labelVertical: 'text-14 text-gray-500',
     labelHorizontal: 'text-14 text-gray-400 w-[60px] flex-shrink-0',
-    base: 'px-[20px] py-[10px] h-[45px] w-[400px] rounded-md text-[14px] text-gray-500 placeholder:text-14 focus:outline-none mo:w-[355px]',
+    base: 'px-[20px] py-[10px] h-[45px] w-full rounded-md text-[14px] text-gray-500 placeholder:text-14 focus:outline-none',
     error: 'border border-red-100 bg-red-50',
     normal:
       'bg-gray-100 focus:border-green-200 focus:ring-1 focus:ring-green-200',
@@ -96,6 +101,7 @@ function InputField({
           ? `${variantClass.containerHorizontal} relative`
           : `${variantClass.containerVertical} relative`
       }
+      style={width ? { width } : undefined}
     >
       {label && <label className={labelClass}>{label}</label>}
       <input
@@ -106,6 +112,8 @@ function InputField({
         onBlur={handleBlur}
         onFocus={handleFocus}
         className={inputClass}
+        ref={ref}
+        {...props}
       />
       {layout === 'vertical' && errorMessage && (
         <span className={variantClass.errorText}>{errorMessage}</span>
