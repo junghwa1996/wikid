@@ -1,26 +1,16 @@
-import instance from 'lib/axios-client';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FormEvent, useEffect, useState } from 'react';
 
 import Button from '@/components/Button';
 import TextEditor from '@/components/TextEditor';
+import { getBoardDetail, patchBoard } from '@/services/api/boardsAPI';
+import { extractContent, formatDate } from '@/utils/boardHelpers';
 
 // 제목 글자수 제한
 const MAX_TITLE = 30;
-
-// HTML에서 Text만 추출하는 함수
-const extractContent = (str: string) => str.replace(/<[^>]*>/g, '').trim();
-
-// 포멧된 날짜 반환하는 함수
-const formatDate = (date: string) => {
-  const d = new Date(date);
-  const year = d.getFullYear();
-  const month = (d.getMonth() + 1).toString().padStart(2, '0');
-  const day = d.getDate().toString().padStart(2, '0');
-  return `${year}. ${month}. ${day}.`;
-};
 
 /**
  * 게시글 수정하기 페이지
@@ -28,19 +18,20 @@ const formatDate = (date: string) => {
 export default function UpdateBoard() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [image, setImage] = useState<string | null>(null);
   const router = useRouter();
   const { articleId } = router.query;
 
   useEffect(() => {
+    // 게시글 상세 내용 로드
     const fetchArticle = async () => {
-      try {
-        const res = await instance.get<{ title: string; content: string }>(
-          `/articles/${articleId as string}`
-        );
-        setTitle(res.data.title);
-        setContent(res.data.content);
-      } catch {
-        throw new Error('게시글 정보를 불러오지 못했습니다.');
+      const res = await getBoardDetail(articleId as string);
+      if (res !== null && res !== undefined) {
+        setTitle(res.title ?? '');
+        setContent(res.content ?? '');
+        setImage(res.image ?? null);
+      } else {
+        throw new Error('게시글을 불러오지 못했습니다.');
       }
     };
 
@@ -68,9 +59,10 @@ export default function UpdateBoard() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await instance.patch(`/articles/${articleId as string}`, {
+      await patchBoard(articleId as string, {
         title,
         content,
+        image: image ?? 'https://ifh.cc/g/V26MYS.png',
       });
       if (typeof articleId === 'string') {
         await router.push(`/boards/${articleId}`);
@@ -112,6 +104,15 @@ export default function UpdateBoard() {
               className="mt-[33px] mo:mt-5 ta:mt-6"
               onSubmit={handleSubmit}
             >
+              {/* TODO : 추후 썸네일 등록 버튼 생성 되면 수정 할 수 있도록 작업 */}
+              <Image
+                src={image ?? 'https://ifh.cc/g/V26MYS.png'}
+                alt="게시물 썸네일"
+                width={500}
+                height={300}
+                priority
+                className="mo:h-auto mo:w-[295px]"
+              />
               <fieldset className="my-5 flex items-center justify-between border-y border-gray-200 mo:mb-4">
                 <label htmlFor="title" className="sr-only">
                   제목
@@ -132,7 +133,7 @@ export default function UpdateBoard() {
               </fieldset>
 
               <p className="mb-[10px] mt-5 text-16md mo:my-4 mo:text-14md">
-                공백포함 : 총 {textContent.length}자 | 공백제외 총{' '}
+                공백포함 : 총 {textContent.length}자 | 공백제외 총
                 {textContent.replaceAll(' ', '').length}자
               </p>
 
