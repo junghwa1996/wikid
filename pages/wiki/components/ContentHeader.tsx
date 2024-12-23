@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
+import Button from '@/components/Button';
 import LinkBar from '@/components/LinkBar';
+import UnsavedChangesModal from '@/components/Modal/UnsavedChangesModal';
 import SnackBar from '@/components/SnackBar';
 
 interface ContentHeaderProps {
@@ -8,6 +10,10 @@ interface ContentHeaderProps {
   link: string;
   isEditing: boolean;
   isInfoSnackBarOpen: boolean;
+  isEmpty: boolean;
+  handleQuizOpen: () => void;
+  closeAndNoSave: () => void;
+  saveContent: () => void;
 }
 
 /**
@@ -23,7 +29,12 @@ export default function ContentHeader({
   link,
   isEditing,
   isInfoSnackBarOpen,
+  handleQuizOpen,
+  isEmpty,
+  closeAndNoSave,
+  saveContent,
 }: ContentHeaderProps) {
+  const [isUCOpen, setIsUCOpen] = useState(false);
   const [linkSnackBarState, setLinkSnackBarState] = useState<{
     open: boolean;
     severity: 'fail' | 'success' | 'info';
@@ -46,6 +57,10 @@ export default function ContentHeader({
     message: '앞 사람의 편집이 끝나면 위키 참여가 가능합니다.',
     autoHideDuration: 300000,
   });
+
+  const onUCClose = () => {
+    setIsUCOpen(false);
+  };
 
   const handleLinkClick = () => {
     navigator.clipboard
@@ -79,8 +94,27 @@ export default function ContentHeader({
 
   return (
     <div>
-      <div className="mb-[32px] flex items-center justify-between text-48sb text-gray-500 mo:mb-[24px] mo:text-32sb">
-        {name}
+      <div className="flex justify-between">
+        <div className="mb-[32px] flex items-center justify-between text-48sb text-gray-500 mo:mb-[24px] mo:text-32sb">
+          {name}
+        </div>
+        <div>
+          {!isEditing ? (
+            !isEmpty && <Button onClick={handleQuizOpen}>위키 수정하기</Button>
+          ) : (
+            <div className="flex gap-[5px] justify-self-end">
+              <Button variant="secondary" onClick={() => setIsUCOpen(true)}>
+                취소
+              </Button>
+              <UnsavedChangesModal
+                isOpen={isUCOpen}
+                closeAndNoSave={closeAndNoSave}
+                onClose={onUCClose}
+              />
+              <Button onClick={saveContent}>저장</Button>
+            </div>
+          )}
+        </div>
       </div>
       {!isEditing && <LinkBar link={link} onClick={handleLinkClick} />}
       {isInfoSnackBarOpen && (

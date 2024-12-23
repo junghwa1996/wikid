@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Button from '@/components/Button';
+// import Button from '@/components/Button';
 import EditorViewer from '@/components/EditorViewer';
 import DisconnectionModal from '@/components/Modal/DisconnectionModal';
-import UnsavedChangesModal from '@/components/Modal/UnsavedChangesModal';
+// import UnsavedChangesModal from '@/components/Modal/UnsavedChangesModal';
 import WikiQuizModal from '@/components/Modal/WikiQuizModal';
 import TextEditor from '@/components/TextEditor';
 import UserProfile from '@/components/UserProfile';
@@ -20,7 +20,6 @@ interface ProfileProps {
 export default function Contents({ profile }: ProfileProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isInfoSnackBarOpen, setIsInfoSnackBarOpen] = useState(false);
-  const [isUCOpen, setIsUCOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
   const [isDMOpen, setIsDMOpen] = useState(false);
@@ -29,7 +28,6 @@ export default function Contents({ profile }: ProfileProps) {
   const [timeLeft, setTimeLeft] = useState(300);
 
   const previousContent = useRef<string>(newContent);
-
   const isEmpty = newContent === null || newContent === '';
 
   const handleQuizOpen = async () => {
@@ -108,12 +106,7 @@ export default function Contents({ profile }: ProfileProps) {
     }
   };
 
-  const onUCClose = () => {
-    setIsUCOpen(false);
-  };
-
   const closeAndNoSave = () => {
-    setIsUCOpen(false);
     setIsEditing(false);
     setIsProfileEdit(false);
     setNewContent(previousContent.current);
@@ -143,7 +136,7 @@ export default function Contents({ profile }: ProfileProps) {
       }, 300000);
 
       countdownInterval = setInterval(() => {
-        setTimeLeft((prev) => Math.max(prev - 1, 0)); // 1초씩 감소, 0초로 고정
+        setTimeLeft((prev) => Math.max(prev - 1, 0));
       }, 1000);
 
       return () => {
@@ -160,41 +153,31 @@ export default function Contents({ profile }: ProfileProps) {
   }, [isEditing]);
 
   return (
-    <div className="pc:grid pc:grid-cols-[auto_auto] pc:grid-rows-[150px_500px_400px_100px] pc:gap-x-[30px]">
-      <div className="grid grid-cols-[auto_auto] grid-rows-[auto_auto]">
+    <div
+      className="pc:grid pc:grid-rows-[150px] pc:gap-x-[80px]"
+      style={{ gridTemplateColumns: 'minmax(300px, 800px) 400px' }}
+    >
+      <div>
         <ContentHeader
           name={profile?.name || ''}
           link={`https://www.wikid.kr/wiki/${profile?.code}`}
           isEditing={isEditing}
           isInfoSnackBarOpen={isInfoSnackBarOpen}
-        />
-
-        <div className="h-[30px]">
-          {!isEditing ? (
-            !isEmpty && <Button onClick={handleQuizOpen}>위키 수정하기</Button>
-          ) : (
-            <div className="flex gap-[5px] justify-self-end">
-              <Button variant="secondary" onClick={() => setIsUCOpen(true)}>
-                취소
-              </Button>
-              <UnsavedChangesModal
-                isOpen={isUCOpen}
-                closeAndNoSave={closeAndNoSave}
-                onClose={onUCClose}
-              />
-              <Button onClick={saveContent}>저장</Button>
-            </div>
-          )}
-        </div>
-        <WikiQuizModal
-          isOpen={isQuizOpen}
-          onClose={() => setIsQuizOpen(false)}
-          securityQuestion={profile?.securityQuestion || ''}
-          userCode={profile?.code || ''}
-          onQuizComplete={handleQuizSuccess}
+          handleQuizOpen={handleQuizOpen}
+          isEmpty={isEmpty}
+          closeAndNoSave={closeAndNoSave}
+          saveContent={saveContent}
         />
       </div>
-      <div className="tamo:m-[20px]">
+      <WikiQuizModal
+        isOpen={isQuizOpen}
+        onClose={() => setIsQuizOpen(false)}
+        securityQuestion={profile?.securityQuestion || ''}
+        userCode={profile?.code || ''}
+        onQuizComplete={handleQuizSuccess}
+      />
+
+      <div className="tamo:my-[20px]">
         <UserProfile
           data={profileData}
           isEditing={isProfileEdit}
