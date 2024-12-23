@@ -59,7 +59,7 @@ export default function WikiList() {
     // 프로필 목록 데이터 요청 함수
     const getProfiles = async () => {
       try {
-        const { data } = await instance.get('/profiles', {
+        const { data } = await instance.get<ListProps>('/profiles', {
           params: {
             page,
             pageSize: PAGE_SIZE,
@@ -72,6 +72,7 @@ export default function WikiList() {
       }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     getProfiles();
   }, [submitValue, page]);
 
@@ -112,7 +113,7 @@ export default function WikiList() {
           {hasList && (
             <div className="my-[120px] flex justify-center mo:my-10">
               <Pagination
-                totalCount={profiles?.totalCount || 0}
+                totalCount={profiles?.totalCount ?? 0}
                 currentPage={page}
                 pageSize={PAGE_SIZE}
                 onPageChange={handlePageChange}
