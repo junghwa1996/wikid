@@ -53,7 +53,7 @@ export default function Contents({ profile }: ProfileProps) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    const userCode = res.data.profile.code;
+    const userCode = (res.data as { profile: Profile }).profile.code;
     if (profile?.code === userCode) {
       setIsProfileEdit(true);
     } else {
@@ -134,8 +134,8 @@ export default function Contents({ profile }: ProfileProps) {
   };
 
   useEffect(() => {
-    let inactivityTimeout: NodeJS.Timeout;
-    let countdownInterval: NodeJS.Timeout;
+    let inactivityTimeout: ReturnType<typeof setTimeout>;
+    let countdownInterval: ReturnType<typeof setInterval>;
 
     if (isEditing) {
       inactivityTimeout = setTimeout(() => {

@@ -26,9 +26,9 @@ export interface Profile {
   id: number;
 }
 
-const getProfileData = async (code: string) => {
+const getProfileData = async (code: string): Promise<Profile | null> => {
   try {
-    const res = await instance.get(`/profiles/${code}`);
+    const res = await instance.get<Profile>(`/profiles/${code}`);
     return res.data;
   } catch (e) {
     console.error('프로필을 불러오지 못했습니다.', e);
@@ -42,18 +42,26 @@ export default function Wiki() {
   const { code } = router.query;
 
   useEffect(() => {
-    if (code && typeof code === 'string') {
-      const fetchProfile = async () => {
-        const profileData = await getProfileData(code as string); // code를 문자열로 변환
-        if (profileData) {
-          setProfile(profileData); // 프로필 상태 업데이트
-        } else {
-          alert('프로필을 불러오지 못했습니다.');
+    const fetchProfile = async () => {
+      if (typeof code === 'string') {
+        try {
+          const profileData = await getProfileData(code); // code를 문자열로 변환
+          if (profileData) {
+            setProfile(profileData); // 프로필 상태 업데이트
+          } else {
+            alert('프로필을 불러오지 못했습니다.');
+          }
+        } catch (error) {
+          console.error('프로필을 불러오는 중에 오류가 발생했습니다.', error);
+          alert('프로필을 불러오는 중에 오류가 발생했습니다.');
         }
-      };
+      }
+    };
 
-      fetchProfile();
-    }
+    fetchProfile().catch((error) => {
+      // Promise 거부 처리
+      console.error('useEffect에서 오류가 발생했습니다.', error);
+    });
   }, [code]);
 
   return (

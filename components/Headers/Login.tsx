@@ -43,7 +43,7 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
 
-  const profileImage = profile?.image || '/icon/icon-profile.svg';
+  const profileImage = profile?.image ?? '/icon/icon-profile.svg';
   const router = useRouter();
   const loginMenuRef = useRef<HTMLDivElement>(null);
 
@@ -62,19 +62,19 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
     setProfileMenu(updateProfileMenu());
   }, [updateProfileMenu]); // updateProfileMenu가 변경될 때만 실행
 
-  const handleLoginMenu = (option: string) => {
+  const handleLoginMenu = async (option: string) => {
     if (option === '위키목록') {
-      router.push('/wikilist');
+      await router.push('/wikilist');
     } else if (option === '자유게시판') {
-      router.push('/boards');
+      await router.push('/boards');
     } else if (option === '마이페이지') {
-      router.push('/mypage');
+      await router.push('/mypage');
     } else if (option === '로그인') {
-      router.push('/login');
+      await router.push('/login');
     } else if (option === '로그아웃') {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      router.push('/');
+      await router.push('/');
     }
   };
 
