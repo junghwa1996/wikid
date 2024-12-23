@@ -1,11 +1,22 @@
 import instance from 'lib/axios-client';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 import Button from '@/components/Button';
 import TextEditor from '@/components/TextEditor';
 // import { AuthAPI } from '@/services/api/auth';
+
+// 게시글 상세 작성 응답 데이터 타입 정의
+interface ArticleResponse {
+  data: {
+    id: number;
+    title: string;
+    content: string;
+    image: string;
+  };
+  status: number;
+}
 
 // 제목 글자수 제한
 const MAX_TITLE = 30;
@@ -50,17 +61,18 @@ export default function Addboard() {
     e.preventDefault();
 
     try {
-      const res = await instance.post('/articles', {
-        image: 'https://ifh.cc/g/V26MYS.png',
-        content,
-        title,
-      });
-      if (res && res.status === 201) {
-        // TODO - 스낵바로 변경
+      const { data, status }: ArticleResponse = await instance.post(
+        '/articles',
+        {
+          image: 'https://ifh.cc/g/V26MYS.png',
+          content,
+          title,
+        }
+      );
+
+      if (status != undefined && status === 201) {
         alert('게시물이 등록되었습니다.');
-        router.push('/boards/' + res.data.id);
-      } else {
-        console.log('--- handleSubmit:res:', res);
+        await router.push('/boards/' + data.id);
       }
     } catch (error) {
       console.error('--- handleSubmit:error:', error);
@@ -76,6 +88,7 @@ export default function Addboard() {
     //   });
     //   console.log('res:', res);
     // };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     // testSignin();
 
     // 테스트용 사용자 정보 - 로그인 여부 확인
@@ -87,6 +100,7 @@ export default function Addboard() {
         console.error('--- useEffect:error:', error);
       }
     };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     testRes();
   }, []);
 
@@ -133,7 +147,7 @@ export default function Addboard() {
                   maxLength={MAX_TITLE}
                   value={title}
                   onChange={handleInputChange}
-                  placeholder="제목을 입력해주세요"
+                  placeholder="제목을 입���해주세요"
                 />
                 <div className="ml-4 w-10 text-14md mo:text-13md">
                   {title.length}/
