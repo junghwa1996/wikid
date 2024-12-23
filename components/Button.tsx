@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 // 로딩 이미지 svg
 const IconLoad = () => (
@@ -50,11 +50,6 @@ interface Props {
   isLoading?: boolean;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   children: ReactNode;
-  [property: string]:
-    | string
-    | boolean
-    | ReactNode
-    | ((e: React.MouseEvent<HTMLElement>) => void);
 }
 
 /**
@@ -68,7 +63,6 @@ interface Props {
  * @param {boolean} props.isLoading - loading 여부
  * @param {function} props.onClick - onClick에 전달할 함수
  * @param {ReactNode} props.children - button태그 사이 들어갈 필수 요소
- * @returns {JSX.Element} 링크값 없으면 button 있으면 Link 요소 반환
  */
 export default function Button({
   className = '',
