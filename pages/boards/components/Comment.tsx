@@ -9,6 +9,7 @@ import CommentForm from './CommentForm';
 
 interface CommentProps extends CommentType {
   name: Writer['name'];
+  updatedAt: string;
   onclick: { update: (value: string) => void; delete: () => void };
   isOwner: boolean;
 }
