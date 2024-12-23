@@ -6,6 +6,7 @@ import UserProfile from '@/components/UserProfile';
 interface ProfileData {
   updatedAt: string;
   securityQuestion: string;
+  securityAnswer: string;
   teamId: string;
   content: string;
   nationality: string;
@@ -26,6 +27,7 @@ interface ProfileData {
 const INITIAL_PROFILE_DATA = {
   updatedAt: '2024-12-19T06:47:31.687Z',
   securityQuestion: 'string',
+  securityAnswer: 'string',
   teamId: 'string',
   content: 'string',
   nationality: '대한민국',
