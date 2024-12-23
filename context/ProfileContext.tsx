@@ -45,12 +45,6 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
 
-  // //accessToken이 있는지 확인 (로그인 여부)
-  // const updateAuthStatus = () => {
-  //   const accessToken = localStorage.getItem('accessToken');
-  //   setIsAuthenticated(!!accessToken);
-  // };
-
   //사용자 프로필 가져오기
   const getProfile = async () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -83,21 +77,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // //초기 인증 상태 확인
-  // useEffect(() => {
-  //   updateAuthStatus();
-  // }, []);
-
-  // //다른 탭에서 localStorage가 변경될때 인증 상태 업데이트
-  // useEffect(() => {
-  //   window.addEventListener('storage', updateAuthStatus);
-
-  //   return () => {
-  //     window.removeEventListener('storage', updateAuthStatus);
-  //   };
-  // }, []);
-
-  //accessToken이 변경되거나 삭제될때 인증 상태 업데이트
+  //인증 상태 업데이트
   useEffect(() => {
     const handleLocalStorageChange = () => {
       const accessToken = localStorage.getItem('accessToken');
@@ -117,16 +97,15 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
     const originalSetItem = localStorage.setItem.bind(localStorage);
     const originalRemoveItem = localStorage.removeItem.bind(localStorage);
 
-    // 화살표 함수로 `this` 문제 해결
     localStorage.setItem = (key: string, value: string) => {
-      originalSetItem.call(localStorage, key, value); // 명시적으로 `call`로 `this` 바인딩
+      originalSetItem.call(localStorage, key, value);
       if (key === 'accessToken') {
         handleLocalStorageChange();
       }
     };
 
     localStorage.removeItem = (key: string) => {
-      originalRemoveItem.call(localStorage, key); // 명시적으로 `call`로 `this` 바인딩
+      originalRemoveItem.call(localStorage, key);
       if (key === 'accessToken') {
         handleLocalStorageChange();
       }

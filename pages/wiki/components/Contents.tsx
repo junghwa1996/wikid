@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-// import Button from '@/components/Button';
 import EditorViewer from '@/components/EditorViewer';
 import DisconnectionModal from '@/components/Modal/DisconnectionModal';
-// import UnsavedChangesModal from '@/components/Modal/UnsavedChangesModal';
 import WikiQuizModal from '@/components/Modal/WikiQuizModal';
 import TextEditor from '@/components/TextEditor';
 import UserProfile from '@/components/UserProfile';
@@ -106,6 +104,7 @@ export default function Contents({ profile }: ProfileProps) {
     }
   };
 
+  //수정 취소시 이전 내용으로 복구
   const closeAndNoSave = () => {
     setIsEditing(false);
     setIsProfileEdit(false);
@@ -126,6 +125,7 @@ export default function Contents({ profile }: ProfileProps) {
     setNewContent(previousContent.current);
   };
 
+  //연결 끊기기까지 타이머
   useEffect(() => {
     let inactivityTimeout: ReturnType<typeof setTimeout>;
     let countdownInterval: ReturnType<typeof setInterval>;

@@ -20,8 +20,12 @@ interface ContentHeaderProps {
  * Content 컴포넌트의 헤더에 해당하는 컴포넌트
  * @param name 위키문서의 이름
  * @param link 위키문서의 링크
- * @param onNameChange 이름이 변경될 때 호출되는 콜백 함수
- * @param isEditing 편집 모드인지 여부
+ * @param isEditing 편집모드인지 여부
+ * @param isInfoSnackBarOpen 정보 스낵바의 열림 여부
+ * @param isEmpty 위키문서가 비어있는지 여부
+ * @param handleQuizOpen 퀴즈 모달을 열기 위한 함수
+ * @param closeAndNoSave 편집모드에서 저장하지 않고 닫기 위한 함수
+ * @param saveContent 편집모드에서 저장하기 위한 함수
  */
 
 export default function ContentHeader({
