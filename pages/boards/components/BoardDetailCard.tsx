@@ -37,6 +37,7 @@ export default function BoardDetailCard({
   content = '',
   image = 'https://ifh.cc/g/V26MYS.png',
   isOwner = false,
+  isLiked = false,
 }: BoardDetailCard & Writer) {
   const isMobile = useCheckMobile();
   const router = useRouter();
@@ -64,7 +65,7 @@ export default function BoardDetailCard({
     const method = isLiked ? 'delete' : 'post';
 
     try {
-      const res = await instance[method](`/articles/${articleId}/like`);
+      const res = await instance[method](`/articles/${id}/like`);
       console.log('--- handleHeartClick:res:', res);
     } catch (error) {
       console.error('--- handleHeartClick:error:', error);

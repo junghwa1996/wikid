@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import HeartIcon from './HeartIcon';
 
@@ -14,10 +14,10 @@ interface HeartProps {
 /**
  * Heart count component
  * @param {number} initialCount - 초기 카운트 수
- * @param {function} onClick - 클릭 시 동작 할 이벤트(옵션)
- * @param {string} textSize - 텍스트 사이즈(옵션)
- * @param {string} iconSize - 아이콘 사이즈(옵션)
- * @param {string} className - 커스텀 클래스(옵션)
+ * @param {function} props.onClick - 클릭 시 동작 할 이벤트(옵션)
+ * @param {string} props.textSize - 텍스트 사이즈(옵션)
+ * @param {string} props.iconSize - 아이콘 사이즈(옵션)
+ * @param {string} props.className - 커스텀 클래스(옵션)
  * @example <Heart initialCount={10} onClick={() => console.log('클릭')} />
  */
 export default function Heart({
@@ -30,6 +30,10 @@ export default function Heart({
 }: HeartProps) {
   const [count, setCount] = useState(initialCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
+
+  useEffect(() => {
+    setIsLiked(initialIsLiked);
+  }, [initialIsLiked]);
 
   const handleClick = () => {
     if (onClick) {
