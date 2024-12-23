@@ -154,7 +154,7 @@ export default function Contents({ profile }: ProfileProps) {
 
   return (
     <div
-      className="pc:grid pc:grid-rows-[150px] pc:gap-x-[80px]"
+      className={`pc:grid ${isEditing ? `pc:grid-rows-[75px]` : `pc:grid-rows-[150px]`} pc:gap-x-[80px] tamo:flex tamo:flex-col tamo:gap-[10px]`}
       style={{ gridTemplateColumns: 'minmax(300px, 800px) 400px' }}
     >
       <div>
@@ -193,13 +193,13 @@ export default function Contents({ profile }: ProfileProps) {
         />
       )}
 
-      <div className="mt-[8px]">
+      <div className="mb-[50px] mt-[20px]">
         {isEditing ? (
           <>
             <div className="mb-[8px] text-right font-bold text-red-100">
               남은시간 {Math.floor(timeLeft / 60)}:{timeLeft % 60}
             </div>
-            <div className="h-[600px] w-full rounded-md border p-[20px] focus:border-gray-300">
+            <div className="h-[700px] w-full rounded-md border p-[20px] focus:border-gray-300">
               <TextEditor value={newContent} onChange={handleContentChange} />
             </div>
           </>

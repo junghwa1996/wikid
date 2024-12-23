@@ -58,7 +58,9 @@ function UserProfile({
     }
 
     return (
-      <p className="mb-[16px] flex h-[18px] w-[200px] gap-[20px] text-14 mo:text-12">
+      <p
+        className={`mb-[16px] flex h-[18px] ${isEditing ? 'w-full' : 'w-[250px]'} gap-[10px] text-14 mo:text-12`}
+      >
         <span className="flex-[1] text-gray-400">{label}</span>
         <span className="flex-[2] text-gray-500">{value}</span>
       </p>
@@ -66,7 +68,9 @@ function UserProfile({
   };
 
   return (
-    <div className="max-w-4xl rounded-custom bg-white py-2 shadow-custom dark:bg-gray-600 dark:shadow-custom-dark pc:h-[671px] pc:w-[320px] pc:px-[30px] tamo:w-full tamo:p-[20px]">
+    <div
+      className={`max-w-4xl rounded-custom bg-white py-2 shadow-custom dark:bg-gray-600 dark:shadow-custom-dark ${isEditing ? `pc:h-[828px]` : `pc:h-[671px]`} pc:w-[320px] pc:px-[30px] tamo:w-full tamo:p-[20px]`}
+    >
       {/* PC 버전은 세로 레이아웃, 모바일/태블릿은 가로 레이아웃 */}
       <div
         className={`flex ${isEditing ? 'flex-col' : 'flex-col mo:flex-row ta:flex-row pc:flex-col tamo:gap-[40px]'} pc:items-center`}
@@ -105,7 +109,9 @@ function UserProfile({
         <div
           className={`${isEditing ? 'mt-4 mo:justify-center' : 'mo:flex-1 ta:flex-1 pc:mt-4'} pc:w-full`}
         >
-          <div className="space-y-3 tamo:max-w-[150px]">
+          <div
+            className={`space-y-3 ${isEditing ? 'tamo:max-w-full' : 'tamo:max-w-[200px]'}`}
+          >
             {/* 기본 정보 */}
             <div
               className={`${
