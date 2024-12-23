@@ -1,11 +1,21 @@
 import instance from 'lib/axios-client';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 import Button from '@/components/Button';
 import TextEditor from '@/components/TextEditor';
-// import { AuthAPI } from '@/services/api/auth';
+
+// 게시글 상세 작성 응답 데이터 타입 정의
+interface ArticleResponse {
+  data: {
+    id: number;
+    title: string;
+    content: string;
+    image: string;
+  };
+  status: number;
+}
 
 // 제목 글자수 제한
 const MAX_TITLE = 30;
@@ -50,45 +60,23 @@ export default function Addboard() {
     e.preventDefault();
 
     try {
-      const res = await instance.post('/articles', {
-        image: 'https://ifh.cc/g/V26MYS.png',
-        content,
-        title,
-      });
-      if (res && res.status === 201) {
-        // TODO - 스낵바로 변경
+      const { data, status }: ArticleResponse = await instance.post(
+        '/articles',
+        {
+          image: 'https://ifh.cc/g/V26MYS.png',
+          content,
+          title,
+        }
+      );
+
+      if (status != undefined && status === 201) {
         alert('게시물이 등록되었습니다.');
-        router.push('/boards/' + res.data.id);
-      } else {
-        console.log('--- handleSubmit:res:', res);
+        await router.push('/boards/' + data.id);
       }
     } catch (error) {
       console.error('--- handleSubmit:error:', error);
     }
   };
-
-  useEffect(() => {
-    // 테스트용 로그인
-    // const testSignin = async () => {
-    //   const res = await AuthAPI.signin({
-    //     email: 'haksoo@email.com',
-    //     password: '1234qwer',
-    //   });
-    //   console.log('res:', res);
-    // };
-    // testSignin();
-
-    // 테스트용 사용자 정보 - 로그인 여부 확인
-    const testRes = async () => {
-      try {
-        const res = await instance.get('/users/me');
-        console.log('--- useEffect:res:', res);
-      } catch (error) {
-        console.error('--- useEffect:error:', error);
-      }
-    };
-    testRes();
-  }, []);
 
   return (
     <div className="min-h-svh">
@@ -142,7 +130,7 @@ export default function Addboard() {
               </fieldset>
 
               <p className="mb-[10px] mt-5 text-16md mo:my-4 mo:text-14md">
-                공백포함 : 총 {textContent.length}자 | 공백제외 총{' '}
+                공백포함 : 총 {textContent.length}자 | 공백제외 총&nbsp;
                 {textContent.replaceAll(' ', '').length}자
               </p>
 
