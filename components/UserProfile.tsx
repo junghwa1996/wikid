@@ -236,7 +236,6 @@ function UserProfile({
                         width={16}
                         height={16}
                       />
-                      더보기
                     </button>
                   ) : (
                     // 펼친 상태: 추가 정보 표시
@@ -256,7 +255,6 @@ function UserProfile({
                           width={16}
                           height={16}
                         />
-                        접기
                       </button>
                     </div>
                   )}
