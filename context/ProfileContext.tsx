@@ -31,9 +31,7 @@ interface ProfileContextType {
   profile: Profile | null;
 }
 
-export const ProfileContext = createContext<ProfileContextType | undefined>(
-  undefined
-);
+export const ProfileContext = createContext<ProfileContextType | null>(null);
 
 export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
   children,
