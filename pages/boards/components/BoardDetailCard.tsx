@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { BoardBase, Writer } from 'types/board';
 
 import Button from '@/components/Button';
 import EditorViewer from '@/components/EditorViewer';
@@ -10,14 +11,7 @@ import dateConversion from '@/utils/dateConversion';
 
 import ButtonIcon from './ButtonIcon';
 
-interface BoardDetailCardProps {
-  title: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-  likeCount: number;
-  content: string;
-  image: string;
+interface BoardDetailCard extends BoardBase {
   isOwner: boolean;
   isLiked: boolean;
 }
@@ -36,29 +30,30 @@ interface BoardDetailCardProps {
  */
 export default function BoardDetailCard({
   title,
-  name,
-  createdAt,
-  updatedAt,
-  likeCount,
-  content,
-  isOwner,
-  image,
-  isLiked,
-}: BoardDetailCardProps) {
+  name = '',
+  createdAt = '',
+  updatedAt = '',
+  likeCount = 0,
+  content = '',
+  image = 'https://ifh.cc/g/V26MYS.png',
+  isOwner = false,
+}: BoardDetailCard & Writer) {
   const isMobile = useCheckMobile();
   const router = useRouter();
   const { articleId } = router.query;
+  const id = articleId as string;
 
   // 수정하기 버튼 클릭 시 수정 페이지 이동
-  const handleUpdateClick = () => {
-    router.push(`/updateboard/${articleId}`);
+  const handleUpdateClick = async () => {
+    await router.push(`/updateboard/${id}`);
   };
 
   // 삭제하기 버튼 클릭 시 게시글 삭제
   const handleDeleteClick = async () => {
     try {
-      await instance.delete(`/articles/${articleId}`);
-      router.push('/boards');
+      await instance.delete(`/articles/${id}`);
+
+      await router.push('/boards');
     } catch (error) {
       console.error('게시글을 삭제하지 못했습니다.', error);
     }

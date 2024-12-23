@@ -1,6 +1,7 @@
 import instance from 'lib/axios-client';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import React from 'react';
 import { FormEvent, useEffect, useState } from 'react';
 
 import Button from '@/components/Button';
@@ -33,16 +34,18 @@ export default function UpdateBoard() {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const res = await instance.get(`/articles/${articleId}`);
+        const res = await instance.get<{ title: string; content: string }>(
+          `/articles/${articleId as string}`
+        );
         setTitle(res.data.title);
         setContent(res.data.content);
-      } catch (error) {
-        console.error('게시글 정보를 불러오지 못했습니다.', error);
+      } catch {
+        throw new Error('게시글 정보를 불러오지 못했습니다.');
       }
     };
 
-    if (articleId) {
-      fetchArticle();
+    if (typeof articleId === 'string') {
+      void fetchArticle();
     }
   }, [articleId]);
 
@@ -65,19 +68,15 @@ export default function UpdateBoard() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('accessToken');
-      await instance.patch(
-        `/articles/${articleId}`,
-        { title, content },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      router.push(`/boards/${articleId}`);
-    } catch (error) {
-      console.error('게시글을 수정하지 못했습니다.', error);
+      await instance.patch(`/articles/${articleId as string}`, {
+        title,
+        content,
+      });
+      if (typeof articleId === 'string') {
+        await router.push(`/boards/${articleId}`);
+      }
+    } catch {
+      throw new Error('게시글을 수정하지 못했습니다.');
     }
   };
 
