@@ -147,7 +147,7 @@ export default function Addboard() {
                   maxLength={MAX_TITLE}
                   value={title}
                   onChange={handleInputChange}
-                  placeholder="제목을 입���해주세요"
+                  placeholder="제목을 입력해주세요"
                 />
                 <div className="ml-4 w-10 text-14md mo:text-13md">
                   {title.length}/
@@ -156,7 +156,7 @@ export default function Addboard() {
               </fieldset>
 
               <p className="mb-[10px] mt-5 text-16md mo:my-4 mo:text-14md">
-                공백포함 : 총 {textContent.length}자 | 공백제외 총{' '}
+                공백포함 : 총 {textContent.length}자 | 공백제외 총&nbsp;
                 {textContent.replaceAll(' ', '').length}자
               </p>
 
