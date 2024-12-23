@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { BoardBase, Writer } from 'types/board';
 
 import Button from '@/components/Button';
@@ -37,8 +38,10 @@ export default function BoardDetailCard({
   content = '',
   image = 'https://ifh.cc/g/V26MYS.png',
   isOwner = false,
-  isLiked = false,
+  isLiked: initialIsLiked = false,
 }: BoardDetailCard & Writer) {
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const [likeCountState, setLikeCountState] = useState(likeCount);
   const isMobile = useCheckMobile();
   const router = useRouter();
   const { articleId } = router.query;
@@ -65,8 +68,11 @@ export default function BoardDetailCard({
     const method = isLiked ? 'delete' : 'post';
 
     try {
-      const res = await instance[method](`/articles/${id}/like`);
-      console.log('--- handleHeartClick:res:', res);
+      await instance[method](`/articles/${id}/like`);
+      setIsLiked(!isLiked);
+      setLikeCountState((prevCount) =>
+        isLiked ? prevCount - 1 : prevCount + 1
+      );
     } catch (error) {
       console.error('--- handleHeartClick:error:', error);
     }
@@ -101,7 +107,7 @@ export default function BoardDetailCard({
           </span>
 
           <Heart
-            initialCount={likeCount}
+            initialCount={likeCountState}
             isLiked={isLiked}
             onClick={handleHeartClick}
           />
