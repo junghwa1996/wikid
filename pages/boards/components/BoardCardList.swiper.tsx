@@ -1,27 +1,11 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { BoardListResponse } from 'types/board';
 
 import BoardCard from './BoardCard';
 
 import 'swiper/css';
 
-interface BoardCardData {
-  id: number;
-  title: string;
-  image: string;
-  writer: {
-    name: string;
-  };
-  likeCount: number;
-  updatedAt: string;
-}
-
-interface BoardCardListSwiperProps {
-  data: BoardCardData[];
-}
-
-export default function BoardCardListSwiper({
-  data,
-}: BoardCardListSwiperProps) {
+export default function BoardCardListSwiper({ data = [] }: BoardListResponse) {
   return (
     <Swiper slidesPerView="auto" spaceBetween={16} className="-my-5 !p-5">
       {data.map((item) => (
