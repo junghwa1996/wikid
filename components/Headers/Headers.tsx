@@ -2,7 +2,7 @@ import useCheckMobile from 'hooks/useCheckMobile';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useProfileContext } from '../../context/ProfileContext';
+import { useProfileContext } from '../../hooks/useProfileContext';
 import Alarm from './Alarm';
 import GNB from './GNB';
 import Login from './Login';
