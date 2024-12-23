@@ -5,6 +5,9 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -34,7 +37,7 @@
     "utils/**/*.tsx",
     "lib/**/*.ts",
     "lib/**/*.tsx",
-    "[code].tsx"
+    ".eslintrc.js"
   ],
   "exclude": ["node_modules", "dist", ".next"]
 }
