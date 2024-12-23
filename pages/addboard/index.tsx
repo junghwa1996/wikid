@@ -1,11 +1,10 @@
 import instance from 'lib/axios-client';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 import Button from '@/components/Button';
 import TextEditor from '@/components/TextEditor';
-// import { AuthAPI } from '@/services/api/auth';
 
 // 게시글 상세 작성 응답 데이터 타입 정의
 interface ArticleResponse {
@@ -78,31 +77,6 @@ export default function Addboard() {
       console.error('--- handleSubmit:error:', error);
     }
   };
-
-  useEffect(() => {
-    // 테스트용 로그인
-    // const testSignin = async () => {
-    //   const res = await AuthAPI.signin({
-    //     email: 'haksoo@email.com',
-    //     password: '1234qwer',
-    //   });
-    //   console.log('res:', res);
-    // };
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    // testSignin();
-
-    // 테스트용 사용자 정보 - 로그인 여부 확인
-    const testRes = async () => {
-      try {
-        const res = await instance.get('/users/me');
-        console.log('--- useEffect:res:', res);
-      } catch (error) {
-        console.error('--- useEffect:error:', error);
-      }
-    };
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    testRes();
-  }, []);
 
   return (
     <div className="min-h-svh">
