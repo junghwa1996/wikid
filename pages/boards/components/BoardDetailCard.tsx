@@ -6,6 +6,7 @@ import { BoardBase, Writer } from 'types/board';
 import Button from '@/components/Button';
 import EditorViewer from '@/components/EditorViewer';
 import Heart from '@/components/Heart/Heart';
+import SnackBar from '@/components/SnackBar';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import instance from '@/lib/axios-client';
 import dateConversion from '@/utils/dateConversion';
@@ -42,6 +43,8 @@ export default function BoardDetailCard({
 }: BoardDetailCard & Writer) {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCountState, setLikeCountState] = useState(likeCount);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState('');
   const isMobile = useCheckMobile();
   const router = useRouter();
   const { articleId } = router.query;
@@ -56,7 +59,8 @@ export default function BoardDetailCard({
   const handleDeleteClick = async () => {
     try {
       await instance.delete(`/articles/${id}`);
-
+      setSnackBarMessage('게시글이 삭제되었습니다.');
+      setSnackBarOpen(true);
       await router.push('/boards');
     } catch (error) {
       console.error('게시글을 삭제하지 못했습니다.', error);
@@ -73,6 +77,10 @@ export default function BoardDetailCard({
       setLikeCountState((prevCount) =>
         isLiked ? prevCount - 1 : prevCount + 1
       );
+      setSnackBarMessage(
+        isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 반영되었습니다.'
+      );
+      setSnackBarOpen(true);
     } catch (error) {
       console.error('--- handleHeartClick:error:', error);
     }
@@ -124,6 +132,15 @@ export default function BoardDetailCard({
         />
         <EditorViewer content={content} />
       </div>
+
+      <SnackBar
+        severity="success"
+        open={snackBarOpen}
+        onClose={() => setSnackBarOpen(false)}
+        autoHideDuration={2000}
+      >
+        {snackBarMessage}
+      </SnackBar>
     </div>
   );
 }
