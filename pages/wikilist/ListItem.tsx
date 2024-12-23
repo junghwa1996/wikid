@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
 
 import LinkBar from '@/components/LinkBar';
 import type { ProfileProps } from '@/pages/wikilist';
@@ -18,8 +19,8 @@ export default function ListItem({ data }: ListItemProps) {
   const baseProfileImage = '/icon/icon-profile.svg';
 
   // 링크바 클릭 핸들러 함수
-  const handleLinkClick = () => {
-    navigator.clipboard.writeText(`https://www.wikied.kr/${code}`);
+  const handleLinkClick = async () => {
+    await navigator.clipboard.writeText(`https://www.wikied.kr/${code}`);
     // TODO: 스낵바로 변경
     alert(`${name}님 위키 링크가 복사되었습니다.`);
   };
