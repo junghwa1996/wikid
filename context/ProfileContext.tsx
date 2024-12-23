@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { createContext, ReactNode, useEffect, useState } from 'react';
 
 import instance from '@/lib/axios-client';
 
@@ -37,7 +31,9 @@ interface ProfileContextType {
   profile: Profile | null;
 }
 
-const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
+export const ProfileContext = createContext<ProfileContextType | undefined>(
+  undefined
+);
 
 export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -124,12 +120,4 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
       {children}
     </ProfileContext.Provider>
   );
-};
-
-export const useProfileContext = () => {
-  const context = useContext(ProfileContext);
-  if (!context) {
-    throw new Error('ProfileProvider로 감싸져야 합니다');
-  }
-  return context;
 };
