@@ -1,3 +1,4 @@
+import { Profile } from 'context/ProfileContext';
 import { useEffect, useRef, useState } from 'react';
 
 import EditorViewer from '@/components/EditorViewer';
@@ -9,7 +10,6 @@ import instance from '@/lib/axios-client';
 
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
-import { Profile } from 'context/ProfileContext';
 
 interface ProfileProps {
   profile: Profile;
@@ -75,7 +75,6 @@ export default function Contents({ profile }: ProfileProps) {
     try {
       // PATCH 요청을 보내는 코드
       const updatedProfile = {
-        securityAnswer: profile?.securityAnswer,
         securityQuestion: profile?.securityQuestion,
         nationality: profileData.nationality,
         family: profileData.family,

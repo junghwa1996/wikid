@@ -3,7 +3,8 @@ import Link from 'next/link';
 import React from 'react';
 
 import LinkBar from '@/components/LinkBar';
-import type { ProfileProps } from '@/pages/wikilist';
+
+import { ProfileProps } from './index.page';
 
 interface ListItemProps {
   data: ProfileProps;
