@@ -17,6 +17,12 @@ export interface BoardBase extends BaseEntity {
   likeCount?: number;
 }
 
+export interface BoardCreateData {
+  title: string;
+  content: string;
+  image: string;
+}
+
 export interface Board extends BoardBase {
   writer: Writer;
 }
