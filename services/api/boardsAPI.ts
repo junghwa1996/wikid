@@ -30,6 +30,7 @@ export const getBoardDetail = async (
 };
 
 // 게시글 댓글 리스트 불러오기
+
 export const getComments = async (
   articleId: string,
   limit: number
