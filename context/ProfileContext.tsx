@@ -1,26 +1,7 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import { Profile } from 'types/profile';
 
 import instance from '@/lib/axios-client';
-
-export interface Profile {
-  image: string;
-  updatedAt: string;
-  securityQuestion: string;
-  teamId: string;
-  content: string;
-  nationality: string;
-  family: string;
-  bloodType: string;
-  nickname: string;
-  birthday: string;
-  sns: string;
-  job: string;
-  mbti: string;
-  city: string;
-  code: string;
-  name: string;
-  id: number;
-}
 
 interface UserProfileResponse {
   profile: Profile;
