@@ -64,8 +64,15 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
   return isLoggedIn ? (
     <div ref={loginMenuRef} className="flex">
       <div
+        role="button"
+        tabIndex={0}
         className="relative cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            setIsOpen(!isOpen);
+          }
+        }}
       >
         <div className="flex size-[32px] overflow-hidden rounded-full mo:hidden">
           <Image
