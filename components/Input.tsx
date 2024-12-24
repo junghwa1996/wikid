@@ -140,8 +140,7 @@ function InputField({
       {typeof layout === 'string' &&
         layout === 'vertical' &&
         typeof errorMessage === 'string' &&
-        errorMessage.length > 0 &&
-        (
+        errorMessage.length > 0 && (
           <span className={variantClass.errorText}>{errorMessage}</span>
         )}
       {typeof showDayPicker === 'boolean' && showDayPicker && (
