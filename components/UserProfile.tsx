@@ -129,14 +129,14 @@ function UserProfile({
   };
 
   return (
-    <div className="mx-auto max-w-4xl rounded-custom bg-white shadow-custom dark:bg-gray-600 dark:shadow-custom-dark mo:w-11/12 ta:w-11/12 pc:w-[400px] pc:p-7 tamo:px-5 tamo:pt-5">
+    <div className="mx-auto max-w-4xl rounded-custom bg-white shadow-custom dark:bg-gray-600 dark:shadow-custom-dark mo:w-11/12 ta:w-11/12 pc:w-[400px] pc:p-7 tamo:p-5">
       {/* 메인 컨테이너 */}
       <div
         className={`flex ${isEditing ? 'flex-col' : 'flex-col mo:flex-row ta:flex-row pc:flex-col'} pc:items-center`}
       >
         {/* 프로필 이미지 섹션 */}
         <div
-          className={`flex items-center justify-center ${isEditing ? '' : 'mo:self-start ta:self-start'}`}
+          className={`flex items-center justify-center tamo:pt-4 ${isEditing ? '' : 'mo:self-start ta:self-start'}`}
         >
           {/* 이미지 클릭 버튼 */}
           <button
@@ -151,7 +151,7 @@ function UserProfile({
               alt="Profile"
               width={100}
               height={100}
-              className={`rounded-full object-cover pc:mb-10 ${
+              className={`rounded-full object-cover ${
                 isEditing
                   ? 'mo:size-[62px] ta:size-[71px] pc:size-48'
                   : 'mo:size-[62px] ta:size-[71px] pc:size-48'
@@ -189,7 +189,7 @@ function UserProfile({
 
         {/* 프로필 정보 섹션 */}
         <div
-          className={`${isEditing ? 'mt-4 mo:justify-center' : 'mo:ml-4 mo:flex-1 ta:ml-4 ta:flex-1 pc:mt-4'} pc:w-full`}
+          className={`${isEditing ? 'mt-4 mo:justify-center' : 'mo:ml-4 mo:flex-1 ta:ml-4 ta:flex-1 pc:mt-4'} mt-6 pc:w-full`}
         >
           <div className="space-y-3">
             {/* 기본 정보 영역 */}
