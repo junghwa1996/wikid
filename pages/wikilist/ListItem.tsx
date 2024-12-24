@@ -15,17 +15,8 @@ interface ListItemProps {
  * @param data - 목록에 출력할 프로필 데이터
  */
 export default function ListItem({ data }: ListItemProps) {
-  const {
-    name = '',
-    code = '',
-    image,
-    city = '',
-    nationality = '',
-    job = '',
-  } = data || {};
-  const isslice =
-    Array.isArray(code) || typeof code === 'string' ? code.slice(0, 4) : '';
-  const shortUrl = `https://www.wikied.kr/${isslice}...`;
+  const { name, code, image, city, nationality, job } = data;
+  const shortUrl = `https://www.wikied.kr/${code.slice(0, 4)}...`;
   const baseProfileImage = '/icon/icon-profile.svg';
 
   // 링크바 클릭 핸들러 함수
