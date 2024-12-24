@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { BoardBase, Writer } from 'types/board';
 
 import Button from '@/components/Button';
 import EditorViewer from '@/components/EditorViewer';
 import Heart from '@/components/Heart/Heart';
+import SnackBar from '@/components/SnackBar';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import instance from '@/lib/axios-client';
 import dateConversion from '@/utils/dateConversion';
@@ -13,6 +15,7 @@ import ButtonIcon from './ButtonIcon';
 
 interface BoardDetailCard extends BoardBase {
   isOwner: boolean;
+  isLiked: boolean;
 }
 
 /**
@@ -36,7 +39,12 @@ export default function BoardDetailCard({
   content = '',
   image = 'https://ifh.cc/g/V26MYS.png',
   isOwner = false,
+  isLiked: initialIsLiked = false,
 }: BoardDetailCard & Writer) {
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const [likeCountState, setLikeCountState] = useState(likeCount);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState('');
   const isMobile = useCheckMobile();
   const router = useRouter();
   const { articleId } = router.query;
@@ -51,10 +59,30 @@ export default function BoardDetailCard({
   const handleDeleteClick = async () => {
     try {
       await instance.delete(`/articles/${id}`);
-
+      setSnackBarMessage('게시글이 삭제되었습니다.');
+      setSnackBarOpen(true);
       await router.push('/boards');
     } catch (error) {
       console.error('게시글을 삭제하지 못했습니다.', error);
+    }
+  };
+
+  // 하트 클릭 시 동작
+  const handleHeartClick = async () => {
+    const method = isLiked ? 'delete' : 'post';
+
+    try {
+      await instance[method](`/articles/${id}/like`);
+      setIsLiked(!isLiked);
+      setLikeCountState((prevCount) =>
+        isLiked ? prevCount - 1 : prevCount + 1
+      );
+      setSnackBarMessage(
+        isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 반영되었습니다.'
+      );
+      setSnackBarOpen(true);
+    } catch (error) {
+      console.error('--- handleHeartClick:error:', error);
     }
   };
 
@@ -85,7 +113,12 @@ export default function BoardDetailCard({
           <span className="flex-1">
             최근 수정일 : {dateConversion(updatedAt)}
           </span>
-          <Heart initialCount={likeCount} />
+
+          <Heart
+            initialCount={likeCountState}
+            isLiked={isLiked}
+            onClick={handleHeartClick}
+          />
         </div>
       </header>
 
@@ -99,6 +132,15 @@ export default function BoardDetailCard({
         />
         <EditorViewer content={content} />
       </div>
+
+      <SnackBar
+        severity="success"
+        open={snackBarOpen}
+        onClose={() => setSnackBarOpen(false)}
+        autoHideDuration={2000}
+      >
+        {snackBarMessage}
+      </SnackBar>
     </div>
   );
 }
