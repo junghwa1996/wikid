@@ -45,7 +45,7 @@ export default function BoardsDetails() {
         }
       };
 
-      if (articleId) {
+      if (articleId !== undefined && articleId !== null && articleId !== '') {
         fetchBoardsDetail().catch((error) => {
           console.error('게시물 상세 데이터를 불러오는데 실패 했습니다', error);
         });
@@ -76,7 +76,7 @@ export default function BoardsDetails() {
       const res = await instance.get(
         `/articles/${String(articleId)}/comments?limit=${LIMIT}${cursorParam}`
       );
-      return res.data as CommentsData;
+      return (res.data as CommentsData) || { list: [] };
     } catch (error) {
       console.error('게시글 댓글을 불러오지 못했습니다.', error);
       throw new Error('댓글 데이터를 가져오는 중 문제가 발생했습니다.');
@@ -195,8 +195,8 @@ export default function BoardsDetails() {
                 댓글&nbsp;
                 <span className="text-green-200">
                   {comments?.pages
-                    ?.map((page) => page.list.length)
-                    .reduce((sum, count) => sum + count, 0) || 0}
+                    ?.map((page) => (page?.list ? page.list.length : 0))
+                    ?.reduce((sum, count) => sum + count, 0) || 0}
                 </span>
               </div>
               <CommentForm
@@ -212,24 +212,28 @@ export default function BoardsDetails() {
 
             {/* 댓글 리스트 */}
             <ul className="flex flex-col gap-6 mo:gap-[14px] ta:gap-4">
-              {comments?.pages.map((page) =>
-                page.list.map((item) => (
-                  <li key={item.id}>
-                    <Comment
-                      id={item.id}
-                      writer={item.writer}
-                      name={item.writer.name}
-                      content={item.content}
-                      updatedAt={item.updatedAt ?? ''}
-                      onclick={{
-                        update: (newContent: string) =>
-                          handleUpdate(item.id, newContent),
-                        delete: () => handleDelete(item.id),
-                      }}
-                      isOwner={item.writer.id === userId}
-                    />
-                  </li>
-                ))
+              {comments?.pages?.map(
+                (page) =>
+                  page?.list?.map((item) => (
+                    <li key={item?.id}>
+                      <Comment
+                        id={item?.id}
+                        writer={item?.writer}
+                        name={item?.writer?.name || '익명'}
+                        content={item?.content || ''}
+                        updatedAt={item?.updatedAt ?? ''}
+                        onclick={{
+                          update: (newContent: string) =>
+                            item?.id
+                              ? handleUpdate(item.id, newContent)
+                              : undefined,
+                          delete: () =>
+                            item?.id ? handleDelete(item.id) : undefined,
+                        }}
+                        isOwner={item?.writer?.id === userId}
+                      />
+                    </li>
+                  )) || []
               )}
             </ul>
 
