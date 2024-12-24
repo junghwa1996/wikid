@@ -30,7 +30,7 @@ export default function BoardCard({
     >
       <div className="relative h-[130px] w-auto overflow-hidden bg-gray-100 ta:h-[17.475vw]">
         <Image
-          src={image ?? '/icon/icon-no-image.svg'}
+          src={image}
           alt={`${title} 썸네일`}
           style={{ objectFit: 'cover' }}
           fill
@@ -45,7 +45,7 @@ export default function BoardCard({
           <span className="flex-1">
             {updatedAt && dateConversion(updatedAt)}
           </span>
-          <Heart initialCount={likeCount ?? 0} />
+          <Heart initialCount={likeCount} />
         </div>
       </div>
     </Link>

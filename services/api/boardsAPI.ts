@@ -8,7 +8,7 @@ import {
 import instance from '../../lib/axios-client';
 
 // 게시글 리스트 불러오기
-export const getBoards = async (query: string) => {
+export const getBoards = async (query: number) => {
   try {
     const res = await instance.get(`/articles?${query}`);
     return res.data as BoardResponse;
@@ -19,7 +19,7 @@ export const getBoards = async (query: string) => {
 
 // 게시글 상세 내용 불러오기
 export const getBoardDetail = async (
-  articleId: string
+  articleId: number | string
 ): Promise<ArticleData> => {
   try {
     const res = await instance.get(`/articles/${articleId}`);
@@ -31,7 +31,7 @@ export const getBoardDetail = async (
 
 // 게시글 댓글 리스트 불러오기
 export const getComments = async (
-  articleId: string,
+  articleId: number,
   limit: number
 ): Promise<CommentsData> => {
   try {
@@ -44,7 +44,10 @@ export const getComments = async (
   }
 };
 
-export const patchBoard = async (articleId: string, data: BoardCreateData) => {
+export const patchBoard = async (
+  articleId: number | string,
+  data: BoardCreateData
+) => {
   try {
     await instance.patch(`/articles/${articleId}`, data);
   } catch {

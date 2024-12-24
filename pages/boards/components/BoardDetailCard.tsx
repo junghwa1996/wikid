@@ -14,6 +14,7 @@ import dateConversion from '@/utils/dateConversion';
 import ButtonIcon from './ButtonIcon';
 
 interface BoardDetailCard extends BoardBase {
+  title: string;
   isOwner: boolean;
   isLiked: boolean;
 }
@@ -31,8 +32,8 @@ interface BoardDetailCard extends BoardBase {
  *
  */
 export default function BoardDetailCard({
-  title = '',
-  name = '',
+  title = '제목',
+  name = '이름',
   createdAt = '',
   updatedAt = '',
   likeCount = 0,
@@ -90,7 +91,9 @@ export default function BoardDetailCard({
     <div className="rounded-custom bg-background px-[30px] py-10 shadow-custom dark:shadow-custom-dark mo:p-5">
       <header className="mb-[38px] mo:mb-[15px] mo:pb-[11px] ta:mb-[30px] ta:pb-2 tamo:border-b">
         <div className="mb-[30px] flex items-center justify-between gap-[14px] mo:mb-[14px] tamo:gap-3">
-          <h1 className="flex-1 text-32sb mo:text-24sb">{title}</h1>
+          <h1 className="flex-1 text-32sb mo:text-24sb">
+            {title ? title : '제목 없음'}
+          </h1>
           {isOwner &&
             (!isMobile ? (
               <>

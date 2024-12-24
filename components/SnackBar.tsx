@@ -51,7 +51,7 @@ export default function SnackBar({
   useEffect(() => {
     if (open) {
       setVisible(true);
-      if (autoHideDuration !== undefined) {
+      if (autoHideDuration) {
         const timer = setTimeout(() => {
           setVisible(false);
           setTimeout(onClose, 300);

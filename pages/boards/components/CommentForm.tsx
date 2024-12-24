@@ -26,7 +26,7 @@ export default function CommentForm({
   update = false,
 }: CommentFormProps) {
   const MAX_LENGTH = 500;
-  const length = value?.length || 0;
+  const length = value.length;
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e);
