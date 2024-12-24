@@ -7,9 +7,9 @@ import TextEditor from '@/components/TextEditor';
 import UserProfile from '@/components/UserProfile';
 import instance from '@/lib/axios-client';
 
-import { Profile } from '../[code]';
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
+import { Profile } from 'context/ProfileContext';
 
 interface ProfileProps {
   profile: Profile;
