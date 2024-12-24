@@ -26,7 +26,7 @@ export default function Contents({ profile }: ProfileProps) {
   const [profileData, setProfileData] = useState<ProfileAnswer>(profile);
 
   const previousContent = useRef<string>(newContent);
-  const isEmpty = newContent === null || newContent === '';
+  const isEmpty = newContent === '';
 
   const handleQuizOpen = async () => {
     const res = await instance.get(`/profiles/${profile.code}/ping`);

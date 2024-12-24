@@ -17,7 +17,7 @@ export const useTimer = (
     let inactivityTimeout: ReturnType<typeof setTimeout>;
     let countdownInterval: ReturnType<typeof setInterval>;
 
-    if (isActive && timeLeft !== null) {
+    if (isActive && timeLeft > 0) {
       // 타이머가 활성화될 때만 초기화 (이전 timeLeft 값을 유지)
       inactivityTimeout = setTimeout(() => {
         onInactivity();
@@ -25,12 +25,12 @@ export const useTimer = (
 
       countdownInterval = setInterval(() => {
         setTimeLeft((prev) => {
-          if (prev !== null && prev <= 1) {
+          if (prev < 1 && prev <= 1) {
             clearInterval(countdownInterval); // 타이머 종료
             onInactivity(); // 타이머 종료 시 onInactivity 실행
             return 0;
           }
-          return prev !== null ? prev - 1 : 0; // 1초마다 남은 시간 업데이트
+          return prev - 1; // 1초마다 남은 시간 업데이트
         });
       }, 1000);
 
