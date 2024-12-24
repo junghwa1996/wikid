@@ -129,7 +129,7 @@ function UserProfile({
   };
 
   return (
-    <div className="mx-auto max-w-4xl rounded-custom bg-white px-5 py-2 shadow-custom dark:bg-gray-600 dark:shadow-custom-dark mo:w-11/12 ta:w-11/12 pc:w-[400px]">
+    <div className="mx-auto max-w-4xl rounded-custom bg-white shadow-custom dark:bg-gray-600 dark:shadow-custom-dark mo:w-11/12 ta:w-11/12 pc:w-[400px] pc:p-7 tamo:px-5 tamo:pt-5">
       {/* 메인 컨테이너 */}
       <div
         className={`flex ${isEditing ? 'flex-col' : 'flex-col mo:flex-row ta:flex-row pc:flex-col'} pc:items-center`}
@@ -151,7 +151,7 @@ function UserProfile({
               alt="Profile"
               width={100}
               height={100}
-              className={`rounded-full object-cover ${
+              className={`rounded-full object-cover pc:mb-10 ${
                 isEditing
                   ? 'mo:size-[62px] ta:size-[71px] pc:size-48'
                   : 'mo:size-[62px] ta:size-[71px] pc:size-48'
@@ -225,37 +225,44 @@ function UserProfile({
                 {/* 모바일/태블릿용 접힘/펼침 섹션 */}
                 <div className="pc:hidden">
                   {!isExpanded ? (
-                    // 접힌 상태: 더보기 버튼
-                    <button
-                      onClick={toggleExpand}
-                      className="flex items-center gap-2 text-14md text-green-200 hover:text-green-300"
-                    >
-                      <Image
-                        src="/icon/icon-expand.svg"
-                        alt="Expand"
-                        width={16}
-                        height={16}
-                      />
-                    </button>
-                  ) : (
-                    // 펼친 상태: 추가 정보 표시
-                    <div className="space-y-3">
-                      {renderField('SNS 계정', 'sns')}
-                      {renderField('생일', 'birthday')}
-                      {renderField('별명', 'nickname')}
-                      {renderField('혈액형', 'bloodType')}
-                      {renderField('국적', 'nationality')}
+                    // 접힌 상태: 더보기 버튼 (가운데 정렬)
+                    <div className="flex justify-center">
                       <button
                         onClick={toggleExpand}
                         className="flex items-center gap-2 text-14md text-green-200 hover:text-green-300"
                       >
                         <Image
-                          src="/icon/icon-collapse.svg"
-                          alt="Collapse"
+                          src="/icon/icon-expand.svg"
+                          alt="Expand"
                           width={16}
                           height={16}
                         />
                       </button>
+                    </div>
+                  ) : (
+                    // 펼친 상태: 추가 정보 표시
+                    <div>
+                      <div className="space-y-3">
+                        {renderField('SNS 계정', 'sns')}
+                        {renderField('생일', 'birthday')}
+                        {renderField('별명', 'nickname')}
+                        {renderField('혈액형', 'bloodType')}
+                        {renderField('국적', 'nationality')}
+                      </div>
+                      {/* 접기 버튼 */}
+                      <div className="mt-3 flex justify-center">
+                        <button
+                          onClick={toggleExpand}
+                          className="flex items-center gap-2 text-14md text-green-200 hover:text-green-300"
+                        >
+                          <Image
+                            src="/icon/icon-collapse.svg"
+                            alt="Collapse"
+                            width={16}
+                            height={16}
+                          />
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
