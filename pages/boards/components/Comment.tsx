@@ -1,14 +1,15 @@
 import Image from 'next/image';
+import React from 'react';
 import { useState } from 'react';
+import { Comment as CommentType, Writer } from 'types/board';
 
 import dateConversion from '@/utils/dateConversion';
 
 import CommentForm from './CommentForm';
 
-interface CommentProps {
-  name: string;
-  content: string;
-  date: string;
+interface CommentProps extends CommentType {
+  name: Writer['name'];
+  updatedAt: string;
   onclick: { update: (value: string) => void; delete: () => void };
   isOwner: boolean;
 }
@@ -24,7 +25,7 @@ interface CommentProps {
 export default function Comment({
   name = '유저이름',
   content = '코멘트',
-  date = '2024-12-19T05:26:36.719Z',
+  updatedAt = '2024-12-19T05:26:36.719Z',
   onclick = { update: () => {}, delete: () => {} },
   isOwner = false,
 }: CommentProps) {
@@ -91,7 +92,7 @@ export default function Comment({
           <>
             <p className="mb-[10px] text-16 mo:mb-1 mo:text-14">{content}</p>
             <span className="text-14 text-gray-400 mo:text-12">
-              {dateConversion(date)}
+              {dateConversion(updatedAt)}
             </span>
           </>
         ) : (

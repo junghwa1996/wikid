@@ -1,12 +1,13 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import { Board } from 'types/board';
 
 import Button from '@/components/Button';
 import Dropdown from '@/components/Dropdown';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
 import useCheckMobile from '@/hooks/useCheckMobile';
-import instance from '@/lib/axios-client';
+import { getBoards } from '@/services/api/boardsAPI';
 
 import BoardCardList from './components/BoardCardList';
 import BoardList from './components/BoardList';
@@ -21,26 +22,14 @@ const BoardCardList_Swiper = dynamic(
 );
 
 /**
- * 게시글 목록을 불러오는 API
- */
-const getBoards = async (query: string) => {
-  try {
-    const response = await instance.get(`/articles?${query}`);
-    return response.data;
-  } catch (error) {
-    console.error('게시글을 불러오지 못했습니다.', error);
-  }
-};
-
-/**
  * 게시판 페이지
  */
 export default function Boards() {
-  const [boards, setBoards] = useState([]);
-  const [likeBoards, setLikeBoards] = useState([]);
+  const [boards, setBoards] = useState<Board[]>([]);
+  const [likeBoards, setLikeBoards] = useState<Board[]>([]);
 
   const [totalCount, setTotalCount] = useState(0);
-  const [currentData, setCurrentData] = useState([]);
+  const [currentData, setCurrentData] = useState<Board[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [selectedOption, setSelectedOption] = useState('최신순');
@@ -50,16 +39,18 @@ export default function Boards() {
   const isMobile = useCheckMobile();
   const PAGE_SIZE = 10;
 
-  // 베스트 게시글 GET
+  // 베스트 게시글 fetch
   useEffect(() => {
     const fetchBoardsLike = async () => {
       const res = await getBoards('orderBy=like&pageSize=4');
-      if (res) {
+      if (Array.isArray(res.list) && res.list.length > 0) {
         setLikeBoards(res.list);
       }
     };
 
-    fetchBoardsLike();
+    fetchBoardsLike().catch((error) =>
+      console.error('베스트 게시글 데이터를 불러오지 못했습니다 :', error)
+    );
   }, []);
 
   // 모든 게시글 GET
@@ -69,13 +60,15 @@ export default function Boards() {
       const res = await getBoards(
         `orderBy=${orderBy}&pageSize=${PAGE_SIZE}&page=${currentPage}`
       );
-      if (res) {
+      if (Array.isArray(res.list) && res.list.length > 0) {
         setBoards(res.list);
         setTotalCount(res.totalCount);
       }
     };
 
-    fetchBoards();
+    fetchBoards().catch((error) =>
+      console.error('게시글 데이터를 불러오지 못했습니다 :', error)
+    );
   }, [currentPage, selectedOption]);
 
   // 게시글 목록 업데이트
@@ -88,7 +81,7 @@ export default function Boards() {
     const res = await getBoards(
       `keyword=${value}&pageSize=${PAGE_SIZE}&page=${currentPage}`
     );
-    if (res) {
+    if (Array.isArray(res.list) && res.list.length > 0) {
       setBoards(res.list);
       setTotalCount(res.totalCount);
     }
