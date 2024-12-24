@@ -5,10 +5,12 @@ import Heart from '@/components/Heart/Heart';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import dateConversion from '@/utils/dateConversion';
 
-interface BoardItem extends BoardBase {
-  name: Writer['name'];
+type CombinedType = BoardBase & Writer;
+
+// BoardItem에 필요한 속성만 제외하기
+type BoardItemProps = Omit<CombinedType, 'content' | 'image' | 'updatedAt'> & {
   className?: string;
-}
+};
 
 /**
  * 게시글 리스트 아이템
@@ -27,7 +29,7 @@ export default function BoardItem({
   likeCount = 0,
   createdAt = '',
   className,
-}: BoardItem) {
+}: BoardItemProps) {
   const isMobile = useCheckMobile();
 
   const textColors = 'mo:text-gray-400';

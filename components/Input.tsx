@@ -31,7 +31,7 @@ function InputField({
 }: InputFieldProps) {
   const { errorMessage, validate } = useValidation({
     type,
-    compareValue,
+    compareValue: compareValue ?? '',
   });
 
   const [showDayPicker, setShowDayPicker] = useState(false);

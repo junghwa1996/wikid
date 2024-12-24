@@ -11,6 +11,8 @@ import instance from '@/lib/axios-client';
 
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
+import { useProfileContext } from '@/hooks/useProfileContext';
+import Router from 'next/router';
 
 interface ProfileProps {
   profile: ProfileAnswer;
@@ -27,8 +29,14 @@ export default function Contents({ profile }: ProfileProps) {
 
   const previousContent = useRef<string>(newContent);
   const isEmpty = newContent === '';
+  const { isAuthenticated } = useProfileContext();
 
   const handleQuizOpen = async () => {
+    if (!isAuthenticated) {
+      alert('로그인 후 이용해주세요.');
+      Router.push('/login');
+      return;
+    }
     const res = await instance.get(`/profiles/${profile.code}/ping`);
     if (res.status === 204) {
       setIsInfoSnackBarOpen(false);
