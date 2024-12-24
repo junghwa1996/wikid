@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  pageExtensions: ['page.js', 'page.tsx'],
   async redirects() {
     return [
       {
