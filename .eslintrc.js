@@ -53,8 +53,12 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off', // 반환 타입 강제 비활성화
 
     'no-undef': 'error',
+    'no-unused-expressions': 'error',
+    'no-prototype-builtins': 'error',
     '@typescript-eslint/no-non-null-assertion': 'error',
     '@typescript-eslint/strict-boolean-expressions': 'error',
+    '@typescript-eslint/no-unnecessary-condition': 'error',
+    '@typescript-eslint/no-unsafe-member-access': 'error',
     '@typescript-eslint/no-misused-promises': [
       'error',
       {
