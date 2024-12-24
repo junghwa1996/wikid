@@ -35,6 +35,7 @@ export default function Contents({ profile }: ProfileProps) {
       setIsQuizOpen(true);
     } else {
       setIsInfoSnackBarOpen(true);
+      setIsQuizOpen(true);
     }
   };
 
@@ -113,10 +114,10 @@ export default function Contents({ profile }: ProfileProps) {
 
   //5분동안 미기입시 뒤로가기
   const handleInactivityWarning = () => {
-    // setIsDMOpen(true);
+    setIsDMOpen(true);
   };
 
-  const timeleft = useTimer(isEditing, handleInactivityWarning, 300);
+  const timeleft = useTimer(isEditing, handleInactivityWarning, 10);
 
   //연결 끊김 모달 (수정중인 내용 취소, 기존 내용으로 복구)
   const onDMClose = () => {
@@ -124,6 +125,7 @@ export default function Contents({ profile }: ProfileProps) {
     setIsEditing(false);
     setIsProfileEdit(false);
     setNewContent(previousContent.current);
+    setProfileData(profile);
   };
 
   return (

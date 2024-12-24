@@ -25,7 +25,7 @@ export const useTimer = (
 
       countdownInterval = setInterval(() => {
         setTimeLeft((prev) => {
-          if (prev < 1 && prev <= 1) {
+          if (prev <= 1) {
             clearInterval(countdownInterval); // 타이머 종료
             onInactivity(); // 타이머 종료 시 onInactivity 실행
             return 0;
