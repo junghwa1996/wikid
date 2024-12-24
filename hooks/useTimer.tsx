@@ -9,38 +9,47 @@ import { useEffect, useState } from 'react';
 export const useTimer = (
   isActive: boolean,
   onInactivity: () => void,
-  initialTime: number = 300
+  initialTime: number
 ) => {
-  const [timeLeft, setTimeLeft] = useState(initialTime);
+  const [timeLeft, setTimeLeft] = useState<number>(initialTime);
 
   useEffect(() => {
     let inactivityTimeout: ReturnType<typeof setTimeout>;
     let countdownInterval: ReturnType<typeof setInterval>;
 
-    if (isActive) {
-      // 타이머가 활성화되면 시간 초기화하고, 타이머 시작
-
-      setTimeLeft((prev) => prev || initialTime);
+    if (isActive && timeLeft !== null) {
+      // 타이머가 활성화될 때만 초기화 (이전 timeLeft 값을 유지)
       inactivityTimeout = setTimeout(() => {
         onInactivity();
-      }, initialTime * 1000);
+      }, timeLeft * 1000);
 
       countdownInterval = setInterval(() => {
-        setTimeLeft((prev) => Math.max(prev - 1, 0)); // 1초마다 남은 시간 업데이트
+        setTimeLeft((prev) => {
+          if (prev !== null && prev <= 1) {
+            clearInterval(countdownInterval); // 타이머 종료
+            onInactivity(); // 타이머 종료 시 onInactivity 실행
+            return 0;
+          }
+          return prev !== null ? prev - 1 : 0; // 1초마다 남은 시간 업데이트
+        });
       }, 1000);
+
       return () => {
         clearTimeout(inactivityTimeout);
         clearInterval(countdownInterval);
       };
     }
 
-    // 정리 함수로 타이머 종료
-    return () => {
+    // 비활성화되면 타이머 초기화
+    if (!isActive) {
       setTimeLeft(initialTime);
+    }
+
+    return () => {
       clearTimeout(inactivityTimeout);
       clearInterval(countdownInterval);
     };
-  }, [isActive, initialTime, onInactivity]);
+  }, [isActive, initialTime, onInactivity, timeLeft]); // timeLeft를 의존성 배열에 추가
 
   return timeLeft;
 };

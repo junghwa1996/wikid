@@ -117,7 +117,7 @@ export default function Contents({ profile }: ProfileProps) {
     setIsDMOpen(true);
   };
 
-  const timeleft = useTimer(isEditing, handleInactivityWarning);
+  const timeleft = useTimer(isEditing, handleInactivityWarning, 300);
 
   //연결 끊김 모달 (수정중인 내용 취소, 기존 내용으로 복구)
   const onDMClose = () => {
