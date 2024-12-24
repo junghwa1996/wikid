@@ -176,6 +176,7 @@ export default function BoardsDetails() {
               likeCount={data?.likeCount}
               content={data?.content}
               image={data?.image}
+              isLiked={data?.isLiked}
             />
           )}
 

@@ -75,7 +75,6 @@ export default function Contents({ profile }: ProfileProps) {
     try {
       // PATCH 요청을 보내는 코드
       const updatedProfile = {
-        securityAnswer: profile?.securityAnswer,
         securityQuestion: profile?.securityQuestion,
         nationality: profileData.nationality,
         family: profileData.family,
@@ -114,7 +113,7 @@ export default function Contents({ profile }: ProfileProps) {
 
   //5분동안 미기입시 뒤로가기
   const handleInactivityWarning = () => {
-    setIsDMOpen(true);
+    // setIsDMOpen(true);
   };
 
   const timeleft = useTimer(isEditing, handleInactivityWarning, 300);
