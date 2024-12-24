@@ -1,17 +1,18 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useState } from 'react';
 import { BoardBase, Writer } from 'types/board';
 
 import Button from '@/components/Button';
 import EditorViewer from '@/components/EditorViewer';
 import Heart from '@/components/Heart/Heart';
-import SnackBar from '@/components/SnackBar';
+import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import instance from '@/lib/axios-client';
 import dateConversion from '@/utils/dateConversion';
 
 import ButtonIcon from './ButtonIcon';
+import { useProfileContext } from '@/hooks/useProfileContext';
 
 interface BoardDetailCard extends BoardBase {
   title: string;
@@ -46,10 +47,13 @@ export default function BoardDetailCard({
   const [likeCountState, setLikeCountState] = useState(likeCount);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState('');
+  const [snackStyled, setSnackStyled] =
+    useState<SnackBarProps['severity']>(undefined);
   const isMobile = useCheckMobile();
   const router = useRouter();
   const { articleId } = router.query;
   const id = articleId as string;
+  const { isAuthenticated } = useProfileContext();
 
   // 수정하기 버튼 클릭 시 수정 페이지 이동
   const handleUpdateClick = async () => {
@@ -70,20 +74,30 @@ export default function BoardDetailCard({
 
   // 하트 클릭 시 동작
   const handleHeartClick = async () => {
-    const method = isLiked ? 'delete' : 'post';
+    if (isAuthenticated) {
+      const method = isLiked ? 'delete' : 'post';
 
-    try {
-      await instance[method](`/articles/${id}/like`);
-      setIsLiked(!isLiked);
-      setLikeCountState((prevCount) =>
-        isLiked ? prevCount - 1 : prevCount + 1
-      );
-      setSnackBarMessage(
-        isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 반영되었습니다.'
-      );
+      try {
+        await instance[method](`/articles/${id}/like`);
+        setIsLiked(!isLiked);
+        setLikeCountState((prevCount) =>
+          isLiked ? prevCount - 1 : prevCount + 1
+        );
+        setSnackBarMessage(
+          isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 반영되었습니다.'
+        );
+        setSnackBarOpen(true);
+        setSnackStyled('success');
+      } catch (error) {
+        console.error('--- handleHeartClick:error:', error);
+      }
+    } else {
+      setSnackBarMessage('로그인 후 이용해주세요.');
       setSnackBarOpen(true);
-    } catch (error) {
-      console.error('--- handleHeartClick:error:', error);
+      setSnackStyled('fail');
+      setTimeout(() => {
+        Router.push('/login');
+      }, 2500);
     }
   };
 
@@ -137,7 +151,7 @@ export default function BoardDetailCard({
       </div>
 
       <SnackBar
-        severity="success"
+        severity={snackStyled}
         open={snackBarOpen}
         onClose={() => setSnackBarOpen(false)}
         autoHideDuration={2000}

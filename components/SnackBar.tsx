@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-interface SnackBarProps {
-  severity: 'fail' | 'success' | 'info';
+export interface SnackBarProps {
+  severity: 'fail' | 'success' | 'info' | undefined;
   children: string;
   open: boolean;
   onClose: () => void;
@@ -45,7 +45,8 @@ export default function SnackBar({
   onClose,
   autoHideDuration = 3000,
 }: SnackBarProps) {
-  const { style, icon, textStyle } = severityConfig[severity];
+  const { style, icon, textStyle } =
+    severityConfig[severity ? severity : 'info'];
   const [visible, setVisible] = useState(open);
 
   useEffect(() => {
