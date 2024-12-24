@@ -9,14 +9,27 @@ const nextConfig: NextConfig = {
         hostname: 'via.placeholder.com',
       },
       {
-        protocol: 'http',
+        protocol: 'https',
         hostname: 'example.com',
       },
       {
         protocol: 'https',
         hostname: 'ifh.cc',
       },
+      {
+        protocol: 'https',
+        hostname: 'sprint-fe-project.s3.ap-northeast-2.amazonaws.com',
+      },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/main',
+        permanent: true,
+      },
+    ];
   },
 };
 

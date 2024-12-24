@@ -1,25 +1,8 @@
+import { BoardListResponse } from 'types/board';
+
 import BoardCard from './BoardCard';
 
-interface BoardCardData {
-  id: number;
-  title: string;
-  image: string;
-  writer: {
-    name: string;
-  };
-  likeCount: number;
-  updatedAt: string;
-}
-
-interface BoardCardListProps {
-  data: BoardCardData[];
-}
-
-export default function BoardCardList({
-  data = [] as BoardCardListProps['data'],
-}: {
-  data: BoardCardListProps['data'];
-}) {
+export default function BoardCardList({ data = [] }: BoardListResponse) {
   return (
     <ul className="grid grid-cols-4 content-between gap-4 ta:grid-cols-2 ta:flex-wrap ta:gap-5">
       {data.map((item) => (
