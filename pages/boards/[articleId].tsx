@@ -38,9 +38,9 @@ export default function BoardsDetails() {
       // 유저 정보 로드
       const fetchUserInfo = async () => {
         const res = await getUserInfo();
-        if (res?.id) {
+        if (res.id) {
           setUserId(
-            res?.id !== undefined && res?.id !== null ? Number(res.id) : null
+            res.id !== undefined && res.id !== null ? Number(res.id) : null
           );
         }
       };
@@ -167,16 +167,16 @@ export default function BoardsDetails() {
           {/* 게시글 상세 본문 */}
           {data && (
             <BoardDetailCard
-              id={data?.id}
-              isOwner={data?.writer?.id === userId}
-              title={data?.title}
-              name={data?.writer?.name}
-              createdAt={data?.createdAt}
-              updatedAt={data?.updatedAt}
-              likeCount={data?.likeCount}
-              content={data?.content}
-              image={data?.image}
-              isLiked={data?.isLiked}
+              id={data.id}
+              isOwner={data.writer.id === userId}
+              title={data.title}
+              name={data.writer.name}
+              createdAt={data.createdAt}
+              updatedAt={data.updatedAt}
+              likeCount={data.likeCount}
+              content={data.content}
+              image={data.image}
+              isLiked={data.isLiked}
             />
           )}
 
@@ -194,9 +194,9 @@ export default function BoardsDetails() {
               <div className="mb-[15px] text-18sb mo:mb-2 mo:text-16sb">
                 댓글&nbsp;
                 <span className="text-green-200">
-                  {comments?.pages
-                    ?.map((page) => (page?.list ? page.list.length : 0))
-                    ?.reduce((sum, count) => sum + count, 0) || 0}
+                  {comments.pages
+                    .map((page) => (page.list ? page.list.length : 0))
+                    .reduce((sum, count) => sum + count, 0) || 0}
                 </span>
               </div>
               <CommentForm
@@ -212,26 +212,25 @@ export default function BoardsDetails() {
 
             {/* 댓글 리스트 */}
             <ul className="flex flex-col gap-6 mo:gap-[14px] ta:gap-4">
-              {comments?.pages?.map(
+              {comments.pages.map(
                 (page) =>
-                  page?.list?.map((item) => (
-                    <li key={item?.id}>
+                  page.list.map((item) => (
+                    <li key={item.id}>
                       <Comment
-                        id={item?.id}
-                        writer={item?.writer}
-                        name={item?.writer?.name || '익명'}
-                        content={item?.content || ''}
-                        updatedAt={item?.updatedAt ?? ''}
-                        profile={item?.writer?.image}
+                        id={item.id}
+                        writer={item.writer}
+                        name={item.writer.name || '익명'}
+                        content={item.content || ''}
+                        updatedAt={item.updatedAt ?? ''}
                         onclick={{
                           update: (newContent: string) =>
-                            item?.id
+                            item.id
                               ? handleUpdate(item.id, newContent)
                               : undefined,
                           delete: () =>
-                            item?.id ? handleDelete(item.id) : undefined,
+                            item.id ? handleDelete(item.id) : undefined,
                         }}
-                        isOwner={item?.writer?.id === userId}
+                        isOwner={item.writer.id === userId}
                       />
                     </li>
                   )) || []
