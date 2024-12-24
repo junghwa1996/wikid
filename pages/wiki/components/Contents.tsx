@@ -1,4 +1,3 @@
-import { Profile } from 'context/ProfileContext';
 import { useEffect, useRef, useState } from 'react';
 import { ProfileAnswer } from 'types/profile';
 
