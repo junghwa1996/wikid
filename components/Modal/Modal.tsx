@@ -32,15 +32,14 @@ const Modal = ({
   useEffect(() => {
     if (!closeOnEsc) return; // early return
     const handleEsc = (e: KeyboardEvent) => {
-      if (closeOnEsc && e.key === 'Escape') {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
 
-    if (closeOnEsc) {
-      window.addEventListener('keydown', handleEsc);
-      return () => window.removeEventListener('keydown', handleEsc);
-    }
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+
     // closeOnEsc만 의존성으로 필요함. onClose는 모달 생명주기 동안 안정적일 것으로 예상
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [closeOnEsc]);
