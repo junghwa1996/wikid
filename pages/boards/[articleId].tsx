@@ -222,6 +222,7 @@ export default function BoardsDetails() {
                         name={item?.writer?.name || '익명'}
                         content={item?.content || ''}
                         updatedAt={item?.updatedAt ?? ''}
+                        profile={item?.writer?.image}
                         onclick={{
                           update: (newContent: string) =>
                             item?.id

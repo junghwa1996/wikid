@@ -12,6 +12,7 @@ interface CommentProps extends CommentType {
   updatedAt: string;
   onclick: { update: (value: string) => void; delete: () => void };
   isOwner: boolean;
+  profile: Writer['image'];
 }
 
 /**
@@ -26,6 +27,7 @@ export default function Comment({
   name = '유저이름',
   content = '코멘트',
   updatedAt = '2024-12-19T05:26:36.719Z',
+  profile = '/icon/icon-profile.svg',
   onclick = { update: () => {}, delete: () => {} },
   isOwner = false,
 }: CommentProps) {
@@ -54,9 +56,9 @@ export default function Comment({
   return (
     <div className="flex items-start gap-5 rounded-custom px-[30px] py-[22px] shadow-custom dark:shadow-custom-dark mo:gap-[15px] mo:px-5 mo:py-4">
       <Image
-        src="/icon/icon-profile.svg"
+        src={profile ?? '/icon/icon-profile.svg'}
         alt="user profile"
-        className="mo:size-10"
+        className="overflow-hidden rounded-full mo:size-10"
         width={50}
         height={50}
       />

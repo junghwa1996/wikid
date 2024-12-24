@@ -45,7 +45,9 @@
     "utils/**/*.tsx",
     "lib/**/*.ts",
     "lib/**/*.tsx",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "src/**/*",
+    "next.config.ts"
   ],
   "exclude": ["node_modules", "dist", ".next"]
 }
