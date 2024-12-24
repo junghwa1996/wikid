@@ -1,4 +1,9 @@
-import { ArticleData, BoardResponse, CommentsData } from 'types/board';
+import {
+  ArticleData,
+  BoardCreateData,
+  BoardResponse,
+  CommentsData,
+} from 'types/board';
 
 import instance from '../../lib/axios-client';
 
@@ -36,5 +41,13 @@ export const getComments = async (
     return res.data as CommentsData;
   } catch {
     throw new Error('댓글 데이터를 가져오는 중 문제가 발생했습니다.');
+  }
+};
+
+export const patchBoard = async (articleId: string, data: BoardCreateData) => {
+  try {
+    await instance.patch(`/articles/${articleId}`, data);
+  } catch {
+    throw new Error('게시글을 수정하지 못했습니다.');
   }
 };

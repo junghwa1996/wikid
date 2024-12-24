@@ -10,6 +10,7 @@ import instance from '@/lib/axios-client';
 import { getBoardDetail } from '@/services/api/boardsAPI';
 import { getUserInfo } from '@/services/api/userInfoAPI';
 
+// import { AuthAPI } from '@/services/api/auth';
 import BoardDetailCard from './components/BoardDetailCard';
 import Comment from './components/Comment';
 import CommentForm from './components/CommentForm';
@@ -176,6 +177,7 @@ export default function BoardsDetails() {
               likeCount={data?.likeCount}
               content={data?.content}
               image={data?.image}
+              isLiked={data?.isLiked}
             />
           )}
 

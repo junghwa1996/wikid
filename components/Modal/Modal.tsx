@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 interface ModalProps {
   isOpen: boolean; // 모달 오픈 여부
