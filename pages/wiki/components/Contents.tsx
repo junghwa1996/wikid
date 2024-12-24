@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useTimer } from 'hooks/useTimer';
+import { useRef, useState } from 'react';
 import { ProfileAnswer } from 'types/profile';
 
 import EditorViewer from '@/components/EditorViewer';
@@ -23,7 +24,6 @@ export default function Contents({ profile }: ProfileProps) {
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile?.content || '');
   const [profileData, setProfileData] = useState<ProfileAnswer>(profile);
-  const [timeLeft, setTimeLeft] = useState(300);
 
   const previousContent = useRef<string>(newContent);
   const isEmpty = newContent === null || newContent === '';
@@ -117,6 +117,8 @@ export default function Contents({ profile }: ProfileProps) {
     setIsDMOpen(true);
   };
 
+  const timeleft = useTimer(isEditing, handleInactivityWarning);
+
   //연결 끊김 모달 (수정중인 내용 취소, 기존 내용으로 복구)
   const onDMClose = () => {
     setIsDMOpen(false);
@@ -124,33 +126,6 @@ export default function Contents({ profile }: ProfileProps) {
     setIsProfileEdit(false);
     setNewContent(previousContent.current);
   };
-
-  //연결 끊기기까지 타이머
-  useEffect(() => {
-    let inactivityTimeout: ReturnType<typeof setTimeout>;
-    let countdownInterval: ReturnType<typeof setInterval>;
-
-    if (isEditing) {
-      inactivityTimeout = setTimeout(() => {
-        handleInactivityWarning();
-      }, 300000);
-
-      countdownInterval = setInterval(() => {
-        setTimeLeft((prev) => Math.max(prev - 1, 0));
-      }, 1000);
-
-      return () => {
-        clearTimeout(inactivityTimeout);
-        clearInterval(countdownInterval);
-      };
-    }
-
-    return () => {
-      setTimeLeft(300);
-      clearTimeout(inactivityTimeout);
-      clearInterval(countdownInterval);
-    };
-  }, [isEditing]);
 
   return (
     <div
@@ -197,7 +172,7 @@ export default function Contents({ profile }: ProfileProps) {
         {isEditing ? (
           <>
             <div className="mb-[8px] text-right font-bold text-red-100">
-              남은시간 {Math.floor(timeLeft / 60)}:{timeLeft % 60}
+              남은시간 {Math.floor(timeleft / 60)}:{timeleft % 60}
             </div>
             <div className="h-[700px] w-full rounded-md border p-[20px] focus:border-gray-300">
               <TextEditor value={newContent} onChange={handleContentChange} />
