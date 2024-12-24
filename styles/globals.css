@@ -4,18 +4,154 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --white: #ffffff;
+  --gray-100: #f7f7fa;
+  --gray-200: #e4e5f0;
+  --gray-300: #c6cada;
+  --gray-400: #8f95b2;
+  --gray-500: #474d66;
+  --gray-600: #3b415b;
+
+  --green-100: #eef9f6;
+  --green-200: #4cbfa4;
+  --green-300: #32a68a;
+
+  --red-50: #fbeded;
+  --red-100: #d14343;
+
+  --purple-100: #8e66ff;
+
+  --yellow-100: #fdd181;
+
+  --blue-50: #f1f4fd;
+  --blue-100: #ecf0fa;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #121212;
+  --white: #e4e4e4;
+  --gray-100: #3b415b;
+  --gray-200: #474d66;
+  --gray-300: #8f95b2;
+  --gray-400: #c6cada;
+  --gray-500: #e4e5f0;
+  --gray-600: #f7f7fa;
+
+  --green-100: #3a8f76;
+  --green-200: #4cbfa4;
+  --green-300: #a5e5d1;
+
+  --red-50: #8a1c1c;
+  --red-100: #d14343;
+
+  --purple-100: #b095ff;
+
+  --yellow-100: #e7a832;
+
+  --blue-50: #1a1f2e;
+  --blue-100: #1a1f2e;
 }
 
 body {
-  color: var(--foreground);
+  color: var(--gray-500);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* quill editor custom style */
+.quill-custom {
+  @apply grid h-full w-full;
+  grid-template-rows: 1fr max-content;
+
+  .ql-editor {
+    @apply p-0;
+  }
+  .ql-editor.ql-blank::before {
+    @apply left-0 not-italic text-gray-400;
+  }
+  .ql-container {
+    @apply overflow-y-auto font-sans text-16;
+  }
+  .ql-container.ql-snow {
+    @apply border-0;
+  }
+  .ql-toolbar.ql-snow {
+    @apply order-last rounded-3xl border-gray-200 text-gray-400;
+  }
+  .ql-snow .ql-stroke {
+    stroke: var(--gray-400);
+  }
+  .ql-snow .ql-fill,
+  .ql-snow .ql-stroke.ql-fill {
+    fill: var(--gray-400);
+  }
+  .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+  .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+    color: var(--gray-400);
+  }
+}
+
+.contentStyle h1 {
+  @apply text-3xl;
+}
+.contentStyle h2 {
+  @apply text-2xl;
+}
+.contentStyle h3 {
+  @apply text-xl;
+}
+.contentStyle h1,
+.contentStyle h2,
+.contentStyle h3 {
+  @apply my-4 font-bold;
+}
+.contentStyle h1,
+.contentStyle h2 {
+  @apply border-b border-gray-200;
+}
+
+.contentStyle p {
+  @apply my-2;
+}
+
+.contentStyle ul,
+.contentStyle ol {
+  @apply my-2 list-inside;
+}
+
+.contentStyle ul {
+  @apply list-disc;
+}
+
+.contentStyle ol {
+  @apply list-decimal;
+}
+
+.contentStyle a {
+  @apply text-blue-500 underline;
+}
+
+.contentStyle blockquote {
+  @apply my-4 border-l-4 border-green-200 pl-4 italic;
+}
+
+.contentStyle pre {
+  @apply my-4 rounded bg-gray-100 p-4;
+}
+
+.contentStyle code {
+  @apply rounded bg-gray-100 px-1;
+}
+.contentStyle .ql-align-center {
+  @apply text-center;
+}
+.contentStyle .ql-align-right {
+  @apply text-right;
+}
+
+@font-face {
+  font-family: 'NEXON Lv1 Gothic Low';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
