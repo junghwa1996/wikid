@@ -30,14 +30,14 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
         },
       });
 
-      const profileData = res.data.profile ?? null;
+      const profileData = res.data.profile ? null;
 
       if (profileData == null) {
         setProfile(null);
         return;
       }
 
-      const code = profileData.code ?? null;
+      const code = profileData.code ? null;
 
       if (!code) {
         setProfile(profileData);

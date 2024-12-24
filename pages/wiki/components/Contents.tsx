@@ -1,4 +1,3 @@
-import { useTimer } from 'hooks/useTimer';
 import { useRef, useState } from 'react';
 import { ProfileAnswer } from 'types/profile';
 
@@ -7,6 +6,7 @@ import DisconnectionModal from '@/components/Modal/DisconnectionModal';
 import WikiQuizModal from '@/components/Modal/WikiQuizModal';
 import TextEditor from '@/components/TextEditor';
 import UserProfile from '@/components/UserProfile';
+import { useTimer } from '@/hooks/useTimer';
 import instance from '@/lib/axios-client';
 
 import Blank from './Blank';
@@ -22,14 +22,14 @@ export default function Contents({ profile }: ProfileProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
   const [isDMOpen, setIsDMOpen] = useState(false);
-  const [newContent, setNewContent] = useState<string>(profile?.content || '');
+  const [newContent, setNewContent] = useState<string>(profile.content || '');
   const [profileData, setProfileData] = useState<ProfileAnswer>(profile);
 
   const previousContent = useRef<string>(newContent);
   const isEmpty = newContent === null || newContent === '';
 
   const handleQuizOpen = async () => {
-    const res = await instance.get(`/profiles/${profile?.code}/ping`);
+    const res = await instance.get(`/profiles/${profile.code}/ping`);
     if (res.status === 204) {
       setIsInfoSnackBarOpen(false);
       setIsQuizOpen(true);
@@ -50,7 +50,7 @@ export default function Contents({ profile }: ProfileProps) {
       },
     });
     const userCode = (res.data as { profile: ProfileAnswer }).profile.code;
-    if (profile?.code === userCode) {
+    if (profile.code === userCode) {
       setIsProfileEdit(true);
     } else {
       setIsProfileEdit(false);
@@ -75,7 +75,7 @@ export default function Contents({ profile }: ProfileProps) {
     try {
       // PATCH 요청을 보내는 코드
       const updatedProfile = {
-        securityQuestion: profile?.securityQuestion,
+        securityQuestion: profile.securityQuestion,
         nationality: profileData.nationality,
         family: profileData.family,
         bloodType: profileData.bloodType,
@@ -90,7 +90,7 @@ export default function Contents({ profile }: ProfileProps) {
       };
 
       // 프로필 수정 API 호출 ("/profiles/{code}"에 PATCH 요청)
-      await instance.patch(`/profiles/${profile?.code}`, updatedProfile);
+      await instance.patch(`/profiles/${profile.code}`, updatedProfile);
 
       // 수정이 완료되면 상태 업데이트
       previousContent.current = newContent;
@@ -133,8 +133,8 @@ export default function Contents({ profile }: ProfileProps) {
     >
       <div>
         <ContentHeader
-          name={profile?.name || ''}
-          link={`https://www.wikid.kr/wiki/${profile?.code}`}
+          name={profile.name || ''}
+          link={`https://www.wikid.kr/wiki/${profile.code}`}
           isEditing={isEditing}
           isInfoSnackBarOpen={isInfoSnackBarOpen}
           handleQuizOpen={handleQuizOpen}
@@ -146,8 +146,8 @@ export default function Contents({ profile }: ProfileProps) {
       <WikiQuizModal
         isOpen={isQuizOpen}
         onClose={() => setIsQuizOpen(false)}
-        securityQuestion={profile?.securityQuestion || ''}
-        userCode={profile?.code || ''}
+        securityQuestion={profile.securityQuestion || ''}
+        userCode={profile.code || ''}
         onQuizComplete={handleQuizSuccess}
       />
 
@@ -162,8 +162,8 @@ export default function Contents({ profile }: ProfileProps) {
       {isEmpty && !isEditing && (
         <Blank
           onQuizSuccess={handleQuizSuccess}
-          question={profile?.securityQuestion || ''}
-          code={profile?.code || ''}
+          question={profile.securityQuestion || ''}
+          code={profile.code || ''}
         />
       )}
 

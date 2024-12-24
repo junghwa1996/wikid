@@ -123,11 +123,11 @@ function MyPage(): React.ReactElement {
       newPasswordConfirm !== undefined &&
       typeof newPasswordConfirm === 'string' &&
       newPasswordConfirm.length > 0 &&
-      typeof currentPasswordValidation?.errorMessage === 'string' &&
+      typeof currentPasswordValidation.errorMessage === 'string' &&
       currentPasswordValidation.errorMessage.length === 0 &&
-      typeof newPasswordValidation?.errorMessage === 'string' &&
+      typeof newPasswordValidation.errorMessage === 'string' &&
       newPasswordValidation.errorMessage.length === 0 &&
-      typeof newPasswordConfirmValidation?.errorMessage === 'string' &&
+      typeof newPasswordConfirmValidation.errorMessage === 'string' &&
       newPasswordConfirmValidation.errorMessage.length === 0
   );
 

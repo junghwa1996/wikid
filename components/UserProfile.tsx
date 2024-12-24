@@ -74,6 +74,14 @@ function UserProfile({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const fileExtension = file.name.toLowerCase().split('.').pop();
+
+    if (fileExtension === 'svg') {
+      alert('SVG 파일은 업로드할 수 없습니다.');
+      e.target.value = '';
+      return;
+    }
+
     // 선택한 이미지 미리보기 생성
     const objectUrl = URL.createObjectURL(file);
     setPreviewImage(objectUrl);
