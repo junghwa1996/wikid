@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { ProfileAnswer } from 'types/profile';
 
 import EditorViewer from '@/components/EditorViewer';
 import DisconnectionModal from '@/components/Modal/DisconnectionModal';
@@ -7,12 +8,11 @@ import TextEditor from '@/components/TextEditor';
 import UserProfile from '@/components/UserProfile';
 import instance from '@/lib/axios-client';
 
-import { Profile } from '../[code]';
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
 
 interface ProfileProps {
-  profile: Profile;
+  profile: ProfileAnswer;
 }
 
 export default function Contents({ profile }: ProfileProps) {
@@ -22,7 +22,7 @@ export default function Contents({ profile }: ProfileProps) {
   const [isProfileEdit, setIsProfileEdit] = useState(false);
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile?.content || '');
-  const [profileData, setProfileData] = useState<Profile>(profile);
+  const [profileData, setProfileData] = useState<ProfileAnswer>(profile);
   const [timeLeft, setTimeLeft] = useState(300);
 
   const previousContent = useRef<string>(newContent);
@@ -49,7 +49,7 @@ export default function Contents({ profile }: ProfileProps) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    const userCode = (res.data as { profile: Profile }).profile.code;
+    const userCode = (res.data as { profile: ProfileAnswer }).profile.code;
     if (profile?.code === userCode) {
       setIsProfileEdit(true);
     } else {
@@ -63,7 +63,7 @@ export default function Contents({ profile }: ProfileProps) {
     setNewContent(value);
   };
 
-  const handleDataChange = (field: keyof Profile, value: string) => {
+  const handleDataChange = (field: keyof ProfileAnswer, value: string) => {
     setProfileData((prev) => ({
       ...prev,
       [field]: value,
