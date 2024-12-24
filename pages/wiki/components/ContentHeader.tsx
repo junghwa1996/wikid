@@ -120,7 +120,9 @@ export default function ContentHeader({
           )}
         </div>
       </div>
-      {!isEditing && <LinkBar link={link} onClick={handleLinkClick} />}
+      {!isEditing && (
+        <LinkBar link={link.slice(0, 34)} onClick={handleLinkClick} />
+      )}
       {isInfoSnackBarOpen && (
         <SnackBar
           severity={infoSnackBarState.severity}
