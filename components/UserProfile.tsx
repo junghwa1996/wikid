@@ -147,7 +147,13 @@ function UserProfile({
           >
             {/* 프로필 이미지 */}
             <Image
-              src={previewImage !== null ? previewImage : data.image}
+              src={
+                previewImage !== null
+                  ? previewImage
+                  : data.image && data.image !== ''
+                    ? data.image
+                    : '/icon/icon-profile.svg'
+              }
               alt="Profile"
               width={100}
               height={100}
