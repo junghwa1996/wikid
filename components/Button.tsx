@@ -104,7 +104,7 @@ export default function Button({
         <Link
           href={href}
           className={`${classNames} ${linkDisabledClass}`}
-          onClick={onClick}
+          onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
           {...props}
         >
           {children}
