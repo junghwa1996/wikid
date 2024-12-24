@@ -146,10 +146,10 @@ function MyPage(): React.ReactElement {
   const inputContainerStyle = 'flex w-full flex-col gap-[8px]';
 
   return (
-    <div className="mo:pt-[108px] flex min-h-screen justify-center pt-[221px]">
-      <form onSubmit={handleSubmit} className="mo:w-[355px] w-[400px]">
+    <div className="flex min-h-screen justify-center pt-[221px] mo:pt-[108px]">
+      <form onSubmit={handleSubmit} className="w-[400px] mo:w-[355px]">
         <div className="flex w-full flex-col items-center gap-[32px]">
-          <h2 className="text-24sb mb-[32px] text-center text-gray-500">
+          <h2 className="mb-[32px] text-center text-24sb text-gray-500">
             계정설정
           </h2>{' '}
           <div className={inputSectionStyle}>

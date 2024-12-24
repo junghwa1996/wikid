@@ -1,10 +1,12 @@
 import Head from 'next/head';
-import SectionTitle from '../main/components/SectionTitle';
 import Image from 'next/image';
-import Button from '@/components/Button';
 import { useRouter } from 'next/router';
-import { useProfileContext } from '@/hooks/useProfileContext';
+
+import Button from '@/components/Button';
 import Footers from '@/components/Footers';
+import { useProfileContext } from '@/hooks/useProfileContext';
+
+import SectionTitle from '../main/components/SectionTitle';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -102,13 +104,13 @@ export default function LandingPage() {
           </div>
 
           {/* bg */}
-          <div className="absolute left-0 top-0 -z-10 h-[1100px] w-[100vw] overflow-hidden bg-blue-50 mo:h-[820px]">
+          <div className="absolute left-0 top-0 -z-10 h-[1100px] w-screen overflow-hidden bg-blue-50 mo:h-[820px]">
             <Image
               src="/images/img-landing-bg.svg"
               alt="배경 이미지"
               width={1920}
               height={400}
-              className="mainBgSize absolute bottom-0 left-1/2 -translate-x-1/2 transform mo:bottom-[195px] ta:bottom-[75px] ta:max-w-[1020px] ta:pb-[100px] pc:h-[400px] pc:max-w-[1920px]"
+              className="mainBgSize absolute bottom-0 left-1/2 -translate-x-1/2 mo:bottom-[195px] ta:bottom-[75px] ta:max-w-[1020px] ta:pb-[100px] pc:h-[400px] pc:max-w-[1920px]"
             />
             <div className="absolute bottom-0 left-0 w-full bg-gray-500 mo:h-[200px] ta:h-[180px] pc:hidden"></div>
           </div>
@@ -193,7 +195,7 @@ export default function LandingPage() {
               }
               align="left"
             />
-            <div className="flex flex-wrap gap-10 mo:gap-[1rem] ta:gap-[2.2rem]">
+            <div className="flex flex-wrap gap-10 mo:gap-4 ta:gap-[2.2rem]">
               <Image
                 src="/images/img-comment.svg"
                 className="h-auto w-full flex-1"
@@ -201,7 +203,7 @@ export default function LandingPage() {
                 width={924}
                 height={280}
               />
-              <div className="flex w-full gap-10 mo:gap-[1rem] ta:gap-[2.2rem]">
+              <div className="flex w-full gap-10 mo:gap-4 ta:gap-[2.2rem]">
                 <Image
                   src="/images/img-bell.svg"
                   alt="벨 이미지"
