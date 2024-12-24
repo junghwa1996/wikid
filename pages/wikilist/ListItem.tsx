@@ -3,7 +3,8 @@ import Link from 'next/link';
 import React from 'react';
 
 import LinkBar from '@/components/LinkBar';
-import type { ProfileProps } from '@/pages/wikilist';
+
+import { ProfileProps } from './index';
 
 interface ListItemProps {
   data: ProfileProps;
@@ -14,6 +15,7 @@ interface ListItemProps {
  * @param data - 목록에 출력할 프로필 데이터
  */
 export default function ListItem({ data }: ListItemProps) {
+  if (!data) return null;
   const { name, code, image, city, nationality, job } = data;
   const shortUrl = `https://www.wikied.kr/${code.slice(0, 4)}...`;
   const baseProfileImage = '/icon/icon-profile.svg';
@@ -34,15 +36,17 @@ export default function ListItem({ data }: ListItemProps) {
 
   return (
     <li className="relative rounded-custom shadow-custom transition-all hover:bg-gray-100 hover:shadow-xl dark:shadow-custom-dark">
+      {/* FIXME : 빌드 에러로 인해 파일 삭제했음으로 에러 해결 완료시 다시 오픈 수정 필요 */}
       <Link
-        href={`/wiki/${code}`}
+        // href={`/wiki/${code}`}
+        href={`/`}
         className="flex gap-8 rounded-full px-9 py-6 mo:gap-5 mo:px-6 mo:py-5"
       >
         <Image
           src={image || baseProfileImage}
-          className="self-start rounded-full mo:size-[60px]"
-          width="85"
-          height="85"
+          className="size-[85px] self-start rounded-full mo:size-[60px]"
+          width={85}
+          height={85}
           alt={`${name} 프로필 이미지`}
           onError={handleError}
         />

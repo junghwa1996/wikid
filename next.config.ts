@@ -22,16 +22,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  pageExtensions: ['page.js', 'page.tsx'],
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/main',
-        permanent: true,
-      },
-    ];
-  },
 };
 
 export default nextConfig;

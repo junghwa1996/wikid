@@ -32,7 +32,7 @@ export default function ModalDefault({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      closeOnBackgroundClick={closeOnBackgroundClick}
+      closeOnBackgroundClick={closeOnBackgroundClick ?? false}
     >
       <div className="mb-[33px]">
         <p className="mb-[10px] text-18sb mo:text-16sb">{title}</p>

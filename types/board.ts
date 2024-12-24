@@ -1,20 +1,20 @@
 export interface Writer {
   name: string;
   id: number;
-  image?: string | null;
+  image: string;
 }
 
 export interface BaseEntity {
   id: number;
-  updatedAt?: string;
-  createdAt?: string;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export interface BoardBase extends BaseEntity {
-  title?: string;
-  image?: string;
-  content?: string;
-  likeCount?: number;
+  title: string;
+  image: string;
+  content: string;
+  likeCount: number;
 }
 
 export interface BoardCreateData {

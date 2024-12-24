@@ -1,29 +1,10 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import { Profile } from 'types/profile';
 
 import instance from '@/lib/axios-client';
 
-export interface Profile {
-  image: string;
-  updatedAt: string;
-  securityQuestion: string;
-  teamId: string;
-  content: string;
-  nationality: string;
-  family: string;
-  bloodType: string;
-  nickname: string;
-  birthday: string;
-  sns: string;
-  job: string;
-  mbti: string;
-  city: string;
-  code: string;
-  name: string;
-  id: number;
-}
-
 interface UserProfileResponse {
-  profile: Profile;
+  profile: Profile | null;
 }
 
 interface ProfileContextType {
@@ -49,14 +30,14 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
         },
       });
 
-      const profileData = res.data.profile ?? null;
+      const profileData = res.data.profile;
 
-      if (profileData == null) {
+      if (!profileData) {
         setProfile(null);
         return;
       }
 
-      const code = profileData.code ?? null;
+      const code = profileData.code;
 
       if (!code) {
         setProfile(profileData);

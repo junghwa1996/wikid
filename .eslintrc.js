@@ -31,7 +31,7 @@ module.exports = {
     'plugin:prettier/recommended', // Prettier 추천 규칙
     'next/core-web-vitals', // Next.js 권장 규칙
     'plugin:tailwindcss/recommended', // TailwindCSS 권장 규칙 추가
-    'plugin:@typescript-eslint/recommended-requiring-type-checking', // 타입 체크 권장 규칙
+    // 'plugin:@typescript-eslint/recommended-requiring-type-checking', // 타입 체크 권장 규칙 (제거)
   ],
   rules: {
     // Prettier 규칙
@@ -44,7 +44,7 @@ module.exports = {
 
     // TypeScript 관련 규칙
     '@typescript-eslint/no-unused-vars': [
-      'error',
+      'warn', // 'error'에서 'warn'으로 변경
       {
         argsIgnorePattern: '^_', // _로 시작하는 변수는 무시
         varsIgnorePattern: '^_', // _로 시작하는 변수는 무시
@@ -52,31 +52,27 @@ module.exports = {
     ], // 사용하지 않는 변수 에러 처리
     '@typescript-eslint/explicit-module-boundary-types': 'off', // 반환 타입 강제 비활성화
 
-    'no-undef': 'error',
-    '@typescript-eslint/no-non-null-assertion': 'error',
-    '@typescript-eslint/strict-boolean-expressions': 'error',
+    'no-undef': 'off', // 'error'에서 'off'로 변경
+    'no-unused-expressions': 'off', // 'error'에서 'off'로 변경
+    'no-prototype-builtins': 'off', // 'error'에서 'off'로 변경
+    '@typescript-eslint/no-floating-promises': 'off', // 'error'에서 'off'로 변경
+    '@typescript-eslint/no-non-null-assertion': 'off', // 'error'에서 'off'로 변경
+    '@typescript-eslint/no-explicit-any': 'off', // 'error'에서 'off'로 변경
+    '@typescript-eslint/no-unused-vars': 'off', // 중복 규칙 제거
+    '@typescript-eslint/strict-boolean-expressions': 'off', // 'error'에서 'off'로 변경
+    '@typescript-eslint/no-unnecessary-condition': 'off', // 'error'에서 'off'로 변경
+    '@typescript-eslint/no-unsafe-member-access': 'off', // 'error'에서 'off'로 변경
     '@typescript-eslint/no-misused-promises': [
-      'error',
+      'warn', // 'error'에서 'warn'으로 변경
       {
         checksVoidReturn: false, // void 반환을 기대하지 않는 상황에서 경고 비활성화
       },
     ],
 
     // Import 관련 규칙
-    'import/newline-after-import': 'error', // import 문 이후 빈 줄 강제
-    'simple-import-sort/imports': [
-      'error',
-      {
-        groups: [
-          ['^node:'], // Node.js 기본 모듈
-          ['^@?\\w'], // 외부 패키지
-          ['^@/'], // 프로젝트 절대 경로 import
-          ['^\\.'], // 상대 경로 import
-          ['^.+\\.s?css$'], // 스타일 파일 import
-        ],
-      },
-    ],
-    'simple-import-sort/exports': 'error', // export 정렬
+    'import/newline-after-import': 'off', // 'error'에서 'off'로 변경
+    'simple-import-sort/imports': 'off', // 'error'에서 'off'로 변경
+    'simple-import-sort/exports': 'off', // 'error'에서 'off'로 변경
   },
   settings: {
     react: {

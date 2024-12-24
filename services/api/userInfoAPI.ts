@@ -8,10 +8,15 @@ interface UserInfo {
 
 // 사용자 정보 불러오기
 export const getUserInfo = async () => {
+  const res = await instance.get<UserInfo | null>('/users/me');
   try {
-    const res = await instance.get<UserInfo>('/users/me');
-    return res.data;
-  } catch {
-    throw new Error('사용자 정보를 불러오지 못했습니다.');
+    if (res.status !== 200) {
+      return res.data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('사용자 정보를 불러오지 못했습니다.', error);
+    return null;
   }
 };

@@ -4,6 +4,14 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -29,6 +37,9 @@
     }
   },
   "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
     "pages/**/*.ts",
     "pages/**/*.tsx",
     "components/**/*.ts",
@@ -37,7 +48,9 @@
     "utils/**/*.tsx",
     "lib/**/*.ts",
     "lib/**/*.tsx",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "src/**/*",
+    "next.config.ts"
   ],
   "exclude": ["node_modules", "dist", ".next"]
 }

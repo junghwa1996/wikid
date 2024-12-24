@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import HeartIcon from './HeartIcon';
+import { useProfileContext } from '@/hooks/useProfileContext';
 
 interface HeartProps {
   initialCount: number;
@@ -30,6 +31,7 @@ export default function Heart({
 }: HeartProps) {
   const [count, setCount] = useState(initialCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const { isAuthenticated } = useProfileContext();
 
   useEffect(() => {
     setIsLiked(initialIsLiked);
@@ -38,6 +40,7 @@ export default function Heart({
   const handleClick = () => {
     if (onClick) {
       onClick();
+      if (!isAuthenticated) return;
       // 좋아요 선 반영
       setCount((prevCount) => (isLiked ? prevCount - 1 : prevCount + 1));
       setIsLiked((prevIsLiked) => !prevIsLiked);
@@ -56,7 +59,7 @@ export default function Heart({
       className={`flex items-center gap-1 ${className}`}
       onClick={onClick ? handleClick : undefined}
     >
-      <HeartIcon fill={clickStyles.icon} iconSize={iconSize} />
+      <HeartIcon fill={clickStyles.icon} iconSize={iconSize || ''} />
       <span
         className={`text-14 text-gray-400 mo:text-12 ${clickStyles.text} ${textSize}`}
       >

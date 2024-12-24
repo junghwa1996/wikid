@@ -6,7 +6,7 @@ import Button from '@/components/Button';
 import Footers from '@/components/Footers';
 import { useProfileContext } from '@/hooks/useProfileContext';
 
-import SectionTitle from './components/SectionTitle';
+import SectionTitle from '../components/main/components/SectionTitle';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -34,10 +34,6 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <link
-          href="https://cdn.jsdelivr.net/npm/@kfonts/nexon-lv1-gothic-low-otf@0.2.0/index.min.css"
-          rel="stylesheet"
-        />
         <style>
           {`
             body {
