@@ -1,3 +1,4 @@
+import { Profile } from 'context/ProfileContext';
 import { useEffect, useRef, useState } from 'react';
 
 import EditorViewer from '@/components/EditorViewer';
@@ -7,7 +8,6 @@ import TextEditor from '@/components/TextEditor';
 import UserProfile from '@/components/UserProfile';
 import instance from '@/lib/axios-client';
 
-import { Profile } from '../[code]';
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
 
@@ -75,7 +75,6 @@ export default function Contents({ profile }: ProfileProps) {
     try {
       // PATCH 요청을 보내는 코드
       const updatedProfile = {
-        securityAnswer: profile?.securityAnswer,
         securityQuestion: profile?.securityQuestion,
         nationality: profileData.nationality,
         family: profileData.family,
@@ -114,7 +113,7 @@ export default function Contents({ profile }: ProfileProps) {
 
   //5분동안 미기입시 뒤로가기
   const handleInactivityWarning = () => {
-    setIsDMOpen(true);
+    // setIsDMOpen(true);
   };
 
   //연결 끊김 모달 (수정중인 내용 취소, 기존 내용으로 복구)
