@@ -22,6 +22,9 @@
   --purple-100: #8e66ff;
 
   --yellow-100: #fdd181;
+
+  --blue-50: #f1f4fd;
+  --blue-100: #ecf0fa;
 }
 
 .dark {
@@ -44,6 +47,9 @@
   --purple-100: #b095ff;
 
   --yellow-100: #e7a832;
+
+  --blue-50: #1a1f2e;
+  --blue-100: #1a1f2e;
 }
 
 body {
