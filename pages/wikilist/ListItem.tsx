@@ -36,8 +36,10 @@ export default function ListItem({ data }: ListItemProps) {
 
   return (
     <li className="relative rounded-custom shadow-custom transition-all hover:bg-gray-100 hover:shadow-xl dark:shadow-custom-dark">
+      {/* FIXME : 빌드 에러로 인해 파일 삭제했음으로 에러 해결 완료시 다시 오픈 수정 필요 */}
       <Link
-        href={`/wiki/${code}`}
+        // href={`/wiki/${code}`}
+        href={`/`}
         className="flex gap-8 rounded-full px-9 py-6 mo:gap-5 mo:px-6 mo:py-5"
       >
         <Image
