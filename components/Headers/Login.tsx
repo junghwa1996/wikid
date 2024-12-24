@@ -2,28 +2,9 @@ import useOutsideClick from 'hooks/useOutsideClick';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Profile } from 'types/profile';
 
 import Menu from '../Menu';
-
-interface Profile {
-  image: string;
-  updatedAt: string;
-  securityQuestion: string;
-  teamId: string;
-  content: string;
-  nationality: string;
-  family: string;
-  bloodType: string;
-  nickname: string;
-  birthday: string;
-  sns: string;
-  job: string;
-  mbti: string;
-  city: string;
-  code: string;
-  name: string;
-  id: number;
-}
 
 interface LoginProps {
   isMobile: boolean;

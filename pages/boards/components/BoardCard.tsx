@@ -4,32 +4,25 @@ import Link from 'next/link';
 import Heart from '@/components/Heart/Heart';
 import dateConversion from '@/utils/dateConversion';
 
-interface BoardCardProps {
-  id: number;
-  image: string;
-  title: string;
-  name: string;
-  updatedAt: string;
-  likeCount: number;
-}
+import { BoardBase, Writer } from '../../../types/board';
 
 /**
  * 게시글 카드 컴포넌트
  * @param {number} id - 게시글 id
- * @param {string} image - 게시글 이미지
- * @param {string} title - 게시글 제목
- * @param {string} name - 유저 이름
- * @param {string} updatedAt - 게시글 수정일
- * @param {number} likeCount - 게시글 좋아요 수
+ * @param {string} props.image - 게시글 이미지
+ * @param {string} props.title - 게시글 제목
+ * @param {string} props.name - 유저 이름
+ * @param {string} props.updatedAt - 게시글 수정일
+ * @param {number} props.likeCount - 게시글 좋아요 수
  */
 export default function BoardCard({
   id,
-  image,
-  title,
-  name,
-  updatedAt,
-  likeCount,
-}: BoardCardProps) {
+  image = 'https://ifh.cc/g/V26MYS.png',
+  title = '',
+  name = '',
+  updatedAt = '',
+  likeCount = 0,
+}: BoardBase & Writer) {
   return (
     <Link
       href={`/boards/${id}`}
@@ -37,7 +30,7 @@ export default function BoardCard({
     >
       <div className="relative h-[130px] w-auto overflow-hidden bg-gray-100 ta:h-[17.475vw]">
         <Image
-          src={image === '' ? '/icon/icon-no-image.svg' : image}
+          src={image ?? '/icon/icon-no-image.svg'}
           alt={`${title} 썸네일`}
           style={{ objectFit: 'cover' }}
           fill
@@ -49,8 +42,10 @@ export default function BoardCard({
         </h3>
         <div className="flex items-center gap-2 text-14 text-gray-300 mo:text-12">
           <p>{name}</p>
-          <span className="flex-1">{dateConversion(updatedAt)}</span>
-          <Heart initialCount={likeCount} />
+          <span className="flex-1">
+            {updatedAt && dateConversion(updatedAt)}
+          </span>
+          <Heart initialCount={likeCount ?? 0} />
         </div>
       </div>
     </Link>
