@@ -10,18 +10,17 @@ import { ProfileProvider } from '../context/ProfileContext';
 
 import '@/styles/globals.css';
 
+const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient();
-
   return (
     <>
       <ProfileProvider>
+        <Head>
+          <title>wikid</title>
+        </Head>
+        <DarkModeToggle />
+        <Headers />
         <QueryClientProvider client={queryClient}>
-          <Head>
-            <title>wikid</title>
-          </Head>
-          <DarkModeToggle />
-          <Headers />
           <Component {...pageProps} />
           {/* NOTE : 배포 시 false로 변경  */}
           <ReactQueryDevtools initialIsOpen={true} />
