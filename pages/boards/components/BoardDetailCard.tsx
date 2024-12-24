@@ -31,7 +31,7 @@ interface BoardDetailCard extends BoardBase {
  *
  */
 export default function BoardDetailCard({
-  title,
+  title = '',
   name = '',
   createdAt = '',
   updatedAt = '',
