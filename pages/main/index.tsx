@@ -43,13 +43,6 @@ export default function LandingPage() {
             body {
               font-family: 'NEXON Lv1 Gothic Low', sans-serif;
             }
-            @media screen and (min-width: 1921px) {
-              .mainBgSize {
-                width: 100% !important;
-                max-width: 100% !important;
-                height: auto !important;
-              }
-            }
 
             body {
               font-size: 6.25%;
@@ -110,7 +103,7 @@ export default function LandingPage() {
               alt="배경 이미지"
               width={1920}
               height={400}
-              className="mainBgSize absolute bottom-0 left-1/2 -translate-x-1/2 mo:bottom-[195px] ta:bottom-[75px] ta:max-w-[1020px] ta:pb-[100px] pc:h-[400px] pc:max-w-[1920px]"
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 mo:bottom-[195px] ta:bottom-[75px] ta:max-w-[1020px] ta:pb-[100px] pc:h-[400px] pc:max-w-[1920px]"
             />
             <div className="absolute bottom-0 left-0 w-full bg-gray-500 mo:h-[200px] ta:h-[180px] pc:hidden"></div>
           </div>
