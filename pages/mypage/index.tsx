@@ -111,33 +111,23 @@ function MyPage(): React.ReactElement {
 
   // 비밀번호 변경 폼 유효성 검사
   const isPasswordFormValid = Boolean(
-    currentPassword !== null &&
-      currentPassword !== undefined &&
-      typeof currentPassword === 'string' &&
+    typeof currentPassword === 'string' &&
       currentPassword.length > 0 &&
-      newPassword !== null &&
-      newPassword !== undefined &&
       typeof newPassword === 'string' &&
       newPassword.length > 0 &&
-      newPasswordConfirm !== null &&
-      newPasswordConfirm !== undefined &&
       typeof newPasswordConfirm === 'string' &&
       newPasswordConfirm.length > 0 &&
-      typeof currentPasswordValidation?.errorMessage === 'string' &&
+      typeof currentPasswordValidation.errorMessage === 'string' &&
       currentPasswordValidation.errorMessage.length === 0 &&
-      typeof newPasswordValidation?.errorMessage === 'string' &&
+      typeof newPasswordValidation.errorMessage === 'string' &&
       newPasswordValidation.errorMessage.length === 0 &&
-      typeof newPasswordConfirmValidation?.errorMessage === 'string' &&
+      typeof newPasswordConfirmValidation.errorMessage === 'string' &&
       newPasswordConfirmValidation.errorMessage.length === 0
   );
 
   const isWikiFormValid = Boolean(
-    question !== null &&
-      question !== undefined &&
-      typeof question === 'string' &&
+    typeof question === 'string' &&
       question.length > 0 &&
-      answer !== null &&
-      answer !== undefined &&
       typeof answer === 'string' &&
       answer.length > 0
   );
