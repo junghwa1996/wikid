@@ -8,9 +8,10 @@ import {
 import instance from '../../lib/axios-client';
 
 // 게시글 리스트 불러오기
-export const getBoards = async (query: number) => {
+export const getBoards = async (query: any) => {
+  const queryString = new URLSearchParams(query).toString();
   try {
-    const res = await instance.get(`/articles?${query}`);
+    const res = await instance.get(`/articles?${queryString}`);
     return res.data as BoardResponse;
   } catch {
     throw new Error('게시글을 불러오지 못했습니다.');

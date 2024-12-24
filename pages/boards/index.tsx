@@ -42,7 +42,7 @@ export default function Boards() {
   // 베스트 게시글 fetch
   useEffect(() => {
     const fetchBoardsLike = async () => {
-      const res = await getBoards('orderBy=like&pageSize=4');
+      const res = await getBoards({ orderBy: 'like', pageSize: 4 });
       if (Array.isArray(res.list) && res.list.length > 0) {
         setLikeBoards(res.list);
       }
@@ -57,9 +57,11 @@ export default function Boards() {
   useEffect(() => {
     const fetchBoards = async () => {
       const orderBy = selectedOption === '최신순' ? 'recent' : 'like';
-      const res = await getBoards(
-        `orderBy=${orderBy}&pageSize=${PAGE_SIZE}&page=${currentPage}`
-      );
+      const res = await getBoards({
+        orderBy,
+        pageSize: PAGE_SIZE,
+        page: currentPage,
+      });
       if (Array.isArray(res.list) && res.list.length > 0) {
         setBoards(res.list);
         setTotalCount(res.totalCount);
@@ -76,11 +78,12 @@ export default function Boards() {
     setCurrentData(boards);
   }, [boards]);
 
-  // 검색 이벤트
   const handleSearchSubmit = async () => {
-    const res = await getBoards(
-      `keyword=${value}&pageSize=${PAGE_SIZE}&page=${currentPage}`
-    );
+    const res = await getBoards({
+      keyword: value,
+      pageSize: PAGE_SIZE,
+      page: currentPage,
+    });
     if (Array.isArray(res.list) && res.list.length > 0) {
       setBoards(res.list);
       setTotalCount(res.totalCount);

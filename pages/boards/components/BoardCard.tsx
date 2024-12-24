@@ -6,6 +6,8 @@ import dateConversion from '@/utils/dateConversion';
 
 import { BoardBase, Writer } from '../../../types/board';
 
+type BoardCardProps = Omit<BoardBase & Writer, 'content' | 'createdAt'>;
+
 /**
  * 게시글 카드 컴포넌트
  * @param {number} id - 게시글 id
@@ -22,7 +24,7 @@ export default function BoardCard({
   name = '',
   updatedAt = '',
   likeCount = 0,
-}: BoardBase & Writer) {
+}: BoardCardProps) {
   return (
     <Link
       href={`/boards/${id}`}
@@ -34,6 +36,8 @@ export default function BoardCard({
           alt={`${title} 썸네일`}
           style={{ objectFit: 'cover' }}
           fill
+          priority
+          sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
       <div className="bg-background px-[20px] pb-[14px] pt-[20px] mo:pt-[11px]">

@@ -34,10 +34,6 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <link
-          href="https://cdn.jsdelivr.net/npm/@kfonts/nexon-lv1-gothic-low-otf@0.2.0/index.min.css"
-          rel="stylesheet"
-        />
         <style>
           {`
             body {

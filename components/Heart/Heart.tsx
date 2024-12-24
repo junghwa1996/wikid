@@ -56,7 +56,7 @@ export default function Heart({
       className={`flex items-center gap-1 ${className}`}
       onClick={onClick ? handleClick : undefined}
     >
-      <HeartIcon fill={clickStyles.icon} iconSize={iconSize} />
+      <HeartIcon fill={clickStyles.icon} iconSize={iconSize || ''} />
       <span
         className={`text-14 text-gray-400 mo:text-12 ${clickStyles.text} ${textSize}`}
       >

@@ -78,8 +78,11 @@ const ImageUploadModal = ({
 
     // length로 파일 존재 여부를 먼저 체크
     if (e.dataTransfer.files.length > 0) {
-      setPreviewUrl(URL.createObjectURL(e.dataTransfer.files[0]));
-      setImageFile(e.dataTransfer.files[0]);
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        setPreviewUrl(URL.createObjectURL(file));
+        setImageFile(file);
+      }
     }
   };
 
@@ -157,8 +160,8 @@ const ImageUploadModal = ({
               <Image
                 src="/icon/icon-delete.svg"
                 alt="삭제"
-                width="20"
-                height="20"
+                width={20}
+                height={20}
               />
             </button>
           </div>
