@@ -1,53 +1,61 @@
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { ArticleData, CommentsData } from 'types/board';
 
 import Button from '@/components/Button';
 import instance from '@/lib/axios-client';
+import { getBoardDetail } from '@/services/api/boardsAPI';
+import { getUserInfo } from '@/services/api/userInfoAPI';
 
+// import { AuthAPI } from '@/services/api/auth';
 import BoardDetailCard from './components/BoardDetailCard';
 import Comment from './components/Comment';
 import CommentForm from './components/CommentForm';
 
-interface Writer {
-  name: string;
-  id: number;
-  image: string | null;
-}
-
-interface ArticleData {
-  updatedAt: string;
-  createdAt: string;
-  likeCount: number;
-  writer: Writer;
-  image: string;
-  title: string;
-  id: number;
-  isLiked: boolean;
-  content: string;
-}
-
-interface Comment {
-  id: number;
-  content: string;
-  updatedAt: string;
-  writer: Writer;
-}
-
-interface CommentsData {
-  list: Comment[];
-  nextCursor: string | null;
-}
-
 export default function BoardsDetails() {
   const [data, setData] = useState<ArticleData | null>(null);
   const [value, setValue] = useState('');
+  const [userId, setUserId] = useState<number | null>(null);
   const router = useRouter();
-  const { articleId } = router.query;
-  const userId = 1909; // TODO : 임시 유저 아이디 - context로 변경 필요
-  const LIMIT = 10; // 페이지당 댓글 수
+  const { articleId } = router.query as { articleId?: string };
+  const LIMIT = 10;
+
+  useEffect(() => {
+    if (
+      !Array.isArray(articleId) &&
+      articleId !== undefined &&
+      articleId !== null &&
+      articleId !== ''
+    ) {
+      // 게시글 상세 내용 로드
+      const fetchBoardsDetail = async () => {
+        const data = await getBoardDetail(articleId);
+        setData(data);
+      };
+
+      // 유저 정보 로드
+      const fetchUserInfo = async () => {
+        const res = await getUserInfo();
+        if (res?.id) {
+          setUserId(
+            res?.id !== undefined && res?.id !== null ? Number(res.id) : null
+          );
+        }
+      };
+
+      if (articleId) {
+        fetchBoardsDetail().catch((error) => {
+          console.error('게시물 상세 데이터를 불러오는데 실패 했습니다', error);
+        });
+        fetchUserInfo().catch((error) => {
+          console.error('유저 정보를 불러오는데 실패 했습니다', error);
+        });
+      }
+    }
+  }, [articleId]);
 
   // Intersection Observer 설정
   const { ref, inView } = useInView({
@@ -59,13 +67,17 @@ export default function BoardsDetails() {
   const getComments = async ({
     queryKey,
     pageParam = 0, // 기본 값 설정
-  }: QueryFunctionContext<[string, number, number]>): Promise<CommentsData> => {
+  }: QueryFunctionContext<[string, string, number]>): Promise<CommentsData> => {
     const [_key, articleId, LIMIT] = queryKey;
     try {
+      const cursorParam =
+        pageParam !== undefined && pageParam !== null
+          ? `&cursor=${encodeURIComponent(pageParam as string)}`
+          : '';
       const res = await instance.get(
-        `/articles/${articleId}/comments?limit=${LIMIT}&cursor=${pageParam}`
+        `/articles/${String(articleId)}/comments?limit=${LIMIT}${cursorParam}`
       );
-      return res.data;
+      return res.data as CommentsData;
     } catch (error) {
       console.error('게시글 댓글을 불러오지 못했습니다.', error);
       throw new Error('댓글 데이터를 가져오는 중 문제가 발생했습니다.');
@@ -86,13 +98,15 @@ export default function BoardsDetails() {
     getNextPageParam: (lastPage) => {
       return lastPage.nextCursor === null ? undefined : lastPage.nextCursor;
     },
-    enabled: !!articleId,
+    enabled: articleId !== undefined && articleId !== null && articleId !== '',
   });
 
   // Intersection Observer를 통해 fetchNextPage 호출
   useEffect(() => {
     if (inView && hasNextPage) {
-      fetchNextPage();
+      fetchNextPage().catch((error) => {
+        console.error('Failed to fetch next page', error);
+      });
     }
   }, [inView, hasNextPage, fetchNextPage]);
 
@@ -105,11 +119,14 @@ export default function BoardsDetails() {
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await instance.post(`/articles/${articleId}/comments`, {
+      await instance.post(`/articles/${articleId as string}/comments`, {
         content: value,
       });
       setValue('');
-      refetch(); // 댓글 등록 후 데이터 다시 가져오기
+      await instance.get(
+        `/articles/${articleId as string}/comments?limit=${LIMIT}`
+      );
+      await refetch();
     } catch (error) {
       console.error('댓글을 등록하지 못했습니다.', error);
     }
@@ -119,7 +136,10 @@ export default function BoardsDetails() {
   const handleUpdate = async (id: number, newContent: string) => {
     try {
       await instance.patch(`/comments/${id}`, { content: newContent });
-      refetch(); // 댓글 수정 후 데이터 다시 가져오기
+      await instance.get(
+        `/articles/${articleId as string}/comments?limit=${LIMIT}`
+      );
+      await refetch();
     } catch (error) {
       console.error('댓글을 수정하지 못했습니다.', error);
     }
@@ -129,27 +149,14 @@ export default function BoardsDetails() {
   const handleDelete = async (id: number) => {
     try {
       await instance.delete(`/comments/${id}`);
-      refetch(); // 댓글 삭제 후 데이터 다시 가져오기
+      await instance.get(
+        `/articles/${articleId as string}/comments?limit=${LIMIT}`
+      );
+      await refetch();
     } catch (error) {
       console.error('댓글을 삭제하지 못했습니다.', error);
     }
   };
-
-  useEffect(() => {
-    // 게시글 상세 내용 불러오기
-    const getBoardDetail = async () => {
-      try {
-        const res = await instance.get(`/articles/${articleId}`);
-        setData(res.data);
-      } catch (error) {
-        console.error('게시글 상세 내용을 불러오지 못했습니다.', error);
-      }
-    };
-
-    if (articleId) {
-      getBoardDetail();
-    }
-  }, [articleId]);
 
   return (
     <>
@@ -161,14 +168,16 @@ export default function BoardsDetails() {
           {/* 게시글 상세 본문 */}
           {data && (
             <BoardDetailCard
-              isOwner={data.writer.id === userId}
-              title={data.title}
-              name={data.writer.name}
-              createdAt={data.createdAt}
-              updatedAt={data.updatedAt}
-              likeCount={data.likeCount}
-              content={data.content}
-              image={data.image}
+              id={data?.id}
+              isOwner={data?.writer?.id === userId}
+              title={data?.title}
+              name={data?.writer?.name}
+              createdAt={data?.createdAt}
+              updatedAt={data?.updatedAt}
+              likeCount={data?.likeCount}
+              content={data?.content}
+              image={data?.image}
+              isLiked={data?.isLiked}
             />
           )}
 
@@ -194,7 +203,11 @@ export default function BoardsDetails() {
               <CommentForm
                 value={value}
                 onChange={handleChange}
-                onSubmit={handleCommentSubmit}
+                onSubmit={(e) => {
+                  handleCommentSubmit(e).catch((error) => {
+                    console.error('Failed to submit comment', error);
+                  });
+                }}
               />
             </div>
 
@@ -204,9 +217,11 @@ export default function BoardsDetails() {
                 page.list.map((item) => (
                   <li key={item.id}>
                     <Comment
+                      id={item.id}
+                      writer={item.writer}
                       name={item.writer.name}
                       content={item.content}
-                      date={item.updatedAt}
+                      updatedAt={item.updatedAt ?? ''}
                       onclick={{
                         update: (newContent: string) =>
                           handleUpdate(item.id, newContent),

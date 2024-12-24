@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Button from '../Button';
 import Modal from './Modal';
@@ -66,8 +66,9 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
     e.stopPropagation();
     setIsDragging(false);
 
-    const file = e.dataTransfer.files?.[0];
-    if (file) {
+    // length로 파일 존재 여부를 먼저 체크
+    if (e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
       const imageUrl = URL.createObjectURL(file);
       setPreviewUrl(imageUrl);
     }
@@ -92,7 +93,8 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
   useEffect(() => {
     return () => {
       // 이전 미리보기 url 정리
-      if (previewUrl) {
+      if (previewUrl != null) {
+        // null과 undefined 모두 체크
         URL.revokeObjectURL(previewUrl);
         setPreviewUrl(null);
       }
@@ -112,7 +114,7 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
           aria-label="파일 선택"
         />
 
-        {previewUrl ? (
+        {previewUrl != null ? (
           <div className="relative h-40 w-full overflow-hidden rounded-lg">
             <Image
               src={previewUrl}
@@ -150,7 +152,7 @@ const ImageUploadModal = ({ isOpen, onClose }: ImageUploadModalProps) => {
         <div className="flex justify-end">
           <Button
             type="button"
-            disabled={!previewUrl}
+            disabled={previewUrl == null}
             isLoading={isUpload}
             onClick={handleImageUpload}
           >
