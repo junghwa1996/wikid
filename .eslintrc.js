@@ -32,6 +32,7 @@ module.exports = {
     'next/core-web-vitals', // Next.js 권장 규칙
     'plugin:tailwindcss/recommended', // TailwindCSS 권장 규칙 추가
     // 'plugin:@typescript-eslint/recommended-requiring-type-checking', // 타입 체크 권장 규칙 (제거)
+    'plugin:@tanstack/eslint-plugin-query/recommended', // tanstack(reactQuery) 권장 규칙
   ],
   rules: {
     // Prettier 규칙
