@@ -98,17 +98,22 @@ export default function BoardsDetails({
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const res = await getUserInfo();
+        const res = await getUserInfo(isAuthenticated);
         if (res) {
           setUserId(res.id);
         }
       } catch (error) {
+        console.log('유저 정보를 불러오지 못했습니다.', error);
         return null;
       }
     };
 
     fetchUserInfo();
   }, []);
+
+  useEffect(() => {
+    console.log('userId', userId);
+  }, [userId]);
 
   // 댓글 데이터 가져오기
   const fetchComments = useCallback(async () => {
