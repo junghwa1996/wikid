@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
@@ -78,7 +78,9 @@ export default function WikiList() {
     router.push(`/wikilist?page=${pageNumber}`);
   };
 
-  if (!page) router.push('/wikilist?page=1');
+  useEffect(() => {
+    if (!page) router.push('/wikilist?page=1');
+  }, [page, router]);
 
   // TODO: 로딩 스피너 & 에러 페이지 컴포넌트 추가
   if (isPending) return <div>Loading...</div>;
