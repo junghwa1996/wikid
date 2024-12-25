@@ -22,8 +22,6 @@ export default function UpdateBoard() {
   const router = useRouter();
   const { articleId } = router.query;
 
-  console.log(articleId);
-
   useEffect(() => {
     // 게시글 상세 내용 로드
     const fetchArticle = async () => {
