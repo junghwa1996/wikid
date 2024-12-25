@@ -9,8 +9,8 @@ import SearchInput from '@/components/SearchInput';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import { getBoards } from '@/services/api/boardsAPI';
 
-import BoardCardList from './components/BoardCardList';
-import BoardList from './components/BoardList';
+import BoardCardList from '@/components/boards.page/BoardCardList';
+import BoardList from '@/components/boards.page/BoardList';
 
 import 'swiper/css';
 import { useProfileContext } from '@/hooks/useProfileContext';
@@ -18,7 +18,7 @@ import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import Router from 'next/router';
 
 const BoardCardList_Swiper = dynamic(
-  () => import('./components/BoardCardList.swiper'),
+  () => import('@/components/boards.page/BoardCardList.swiper'),
   {
     ssr: false,
   }

@@ -4,7 +4,7 @@ import React from 'react';
 
 import LinkBar from '@/components/LinkBar';
 
-import { ProfileProps } from './index';
+import { ProfileProps } from '../../pages/wikilist/index';
 
 interface ListItemProps {
   data: ProfileProps;
