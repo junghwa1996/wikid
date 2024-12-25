@@ -6,7 +6,7 @@ import Button from '@/components/Button';
 import Footers from '@/components/Footers';
 import { useProfileContext } from '@/hooks/useProfileContext';
 
-import SectionTitle from '../components/main/components/SectionTitle';
+import SectionTitle from '../components/main.page/SectionTitle';
 
 export default function LandingPage() {
   const router = useRouter();
