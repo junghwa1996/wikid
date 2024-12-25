@@ -20,6 +20,7 @@ export default function Headers() {
             alt="위키드 로고"
             width={107}
             height={30}
+            priority
           />
         </Link>
         <GNB />

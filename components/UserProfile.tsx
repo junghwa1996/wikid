@@ -165,6 +165,7 @@ function UserProfile({
               alt="Profile"
               width={100}
               height={100}
+              priority
               className={`rounded-full object-cover ${
                 isEditing
                   ? 'mo:size-[62px] ta:size-[71px] pc:size-48'

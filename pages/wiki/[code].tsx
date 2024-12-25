@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import { ProfileAnswer } from 'types/profile';
 
 import instance from '@/lib/axios-client';
-
-import Contents from './components/Contents';
+import Contents from '@/components/wiki.page/Contents';
 
 const getProfileData = async (code: string): Promise<ProfileAnswer | null> => {
   try {

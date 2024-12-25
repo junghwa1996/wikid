@@ -8,17 +8,19 @@ interface CustomDayPickerProps {
   onSelect?: (date: Date | undefined) => void;
 }
 
-function CustomDayPicker({ selected, onSelect }: CustomDayPickerProps) {
+function CustomDayPicker({
+  selected,
+  onSelect = () => {},
+}: CustomDayPickerProps) {
   return (
     <div className="relative">
       <DayPicker
         mode="single"
+        required={true}
         selected={selected}
         onSelect={onSelect}
         locale={ko}
         captionLayout="dropdown"
-        fromYear={2000}
-        toYear={new Date().getFullYear()}
         modifiersStyles={{
           selected: {
             backgroundColor: '#32A68A',

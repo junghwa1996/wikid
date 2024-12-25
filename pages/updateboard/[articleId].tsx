@@ -22,15 +22,17 @@ export default function UpdateBoard() {
   const router = useRouter();
   const { articleId } = router.query;
 
+  console.log(articleId);
+
   useEffect(() => {
     // 게시글 상세 내용 로드
     const fetchArticle = async () => {
-      const res = await getBoardDetail(articleId as string);
-      if (res !== null && res !== undefined) {
-        setTitle(res.title ?? '');
-        setContent(res.content ?? '');
-        setImage(res.image ?? null);
-      } else {
+      try {
+        const res = await getBoardDetail(articleId as string);
+        setTitle(res.title);
+        setContent(res.content);
+        setImage(res.image);
+      } catch {
         throw new Error('게시글을 불러오지 못했습니다.');
       }
     };
@@ -59,7 +61,7 @@ export default function UpdateBoard() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await patchBoard(articleId as string, {
+      await patchBoard(articleId as number | string, {
         title,
         content,
         image: image ?? 'https://ifh.cc/g/V26MYS.png',

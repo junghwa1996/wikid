@@ -14,7 +14,14 @@ export default function EmptyList({
       className={`flex flex-col items-center justify-center gap-8 ${classNames}`}
     >
       <p className="text-20sb text-gray-400 mo:text-18md">{text}</p>
-      <Image src="/images/empty.png" alt="" width="144" height="144" />
+      <Image
+        src="/images/empty.png"
+        alt=""
+        width={144}
+        height={144}
+        priority
+        className="size-[144px]"
+      />
     </div>
   );
 }
