@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';
 
-import EmptyList from '@/components/EmptyList';
-import Pagination from '@/components/Pagination/Pagination';
-import SearchInput from '@/components/SearchInput';
 import { instance } from '@/lib/axios-client';
 
+import EmptyList from '@/components/EmptyList';
 import ListItem from '@/components/wikiList.page/ListItem';
+import Pagination from '@/components/Pagination/Pagination';
+import SearchInput from '@/components/SearchInput';
 
 // 위키 목록 페이지 프로필 데이터 타입
 export interface ProfileProps {
@@ -28,15 +30,36 @@ interface ListProps {
 // 페이지당 목록 개수
 const PAGE_SIZE = 5;
 
+// TODO: 서버사이드 렌더링 적용
+// export const getServerSideProps = async (context) => {}
+
+const fetchProfiles = async (page: number, submitValue: string) => {
+  const { data } = await instance.get<ListProps>('/profiles', {
+    params: {
+      page,
+      pageSize: PAGE_SIZE,
+      name: submitValue,
+    },
+  });
+  return data;
+};
+
 /**
  * 위키 목록 페이지 컴포넌트
  */
 export default function WikiList() {
   const [searchValue, setSearchValue] = useState('');
   const [submitValue, setSubmitValue] = useState('');
-  const [profiles, setProfiles] = useState<ListProps | null>(null);
-  const [page, setPage] = useState(1);
-  const hasList = (profiles?.totalCount ?? 0) > 0;
+  const router = useRouter();
+
+  const { page } = router.query;
+  const { isPending, error, data } = useQuery<ListProps, Error>({
+    queryKey: ['profiles', page, submitValue],
+    queryFn: () => fetchProfiles(Number(page), submitValue),
+    enabled: !!page,
+  });
+  const { list, totalCount } = data ?? { list: [], totalCount: 0 };
+  const hasList = totalCount > 0;
   const emptyListText =
     submitValue === ''
       ? '위키 목록이 없어요.'
@@ -52,29 +75,16 @@ export default function WikiList() {
   };
   // 페이지 변경 핸들러 함수
   const handlePageChange = (pageNumber: number) => {
-    setPage(pageNumber);
+    router.push(`/wikilist?page=${pageNumber}`);
   };
 
-  useEffect(() => {
-    // 프로필 목록 데이터 요청 함수
-    const getProfiles = async () => {
-      try {
-        const { data } = await instance.get<ListProps>('/profiles', {
-          params: {
-            page,
-            pageSize: PAGE_SIZE,
-            name: submitValue,
-          },
-        });
-        setProfiles(data);
-      } catch (error) {
-        console.error('--- getProfiles:error:', error);
-      }
-    };
+  if (!page) router.push('/wikilist?page=1');
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    getProfiles();
-  }, [submitValue, page]);
+  // TODO: 로딩 스피너 & 에러 페이지 컴포넌트 추가
+  if (isPending) return <div>Loading...</div>;
+
+  // TODO: 에러 컴포넌트 추가
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="min-h-svh">
@@ -95,14 +105,13 @@ export default function WikiList() {
           {submitValue && hasList && (
             <p className="mt-4 text-16 text-gray-400">
               {`“${submitValue}”님을 총 `}
-              <span className="text-green-200">{profiles?.totalCount}</span>명
-              찾았습니다.
+              <span className="text-green-200">{totalCount}</span>명 찾았습니다.
             </p>
           )}
 
           {hasList ? (
             <ul className="my-[57px] flex flex-col gap-6 mo:my-10 mo:gap-2">
-              {profiles?.list.map((profile) => (
+              {list.map((profile) => (
                 <ListItem key={profile.id} data={profile} />
               ))}
             </ul>
@@ -113,8 +122,8 @@ export default function WikiList() {
           {hasList && (
             <div className="my-[120px] flex justify-center mo:my-10">
               <Pagination
-                totalCount={profiles?.totalCount ?? 0}
-                currentPage={page}
+                totalCount={totalCount}
+                currentPage={Number(page)}
                 pageSize={PAGE_SIZE}
                 onPageChange={handlePageChange}
               />
