@@ -3,8 +3,17 @@ import { useEffect, useState } from 'react';
 import { ProfileAnswer } from 'types/profile';
 
 import instance from '@/lib/axios-client';
+import Contents from '@/components/wiki.page/Contents';
 
-import Contents from '../../components/wiki.page/Contents';
+const getProfileData = async (code: string): Promise<ProfileAnswer | null> => {
+  try {
+    const res = await instance.get<ProfileAnswer>(`/profiles/${code}`);
+    return res.data;
+  } catch (e) {
+    console.error('프로필을 불러오지 못했습니다.', e);
+    return null; // 오류 발생 시 null 반환
+  }
+};
 
 export default function Wiki() {
   const [profile, setProfile] = useState<ProfileAnswer | null>(null);
@@ -12,22 +21,6 @@ export default function Wiki() {
   const { code } = router.query;
 
   useEffect(() => {
-    const getProfileData = async (
-      code: string
-    ): Promise<ProfileAnswer | null> => {
-      try {
-        const res = await instance.get<ProfileAnswer>(`/profiles/${code}`);
-        if (res.status === 201) {
-          return res.data;
-        } else {
-          return null;
-        }
-      } catch (e) {
-        console.error('프로필을 불러오지 못했습니다.', e);
-        return null; // 오류 발생 시 null 반환
-      }
-    };
-
     const fetchProfile = async () => {
       if (typeof code === 'string') {
         try {
