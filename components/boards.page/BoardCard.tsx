@@ -3,8 +3,7 @@ import Link from 'next/link';
 
 import Heart from '@/components/Heart/Heart';
 import dateConversion from '@/utils/dateConversion';
-
-import { BoardBase, Writer } from '../../../types/board';
+import { BoardBase, Writer } from 'types/board';
 
 type BoardCardProps = Omit<BoardBase & Writer, 'content' | 'createdAt'>;
 
