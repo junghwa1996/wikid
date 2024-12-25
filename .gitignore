@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+example.http
 
 # next.js
 /.next/
@@ -39,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# REST Client
+*.http
