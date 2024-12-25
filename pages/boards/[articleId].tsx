@@ -1,8 +1,7 @@
 // FIXME : 댓글 수정, 삭제 시 댓글 목록이 초기화되는 문제 해결 필요
 
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ArticleData, CommentsData } from 'types/board';
 
@@ -16,80 +15,20 @@ import BoardDetailCard from '@/components/boards.page/BoardDetailCard';
 import CommentForm from '@/components/boards.page/CommentForm';
 import Comment from '@/components/boards.page/Comment';
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { articleId } = context.query;
-
-  if (!articleId || Array.isArray(articleId)) {
-    return {
-      props: {
-        boardData: null,
-        initialComments: null,
-        articleId: null,
-      },
-    };
-  }
-
-  const parsedArticleId = parseInt(articleId, 10);
-
-  if (isNaN(parsedArticleId)) {
-    return {
-      props: {
-        boardData: null,
-        initialComments: null,
-        articleId: null,
-      },
-    };
-  }
-
-  try {
-    const boardData = await getBoardDetail(parsedArticleId);
-    const commentsData = await instance.get(
-      `/articles/${parsedArticleId}/comments?limit=10`
-    );
-
-    return {
-      props: {
-        boardData,
-        initialComments: commentsData.data,
-        articleId: parsedArticleId,
-      },
-    };
-  } catch (error) {
-    console.error('SSR에서 게시글 데이터를 불러오는데 실패했습니다.', error);
-
-    return {
-      props: {
-        boardData: null,
-        initialComments: null,
-        articleId: parsedArticleId,
-      },
-    };
-  }
-}
-
-interface BoardsDetailsProps {
-  boardData: ArticleData | null;
-  initialComments: CommentsData | null;
-  articleId: number | null;
-}
-
-export default function BoardsDetails({
-  boardData,
-  initialComments,
-  articleId,
-}: BoardsDetailsProps) {
-  const [comments, setComments] = useState<CommentsData | null>(
-    initialComments
-  );
+export default function BoardsDetails() {
+  const [boardData, setBoardData] = useState<ArticleData | null>(null);
+  const [comments, setComments] = useState<CommentsData | null>(null);
   const [value, setValue] = useState('');
   const [userId, setUserId] = useState<number | string | null>(null);
   const [cursor, setCursor] = useState<string | null>(
-    initialComments?.nextCursor || null
+    comments?.nextCursor || null
   );
-  const [hasMore, setHasMore] = useState(initialComments?.nextCursor !== null);
+  const [hasMore, setHasMore] = useState(comments?.nextCursor !== null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
+  const router = useRouter();
+  const { articleId } = router.query;
   const { isAuthenticated } = useProfileContext();
 
   const LIMIT = 10;
@@ -110,6 +49,23 @@ export default function BoardsDetails({
 
     fetchUserInfo();
   }, [isAuthenticated]);
+
+  // 게시글 데이터 로드
+  useEffect(() => {
+    const fetchBoardDetail = async () => {
+      if (!articleId) return;
+
+      try {
+        const res = await getBoardDetail(articleId);
+        setBoardData(res);
+      } catch (error) {
+        console.error('게시글 데이터를 불러오지 못했습니다.', error);
+        return null;
+      }
+    };
+
+    fetchBoardDetail();
+  }, [articleId]);
 
   // 댓글 데이터 가져오기
   const fetchComments = useCallback(async () => {
