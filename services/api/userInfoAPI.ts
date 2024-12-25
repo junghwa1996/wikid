@@ -1,4 +1,3 @@
-import { useProfileContext } from '@/hooks/useProfileContext';
 import instance from '../../lib/axios-client';
 
 interface UserInfo {
@@ -10,7 +9,6 @@ interface UserInfo {
 // 사용자 정보 불러오기
 export const getUserInfo = async (isAuthenticated: boolean) => {
   if (!isAuthenticated) {
-    console.error('로그인 상태가 아닙니다.');
     return null;
   } else {
     try {

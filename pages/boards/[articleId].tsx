@@ -109,11 +109,7 @@ export default function BoardsDetails({
     };
 
     fetchUserInfo();
-  }, []);
-
-  useEffect(() => {
-    console.log('userId', userId);
-  }, [userId]);
+  }, [isAuthenticated]);
 
   // 댓글 데이터 가져오기
   const fetchComments = useCallback(async () => {
