@@ -76,7 +76,6 @@ export default function BoardDetailCard({
   const handleHeartClick = async () => {
     if (isAuthenticated) {
       const method = isLiked ? 'delete' : 'post';
-
       try {
         await instance[method](`/articles/${id}/like`);
         setIsLiked(!isLiked);
