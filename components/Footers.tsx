@@ -6,7 +6,7 @@ import {
   FINANCIAL_TERMS,
   PRIVACY_POLICY,
   TERMS_OF_SERVICE,
-} from './main/constants/terms';
+} from '../constants/terms';
 
 function Footers() {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);

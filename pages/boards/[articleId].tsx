@@ -2,6 +2,7 @@
 
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import Router from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ArticleData, CommentsData } from 'types/board';
 
@@ -10,11 +11,10 @@ import instance from '@/lib/axios-client';
 import { getBoardDetail } from '@/services/api/boardsAPI';
 import { getUserInfo } from '@/services/api/userInfoAPI';
 
-import BoardDetailCard from './components/BoardDetailCard';
-import Comment from './components/Comment';
-import CommentForm from './components/CommentForm';
 import { useProfileContext } from '@/hooks/useProfileContext';
-import Router from 'next/router';
+import BoardDetailCard from '@/components/boards.page/BoardDetailCard';
+import CommentForm from '@/components/boards.page/CommentForm';
+import Comment from '@/components/boards.page/Comment';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { articleId } = context.query;
@@ -98,17 +98,18 @@ export default function BoardsDetails({
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const res = await getUserInfo();
+        const res = await getUserInfo(isAuthenticated);
         if (res) {
           setUserId(res.id);
         }
       } catch (error) {
+        console.log('유저 정보를 불러오지 못했습니다.', error);
         return null;
       }
     };
 
     fetchUserInfo();
-  }, []);
+  }, [isAuthenticated]);
 
   // 댓글 데이터 가져오기
   const fetchComments = useCallback(async () => {
