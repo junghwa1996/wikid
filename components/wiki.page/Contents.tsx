@@ -57,7 +57,6 @@ export default function Contents({ profile }: ProfileProps) {
       setIsQuizOpen(true);
     } else {
       setIsInfoSnackBarOpen(true);
-      setIsQuizOpen(true);
     }
   };
 
