@@ -21,3 +21,9 @@ export interface Profile {
 export interface ProfileAnswer extends Profile {
   securityAnswer: string;
 }
+
+export interface UserProfileProps {
+  data: Profile;
+  isEditing?: boolean;
+  onDataChange: (field: keyof Profile, value: string) => void;
+}
