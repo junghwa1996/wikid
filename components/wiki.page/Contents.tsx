@@ -57,6 +57,7 @@ export default function Contents({ profile }: ProfileProps) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
     const userCode = (res.data as { profile: ProfileAnswer }).profile.code;
     if (profile.code === userCode) {
       setIsProfileEdit(true);
@@ -170,6 +171,7 @@ export default function Contents({ profile }: ProfileProps) {
 
       {isEmpty && !isEditing && (
         <Blank
+          onQuizOpen={handleQuizOpen}
           onQuizSuccess={handleQuizSuccess}
           question={profile.securityQuestion || ''}
           code={profile.code || ''}

@@ -4,6 +4,7 @@ import Button from '@/components/Button';
 import WikiQuizModal from '@/components/Modal/WikiQuizModal';
 
 interface BlankProps {
+  onQuizOpen: () => void;
   onQuizSuccess: () => void;
   question: string;
   code: string;
@@ -16,7 +17,12 @@ interface BlankProps {
  * @param answer 퀴즈에 대한 답변
  */
 
-export default function Blank({ onQuizSuccess, question, code }: BlankProps) {
+export default function Blank({
+  onQuizOpen,
+  onQuizSuccess,
+  question,
+  code,
+}: BlankProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const onQuizClose = () => setIsQuizOpen(false);
 
@@ -26,7 +32,7 @@ export default function Blank({ onQuizSuccess, question, code }: BlankProps) {
         <p>아직 작성된 내용이 없네요.</p>
         <p>위키에 참여해 보세요!</p>
       </div>
-      <Button onClick={() => setIsQuizOpen(true)}>시작하기</Button>
+      <Button onClick={onQuizOpen}>시작하기</Button>
 
       <WikiQuizModal
         isOpen={isQuizOpen}
