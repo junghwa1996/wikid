@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 export default function DarkModeToggle() {
@@ -14,14 +15,15 @@ export default function DarkModeToggle() {
 
   return (
     <button
-      className="fixed bottom-0 left-0 z-40 rounded p-2"
-      style={{
-        backgroundColor: 'var(--gray-200)',
-        color: 'var(--gray-600)',
-      }}
+      className="rounded-full p-2 hover:bg-gray-200"
       onClick={() => setIsDarkMode((prev) => !prev)}
     >
-      {isDarkMode ? '라이트 모드로 전환' : '다크 모드로 전환'}
+      <Image
+        src={isDarkMode ? 'icon/icon-light.svg' : 'icon/icon-dark.svg'}
+        width={24}
+        height={24}
+        alt="다크 모드 전환"
+      />
     </button>
   );
 }
