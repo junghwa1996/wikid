@@ -26,6 +26,7 @@ export default function Contents({ profile }: ProfileProps) {
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile.content || '');
   const [profileData, setProfileData] = useState<ProfileAnswer>(profile);
+  const [diffTime, setDiffTime] = useState<number>(0);
 
   const previousContent = useRef<string>(newContent);
   const isEmpty = newContent === '';
@@ -42,6 +43,10 @@ export default function Contents({ profile }: ProfileProps) {
       setIsInfoSnackBarOpen(false);
       setIsQuizOpen(true);
     } else {
+      const registeredDate = new Date(res.data.registeredAt);
+      const nowDate = new Date();
+      const diff = nowDate.getTime() - registeredDate.getTime();
+      setDiffTime(diff);
       setIsInfoSnackBarOpen(true);
     }
   };
@@ -150,6 +155,7 @@ export default function Contents({ profile }: ProfileProps) {
           isEmpty={isEmpty}
           closeAndNoSave={closeAndNoSave}
           saveContent={saveContent}
+          registeredAt={diffTime}
         />
       </div>
       <WikiQuizModal

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Button from '@/components/Button';
 import LinkBar from '@/components/LinkBar';
@@ -11,6 +11,7 @@ interface ContentHeaderProps {
   isEditing: boolean;
   isInfoSnackBarOpen: boolean;
   isEmpty: boolean;
+  registeredAt?: number;
   handleQuizOpen: () => void;
   closeAndNoSave: () => void;
   saveContent: () => void;
@@ -35,6 +36,7 @@ export default function ContentHeader({
   isInfoSnackBarOpen,
   handleQuizOpen,
   isEmpty,
+  registeredAt,
   closeAndNoSave,
   saveContent,
 }: ContentHeaderProps) {
@@ -58,9 +60,20 @@ export default function ContentHeader({
   }>({
     open: true,
     severity: 'info',
-    message: '앞 사람의 편집이 끝나면 위키 참여가 가능합니다.',
+    message: '',
     autoHideDuration: 300000,
   });
+
+  useEffect(() => {
+    const infoSnackBarMessage = registeredAt
+      ? `${Math.floor(5 - registeredAt / 60 / 1000)}분 후 위키 참여가 가능합니다.`
+      : '';
+
+    setInfoSnackBarState((prevState) => ({
+      ...prevState,
+      message: infoSnackBarMessage,
+    }));
+  }, [registeredAt]);
 
   const onUCClose = () => {
     setIsUCOpen(false);
