@@ -16,6 +16,7 @@ import 'swiper/css';
 import { useProfileContext } from '@/hooks/useProfileContext';
 import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import Router from 'next/router';
+import EmptyList from '@/components/EmptyList';
 
 const BoardCardList_Swiper = dynamic(
   () => import('@/components/boards.page/BoardCardList.swiper'),
@@ -97,6 +98,9 @@ export default function Boards() {
     if (Array.isArray(res.list) && res.list.length > 0) {
       setBoards(res.list);
       setTotalCount(res.totalCount);
+    } else {
+      setBoards([]);
+      setTotalCount(0);
     }
   };
 
@@ -120,6 +124,11 @@ export default function Boards() {
       return;
     }
   };
+
+  const emptyListText =
+    value === ''
+      ? '게시글이 존재하지 않습니다.'
+      : `${value}와(과) 일치하는 검색 결과가 없습니다.`;
 
   const pxTablet = 'ta:px-[60px]';
 
@@ -164,18 +173,24 @@ export default function Boards() {
           </div>
 
           {/* 게시글 목록 */}
-          <BoardList data={currentData} />
+          {currentData.length > 0 ? (
+            <BoardList data={currentData} />
+          ) : (
+            <EmptyList classNames="mt-[60px] mo:mt-10" text={emptyListText} />
+          )}
         </div>
 
         {/* 페이지네이션 */}
-        <div className="mo:-mt-2">
-          <Pagination
-            totalCount={totalCount}
-            currentPage={currentPage}
-            pageSize={PAGE_SIZE}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
-        </div>
+        {currentData.length > 0 && (
+          <div className="mo:-mt-2">
+            <Pagination
+              totalCount={totalCount}
+              currentPage={currentPage}
+              pageSize={PAGE_SIZE}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </div>
+        )}
       </div>
       <SnackBar
         severity={snackStyled}
