@@ -5,11 +5,20 @@ export default function DarkModeToggle() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode) {
+      setIsDarkMode(savedMode === 'true');
+    }
+  }, []);
+
+  useEffect(() => {
     const html = document.documentElement;
     if (isDarkMode) {
       html.classList.add('dark');
+      localStorage.setItem('darkMode', 'true');
     } else {
       html.classList.remove('dark');
+      localStorage.setItem('darkMode', 'false');
     }
   }, [isDarkMode]);
 
