@@ -45,7 +45,7 @@ module.exports = {
 
     // TypeScript 관련 규칙
     '@typescript-eslint/no-unused-vars': [
-      'warn', // 'error'에서 'warn'으로 변경
+      'off', // 'error'에서 'warn'으로 변경
       {
         argsIgnorePattern: '^_', // _로 시작하는 변수는 무시
         varsIgnorePattern: '^_', // _로 시작하는 변수는 무시
@@ -59,7 +59,6 @@ module.exports = {
     '@typescript-eslint/no-floating-promises': 'off', // 'error'에서 'off'로 변경
     '@typescript-eslint/no-non-null-assertion': 'off', // 'error'에서 'off'로 변경
     '@typescript-eslint/no-explicit-any': 'off', // 'error'에서 'off'로 변경
-    '@typescript-eslint/no-unused-vars': 'off', // 중복 규칙 제거
     '@typescript-eslint/strict-boolean-expressions': 'off', // 'error'에서 'off'로 변경
     '@typescript-eslint/no-unnecessary-condition': 'off', // 'error'에서 'off'로 변경
     '@typescript-eslint/no-unsafe-member-access': 'off', // 'error'에서 'off'로 변경
