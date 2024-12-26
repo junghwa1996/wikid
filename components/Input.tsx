@@ -146,7 +146,17 @@ function InputField({
       {typeof showDayPicker === 'boolean' && showDayPicker && (
         <div className="absolute left-0 top-full z-50 mt-2 rounded bg-white p-4 shadow-md">
           <div>
-            <CustomDayPicker />
+            <CustomDayPicker
+              selected={value ? new Date(value) : undefined}
+              onSelect={(date) => {
+                if (date) {
+                  onChange({
+                    target: { value: date.toISOString().split('T')[0] },
+                  } as React.ChangeEvent<HTMLInputElement>);
+                  setShowDayPicker(false);
+                }
+              }}
+            />
           </div>
           <button onClick={closeDayPicker} className="mt-2 text-gray-500">
             닫기
