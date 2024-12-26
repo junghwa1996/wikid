@@ -7,6 +7,7 @@ import Button from '@/components/Button';
 import ImageUploadModal from '@/components/Modal/ImageUploadModal';
 import SnackBar from '@/components/SnackBar';
 import TextEditor from '@/components/TextEditor';
+import useSnackBar from '@/hooks/useSnackBar';
 
 // 게시글 상세 작성 응답 데이터 타입 정의
 interface ArticleResponse {
@@ -24,15 +25,6 @@ interface ImageResponse {
     url: string;
   };
   status: number;
-}
-
-// 스낵바 타입 정의
-type severity = 'fail' | 'success' | 'info';
-interface SnackBarValues {
-  open: boolean;
-  severity: severity;
-  message: string;
-  onClose: (value: boolean) => void;
 }
 
 // 제목 글자수 제한
@@ -58,13 +50,9 @@ export default function Addboard() {
   const [content, setContent] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [snackBarValues, setSnackBarValues] = useState<SnackBarValues>({
-    open: false,
-    severity: 'success',
-    message: '',
-    onClose: () => {},
-  });
+
   const router = useRouter();
+  const { snackBarValues, snackBarOpen } = useSnackBar();
   const formData = new FormData();
 
   // 등록 버튼 비활성화
@@ -96,23 +84,6 @@ export default function Addboard() {
   const handleContentChange = (value: string) => {
     setContent(value);
   };
-  // 스낵바 오픈 함수
-  const snackBarOpen = (
-    severity: severity,
-    message: string,
-    done: null | (() => void) = null // 스넥바 사라지고 난 후 실행할 함수
-  ) => {
-    setSnackBarValues({
-      open: true,
-      severity: severity,
-      message: message,
-      onClose: (value: boolean) => {
-        setSnackBarValues({ ...snackBarValues, open: value });
-        if (done) done();
-      },
-    });
-  };
-
   // 작성 폼 서브밋 함수
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -212,7 +183,12 @@ export default function Addboard() {
                   {title.length}/
                   <span className="text-green-200">{MAX_TITLE}</span>
                 </div>
-                <Button type="button" size="small" onClick={handleAddThumbnail}>
+                <Button
+                  type="button"
+                  size="small"
+                  variant="secondary"
+                  onClick={handleAddThumbnail}
+                >
                   썸네일 이미지 {imageFile === null ? '추가' : '변경'}
                 </Button>
               </fieldset>
@@ -246,9 +222,9 @@ export default function Addboard() {
       <SnackBar
         open={snackBarValues.open}
         severity={snackBarValues.severity}
-        onClose={() => snackBarValues.onClose(false)}
+        onClose={() => snackBarValues.onClose()}
       >
-        {snackBarValues.message}
+        {snackBarValues.children}
       </SnackBar>
     </div>
   );
