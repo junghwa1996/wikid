@@ -1,7 +1,5 @@
-// pages/boards/[articleId].tsx
-
 import Head from 'next/head';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { ArticleData } from 'types/board';
 
@@ -28,11 +26,18 @@ import {
   deleteComment,
 } from '@/services/api/commentAPI';
 import { CommentsData, CommentType } from 'types/board';
+import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 
 export default function BoardsDetails() {
   const [boardData, setBoardData] = useState<ArticleData | null>(null);
   const [value, setValue] = useState('');
   const [userId, setUserId] = useState<number | string | null>(null);
+
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState('');
+  const [snackStyled, setSnackStyled] =
+    useState<SnackBarProps['severity']>(undefined);
+
   const router = useRouter();
   const { articleId } = router.query;
   const { isAuthenticated } = useProfileContext();
@@ -148,8 +153,9 @@ export default function BoardsDetails() {
         await addCommentMutation.mutateAsync(value);
         setValue('');
       } else {
-        alert('로그인이 필요한 서비스입니다.');
-        Router.push('/login');
+        setSnackBarMessage('로그인이 필요한 서비스입니다.');
+        setSnackStyled('fail');
+        setSnackBarOpen(true);
       }
     } catch (error) {
       console.error('댓글을 등록하지 못했습니다.', error);
@@ -261,6 +267,14 @@ export default function BoardsDetails() {
             {isFetching && !isFetchingNextPage && <p>로딩 중...</p>}
           </div>
         </div>
+        <SnackBar
+          severity={snackStyled}
+          open={snackBarOpen}
+          onClose={() => setSnackBarOpen(false)}
+          autoHideDuration={2000}
+        >
+          {snackBarMessage}
+        </SnackBar>
       </main>
     </>
   );
