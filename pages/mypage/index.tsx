@@ -159,10 +159,11 @@ function MyPage(): React.ReactElement {
               />
               <InputField
                 label=""
-                type="password"
+                type="passwordConfirm"
                 value={newPasswordConfirm}
                 width="100%"
                 onChange={handleNewPasswordConfirmChange}
+                compareValue={newPassword}
                 placeholder="새 비밀번호 확인"
               />
 
