@@ -114,9 +114,6 @@ export default function Boards() {
       setSnackStyled('fail');
       setSnackBarMessage('로그인 후 이용해주세요');
       setSnackBarOpen(true);
-      setTimeout(() => {
-        Router.push('/login');
-      }, 3000);
       return;
     }
   };
