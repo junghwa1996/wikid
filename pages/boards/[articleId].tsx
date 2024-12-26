@@ -1,12 +1,11 @@
-// FIXME : 댓글 수정, 삭제 시 댓글 목록이 초기화되는 문제 해결 필요
+// pages/boards/[articleId].tsx
 
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ArticleData, CommentsData } from 'types/board';
+import React, { useEffect, useState } from 'react';
+import { ArticleData } from 'types/board';
 
 import Button from '@/components/Button';
-import instance from '@/lib/axios-client';
 import { getBoardDetail } from '@/services/api/boardsAPI';
 import { getUserInfo } from '@/services/api/userInfoAPI';
 
@@ -15,27 +14,33 @@ import BoardDetailCard from '@/components/boards.page/BoardDetailCard';
 import CommentForm from '@/components/boards.page/CommentForm';
 import Comment from '@/components/boards.page/Comment';
 
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+  QueryFunctionContext,
+} from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
+import {
+  fetchComments,
+  addComment,
+  updateComment,
+  deleteComment,
+} from '@/services/api/commentAPI';
+import { CommentsData, CommentType } from 'types/board';
+
 export default function BoardsDetails() {
   const [boardData, setBoardData] = useState<ArticleData | null>(null);
-  const [comments, setComments] = useState<CommentsData | null>(null);
   const [value, setValue] = useState('');
   const [userId, setUserId] = useState<number | string | null>(null);
-  const [cursor, setCursor] = useState<string | null>(
-    comments?.nextCursor || null
-  );
-  const [hasMore, setHasMore] = useState(comments?.nextCursor !== null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const observer = useRef<IntersectionObserver | null>(null);
   const router = useRouter();
   const { articleId } = router.query;
   const { isAuthenticated } = useProfileContext();
+  const queryClient = useQueryClient();
 
-  const LIMIT = 10;
-
-  // 유저 정보 로드
+  // 유저 정보 페칭
   useEffect(() => {
-    const fetchUserInfo = async () => {
+    const fetchUserInfoData = async () => {
       try {
         const res = await getUserInfo(isAuthenticated);
         if (res) {
@@ -43,159 +48,142 @@ export default function BoardsDetails() {
         }
       } catch (error) {
         console.log('유저 정보를 불러오지 못했습니다.', error);
-        return null;
       }
     };
 
-    fetchUserInfo();
+    fetchUserInfoData();
   }, [isAuthenticated]);
 
-  // 게시글 데이터 로드
+  // 게시글 상세 정보 페칭
   useEffect(() => {
     const fetchBoardDetail = async () => {
-      if (!articleId) return;
+      if (!articleId || typeof articleId !== 'string') return;
 
       try {
         const res = await getBoardDetail(articleId);
         setBoardData(res);
       } catch (error) {
         console.error('게시글 데이터를 불러오지 못했습니다.', error);
-        return null;
       }
     };
 
     fetchBoardDetail();
   }, [articleId]);
 
-  // 댓글 데이터 가져오기
-  const fetchComments = useCallback(async () => {
-    if (isLoading || !hasMore || !articleId) return; // 중복 요청 방지 및 articleId 확인
-
-    setIsLoading(true);
-    setError(null); // 이전 에러 상태 초기화
-
-    try {
-      const res = await instance.get(
-        `/articles/${articleId}/comments?limit=${LIMIT}${
-          cursor ? `&cursor=${cursor}` : ''
-        }`
-      );
-      const newComments = res.data.list;
-      const newNextCursor = res.data.nextCursor;
-
-      // 중복 제거 및 댓글 추가
-      setComments((prevComments) => {
-        if (!prevComments) return res.data;
-
-        const existingIds = new Set(prevComments.list.map((item) => item.id));
-        const filteredNewComments = newComments.filter(
-          (item: any) => !existingIds.has(item.id)
-        );
-
-        return {
-          ...res.data,
-          list: [...prevComments.list, ...filteredNewComments],
-        };
-      });
-
-      // 다음 커서 업데이트
-      setCursor(newNextCursor);
-      setHasMore(newNextCursor !== null);
-    } catch (error) {
-      console.error('댓글 데이터를 불러오지 못했습니다.', error);
-      setError('댓글 데이터를 불러오는 중 문제가 발생했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [articleId, cursor, hasMore, isLoading]);
-
-  // Intersection Observer 설정
-  const lastCommentElementRef = useCallback(
-    (node: Element | null) => {
-      if (isLoading || !hasMore) return; // 로딩 중이거나 더 가져올 데이터가 없으면 실행하지 않음
-
-      if (observer.current) observer.current.disconnect();
-
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0]?.isIntersecting) {
-          fetchComments();
-        }
-      });
-
-      if (node) observer.current.observe(node);
+  // useInfiniteQuery를 사용한 댓글 페칭
+  const {
+    data,
+    error: commentsError,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery<CommentsData, Error>({
+    queryKey: ['comments', articleId],
+    queryFn: async (context: QueryFunctionContext) => {
+      const pageParam = context.pageParam as string | null;
+      if (typeof articleId !== 'string') {
+        throw new Error('id가 올바르지 않습니다.');
+      }
+      return fetchComments(articleId, pageParam);
     },
-    [hasMore, isLoading, fetchComments]
-  );
+    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    enabled: !!articleId && typeof articleId === 'string',
+    staleTime: 5 * 60 * 1000, // 5분
+    initialPageParam: null,
+  });
 
-  // 댓글 입력창 value 변경
+  const comments = data?.pages.flatMap((page) => page.list) ?? [];
+
+  // 무한 스크롤 트리거 설정
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  // 뮤테이션 설정 (댓글 추가, 수정, 삭제)
+  const addCommentMutation = useMutation({
+    mutationFn: (content: string) => addComment(articleId as string, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['comments', articleId],
+      });
+    },
+  });
+
+  const updateCommentMutation = useMutation({
+    mutationFn: ({ id, newContent }: { id: number; newContent: string }) =>
+      updateComment(id, newContent),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['comments', articleId],
+      });
+    },
+  });
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: (id: number) => deleteComment(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['comments', articleId],
+      });
+    },
+  });
+
+  // 댓글 입력값 변경 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 
-  // 댓글 등록
+  // 댓글 제출 핸들러
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!value.trim() || !articleId) return;
+    if (!value.trim() || !articleId || typeof articleId !== 'string') return;
 
     try {
       if (isAuthenticated) {
-        await instance.post(`/articles/${articleId}/comments`, {
-          content: value,
-        });
+        await addCommentMutation.mutateAsync(value);
         setValue('');
-        setComments(null);
-        setCursor(null);
-        setHasMore(true);
-        await fetchComments();
       } else {
         alert('로그인이 필요한 서비스입니다.');
-        return await Router.push('/login');
+        Router.push('/login');
       }
     } catch (error) {
       console.error('댓글을 등록하지 못했습니다.', error);
     }
   };
 
-  // 댓글 수정
+  // 댓글 수정 핸들러
   const handleUpdate = async (id: number, newContent: string) => {
     try {
-      await instance.patch(`/comments/${id}`, { content: newContent });
-      setComments(null);
-      setCursor(null);
-      setHasMore(true);
-      await fetchComments();
+      await updateCommentMutation.mutateAsync({ id, newContent });
     } catch (error) {
       console.error('댓글을 수정하지 못했습니다.', error);
     }
   };
 
-  // 댓글 삭제
+  // 댓글 삭제 핸들러
   const handleDelete = async (id: number) => {
     try {
-      await instance.delete(`/comments/${id}`);
-      setComments(null);
-      setCursor(null);
-      setHasMore(true);
-      await fetchComments();
+      await deleteCommentMutation.mutateAsync(id);
     } catch (error) {
       console.error('댓글을 삭제하지 못했습니다.', error);
     }
   };
 
-  useEffect(() => {
-    if (!comments && hasMore && !isLoading && articleId !== null) {
-      fetchComments();
-    }
-  }, [comments, hasMore, isLoading, fetchComments, articleId]);
-
-  // 게시글 데이터가 없는 경우 로딩 상태
+  // 게시글 데이터 로딩 상태
   if (!boardData) {
     return <div>게시글을 불러오는 중입니다...</div>;
   }
 
-  // 에러가 있는 경우 에러 메시지 표시
-  if (error) {
-    return <div>댓글을 불러오지 못했습니다: {error}</div>;
+  // 댓글 페칭 에러 처리
+  if (commentsError) {
+    return (
+      <div>댓글을 불러오지 못했습니다: {(commentsError as Error).message}</div>
+    );
   }
 
   return (
@@ -228,33 +216,20 @@ export default function BoardsDetails() {
             <div className="mb-[42px] tamo:mb-6">
               <div className="mb-[15px] text-18sb mo:mb-2 mo:text-16sb">
                 댓글&nbsp;
-                <span className="text-green-200">
-                  {comments?.list.length ?? 0}
-                </span>
+                <span className="text-green-200">{comments.length}</span>
               </div>
               <CommentForm
                 value={value}
                 onChange={handleChange}
-                onSubmit={(e) => {
-                  handleCommentSubmit(e).catch((error) => {
-                    console.error('Failed to submit comment', error);
-                  });
-                }}
+                onSubmit={handleCommentSubmit}
               />
             </div>
 
             {/* 댓글 목록 조건부 렌더링 */}
-            {comments && comments.list.length > 0 ? (
+            {comments.length > 0 ? (
               <ul className="flex flex-col gap-6 mo:gap-[14px] ta:gap-4">
-                {comments.list.map((item, index) => (
-                  <li
-                    key={item.id}
-                    ref={
-                      comments.list.length === index + 1
-                        ? lastCommentElementRef
-                        : null
-                    }
-                  >
+                {comments.map((item: CommentType) => (
+                  <li key={item.id}>
                     <Comment
                       id={item.id}
                       profile={item.writer.image}
@@ -277,7 +252,13 @@ export default function BoardsDetails() {
               <div className="text-gray-500">작성된 댓글이 없습니다.</div>
             )}
 
-            {isLoading && <p>로딩 중...</p>}
+            {/* 무한 스크롤 로더 */}
+            <div ref={ref} className="h-10">
+              {isFetchingNextPage && <p>로딩 중...</p>}
+            </div>
+
+            {/* 일반 로딩 표시기 */}
+            {isFetching && !isFetchingNextPage && <p>로딩 중...</p>}
           </div>
         </div>
       </main>
