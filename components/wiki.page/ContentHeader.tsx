@@ -126,7 +126,7 @@ export default function ContentHeader({
         </div>
       </div>
       {!isEditing && (
-        <LinkBar link={link.slice(0, 34)} onClick={handleLinkClick} />
+        <LinkBar link={link.slice(0, 43)} onClick={handleLinkClick} />
       )}
       {isInfoSnackBarOpen && (
         <SnackBar

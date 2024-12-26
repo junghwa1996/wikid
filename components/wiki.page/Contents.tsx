@@ -167,7 +167,7 @@ export default function Contents({ profile }: ProfileProps) {
       <div>
         <ContentHeader
           name={profile.name || ''}
-          link={`https://www.wikid.kr/wiki/${profile.code}`}
+          link={`https://wikied-ten.vercel.app/wiki/${profile.code}`}
           isEditing={isEditing}
           isInfoSnackBarOpen={isInfoSnackBarOpen}
           handleQuizOpen={handleQuizOpen}
