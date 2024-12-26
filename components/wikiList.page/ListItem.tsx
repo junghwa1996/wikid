@@ -16,6 +16,7 @@ interface ListItemProps {
  */
 export default function ListItem({ data }: ListItemProps) {
   if (!data) return null;
+
   const { name, code, image, city, nationality, job } = data;
   const shortUrl = `https://www.wikied.kr/${code.slice(0, 4)}...`;
   const baseProfileImage = '/icon/icon-profile.svg';
@@ -35,7 +36,7 @@ export default function ListItem({ data }: ListItemProps) {
   };
 
   return (
-    <li className="relative rounded-custom shadow-custom transition-all hover:bg-gray-100 hover:shadow-xl dark:shadow-custom-dark">
+    <li className="relative rounded-custom shadow-custom transition-all hover:scale-[1.02] hover:bg-gray-100 hover:shadow-xl dark:shadow-custom-dark">
       <Link
         href={`/wiki/${code}`}
         className="flex gap-8 rounded-full px-9 py-6 mo:gap-5 mo:px-6 mo:py-5"
@@ -53,7 +54,7 @@ export default function ListItem({ data }: ListItemProps) {
             {name}
           </h2>
           <p className="text-14 text-gray-400 mo:text-12">
-            {city}, {nationality}
+            {city && city + ','} {nationality}
             <br />
             {job}
           </p>
