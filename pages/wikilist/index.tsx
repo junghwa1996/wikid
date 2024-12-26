@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 
-import { instance } from '@/lib/axios-client';
-
+import { getProfiles } from '@/services/api/profileAPI';
 import EmptyList from '@/components/EmptyList';
 import ListItem from '@/components/wikiList.page/ListItem';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
+import useSnackBar from '@/hooks/useSanckBar';
+import SnackBar from '@/components/SnackBar';
 
 // 위키 목록 페이지 프로필 데이터 타입
 export interface ProfileProps {
@@ -22,7 +24,7 @@ export interface ProfileProps {
 }
 
 // 위키 목록 페이지 리스트 데이터 타입
-interface ListProps {
+export interface ListProps {
   totalCount: number;
   list: ProfileProps[];
 }
@@ -30,18 +32,26 @@ interface ListProps {
 // 페이지당 목록 개수
 const PAGE_SIZE = 5;
 
-// TODO: 서버사이드 렌더링 적용
-// export const getServerSideProps = async (context) => {}
+// 서버사이드 렌더링 적용
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const queryClient = new QueryClient();
+  const { page, name } = context.query;
 
-const fetchProfiles = async (page: number, submitValue: string) => {
-  const { data } = await instance.get<ListProps>('/profiles', {
-    params: {
-      page,
-      pageSize: PAGE_SIZE,
-      name: submitValue,
-    },
+  await queryClient.prefetchQuery({
+    queryKey: ['profiles', page, name],
+    queryFn: () =>
+      getProfiles({
+        page: Number(page),
+        name: name as string,
+        pageSize: PAGE_SIZE,
+      }),
   });
-  return data;
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
 };
 
 /**
@@ -49,21 +59,26 @@ const fetchProfiles = async (page: number, submitValue: string) => {
  */
 export default function WikiList() {
   const [searchValue, setSearchValue] = useState('');
-  const [submitValue, setSubmitValue] = useState('');
   const router = useRouter();
+  const { snackBarValues, snackBarOpen } = useSnackBar();
 
-  const { page } = router.query;
+  const { page, name } = router.query;
   const { isPending, error, data } = useQuery<ListProps, Error>({
-    queryKey: ['profiles', page, submitValue],
-    queryFn: () => fetchProfiles(Number(page), submitValue),
+    queryKey: ['profiles', page, name],
+    queryFn: () =>
+      getProfiles({
+        page: Number(page),
+        name: name as string,
+        pageSize: PAGE_SIZE,
+      }),
     enabled: !!page,
   });
   const { list, totalCount } = data ?? { list: [], totalCount: 0 };
   const hasList = totalCount > 0;
   const emptyListText =
-    submitValue === ''
+    name === ''
       ? '위키 목록이 없어요.'
-      : `${submitValue}와(과) 일치하는 검색 결과가 없어요.`;
+      : `${name}와(과) 일치하는 검색 결과가 없어요.`;
 
   // 검색 인풋 값 변경 핸들러 함수
   const handleChange = (value: string) => {
@@ -71,15 +86,30 @@ export default function WikiList() {
   };
   // 검색 제출 핸들러 함수
   const handleSubmit = () => {
-    setSubmitValue(searchValue);
+    router.push({
+      pathname: '/wikilist',
+      query: { page: 1, name: searchValue },
+    });
   };
   // 페이지 변경 핸들러 함수
   const handlePageChange = (pageNumber: number) => {
-    router.push(`/wikilist?page=${pageNumber}`);
+    router.push({
+      pathname: '/wikilist',
+      query: { page: pageNumber, name: name },
+    });
+  };
+
+  // 목록의 위키 링크 클릭
+  const handleSnackBarClick = (name: string) => {
+    snackBarOpen('success', `${name}님 위키 링크가 복사되었습니다.`);
   };
 
   useEffect(() => {
-    if (!page) router.push('/wikilist?page=1');
+    if (!page)
+      router.push({
+        pathname: '/wikilist',
+        query: { page: 1, name: '' },
+      });
   }, [page, router]);
 
   // TODO: 로딩 스피너 & 에러 페이지 컴포넌트 추가
@@ -91,9 +121,7 @@ export default function WikiList() {
   return (
     <div className="min-h-svh">
       <Head>
-        <title>
-          위키 목록{submitValue && ` - 검색어 '${submitValue}'`} | wikied
-        </title>
+        <title>위키 목록{name && ` - 검색어 '${name}'`} | wikied</title>
       </Head>
 
       <div className="container pb-5 pt-20 mo:pt-10">
@@ -104,9 +132,9 @@ export default function WikiList() {
             onChange={handleChange}
             onSubmit={handleSubmit}
           />
-          {submitValue && hasList && (
+          {name && hasList && (
             <p className="mt-4 text-16 text-gray-400">
-              {`“${submitValue}”님을 총 `}
+              {`“${name}”님을 총 `}
               <span className="text-green-200">{totalCount}</span>명 찾았습니다.
             </p>
           )}
@@ -114,7 +142,11 @@ export default function WikiList() {
           {hasList ? (
             <ul className="my-[57px] flex flex-col gap-6 mo:my-10 mo:gap-2">
               {list.map((profile) => (
-                <ListItem key={profile.id} data={profile} />
+                <ListItem
+                  key={profile.id}
+                  data={profile}
+                  onSnackBarClick={handleSnackBarClick}
+                />
               ))}
             </ul>
           ) : (
@@ -133,6 +165,14 @@ export default function WikiList() {
           )}
         </div>
       </div>
+
+      <SnackBar
+        open={snackBarValues.open}
+        severity={snackBarValues.severity}
+        onClose={snackBarValues.onClose}
+      >
+        {snackBarValues.children}
+      </SnackBar>
     </div>
   );
 }

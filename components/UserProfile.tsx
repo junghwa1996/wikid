@@ -100,9 +100,7 @@ function UserProfile({
             {isEditing && (
               <div className="absolute left-0 top-0 flex size-full items-center justify-center rounded-full bg-black/50">
                 {isLoading ? (
-
                   <Spinner />
-
                 ) : (
                   // 카메라 아이콘 표시
                   <Image

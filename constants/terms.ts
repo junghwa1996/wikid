@@ -25,3 +25,6 @@ export const FINANCIAL_TERMS = `㈜코드잇 전자금융거래 기본약관
 1. "전자금융거래"란 회사가 전자적 장치를 통하여 제공하는 금융상품 및 서비스를 이용자가 전자적 장치를 통하여 비대면·자동화된 방식으로 직접 이용하는 거래를 말합니다.
 2. "이용자"란 본 약관에 동의하고 회사가 제공하는 전자금융거래 서비스를 이용하는 고객을 말합니다.
 `;
+
+export const SITE_NAME = 'wikied';
+export const WIKI_LINK = 'https://wikied-ten.vercel.app/wiki/';
