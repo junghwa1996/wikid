@@ -1,5 +1,6 @@
 import { useValidation } from 'hooks/useValidation';
 import React, { useState } from 'react';
+import { format } from 'date-fns';
 
 import CustomDayPicker from './DayPicker';
 
@@ -150,8 +151,9 @@ function InputField({
               selected={value ? new Date(value) : undefined}
               onSelect={(date) => {
                 if (date) {
+                  const formattedDate = format(date, 'yyyy-MM-dd');
                   onChange({
-                    target: { value: date.toISOString().split('T')[0] },
+                    target: { value: formattedDate },
                   } as React.ChangeEvent<HTMLInputElement>);
                   setShowDayPicker(false);
                 }
