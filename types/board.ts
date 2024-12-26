@@ -36,13 +36,13 @@ export interface BoardListResponse {
   data: Board[];
 }
 
-export interface Comment extends BaseEntity {
+export interface CommentType extends BaseEntity {
   content: string;
   writer: Writer;
 }
 
 export interface CommentsData {
-  list: Comment[];
+  list: CommentType[];
   nextCursor: string | null;
 }
 

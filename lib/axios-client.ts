@@ -106,12 +106,14 @@ const refreshToken = async (): Promise<string | null> => {
   const storedRefreshToken = localStorage.getItem('refreshToken');
 
   if (typeof storedRefreshToken !== 'string') {
-    console.error('Invalid refresh token');
+    // console.error('Invalid refresh token');
+    alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
     return null;
   }
 
   if (!storedRefreshToken) {
-    console.error('No refresh token available');
+    // console.error('No refresh token available');
+    alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
     return null;
   }
 
@@ -132,7 +134,7 @@ const refreshToken = async (): Promise<string | null> => {
     localStorage.setItem('accessToken', newAccessToken);
     return newAccessToken;
   } catch (error) {
-    console.error('Failed to refresh token:', error);
+    // console.error('Failed to refresh token:', error);
     // 토큰 갱신 실패 시 로그인 페이지로 리다이렉트
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
