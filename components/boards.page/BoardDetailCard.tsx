@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { BoardBase, Writer } from 'types/board';
 
@@ -94,9 +94,6 @@ export default function BoardDetailCard({
       setSnackBarMessage('로그인 후 이용해주세요.');
       setSnackBarOpen(true);
       setSnackStyled('fail');
-      setTimeout(() => {
-        Router.push('/login');
-      }, 2500);
     }
   };
 
@@ -144,7 +141,8 @@ export default function BoardDetailCard({
           alt="게시글 이미지"
           width={500}
           height={300}
-          className="mb-5 mo:mb-[15px] mo:max-h-[177px] mo:max-w-[295px]"
+          priority
+          className="mb-5 h-[300px] w-[500px] mo:mb-[15px] mo:h-auto mo:w-[295px]"
         />
         <EditorViewer content={content} />
       </div>
