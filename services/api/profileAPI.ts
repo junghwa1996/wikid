@@ -2,6 +2,8 @@ import { AxiosError } from 'axios';
 
 import instance from '../../lib/axios-client';
 
+import type { ListProps } from '@/pages/wikilist/index';
+
 // 에러 처리 통합 함수
 export const handleApiError = (error: unknown): never => {
   if (error instanceof AxiosError) {
@@ -38,13 +40,20 @@ export const ProfileAPI = {
       handleApiError(error);
     }
   },
+};
 
-  getProfiles: async () => {
-    try {
-      const res = await instance.get('/profiles');
-      return res.data;
-    } catch (error) {
-      handleApiError(error);
-    }
-  },
+// 위키 목록 페이지 요청 파라미터 타입
+interface GetProfilesProps {
+  page?: number;
+  name?: string;
+  pageSize?: number;
+}
+// 위키 목록 페이지 요청 함수
+export const getProfiles = async (
+  params: GetProfilesProps
+): Promise<ListProps> => {
+  const { data } = await instance.get<ListProps>('/profiles', {
+    params,
+  });
+  return data;
 };
