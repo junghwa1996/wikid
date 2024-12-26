@@ -143,7 +143,7 @@ export default function Contents({ profile }: ProfileProps) {
       <div>
         <ContentHeader
           name={profile.name || ''}
-          link={`https://www.wikid.kr/wiki/${profile.code}`}
+          link={`https://www.wikied.kr/wiki/${profile.code}`}
           isEditing={isEditing}
           isInfoSnackBarOpen={isInfoSnackBarOpen}
           handleQuizOpen={handleQuizOpen}
