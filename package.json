@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "npm run test",
+    "test": "npm run lint && npm run type-check && npm run build",
     "lint-auto": "eslint . --ext .ts,.tsx",
     "type-check": "tsc --noEmit",
     "prebuild": "npm run lint && npm run type-check"
@@ -30,6 +30,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^8.57.1",
+    "@tanstack/eslint-plugin-query": "^5.62.9",
     "@types/node": "^20",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",

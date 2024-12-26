@@ -1,30 +1,32 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 import LinkBar from '@/components/LinkBar';
 
-import { ProfileProps } from '../../pages/wikilist/index';
+import { ProfileProps } from '@/pages/wikilist/index';
+import { WIKI_LINK } from '../../constants/terms';
 
 interface ListItemProps {
   data: ProfileProps;
+  onSnackBarClick: (name: string) => void;
 }
 
 /**
  * 위키 목록 페이지 리스트 아이템 컴포넌트
  * @param data - 목록에 출력할 프로필 데이터
  */
-export default function ListItem({ data }: ListItemProps) {
-  if (!data) return null;
+export default function ListItem({ data, onSnackBarClick }: ListItemProps) {
+  // if (!data) return null;
+
   const { name, code, image, city, nationality, job } = data;
-  const shortUrl = `https://www.wikied.kr/${code.slice(0, 4)}...`;
+  const shortUrl = `${WIKI_LINK}${code.slice(0, 4)}...`;
   const baseProfileImage = '/icon/icon-profile.svg';
 
   // 링크바 클릭 핸들러 함수
   const handleLinkClick = async () => {
-    await navigator.clipboard.writeText(`https://www.wikied.kr/${code}`);
-    // TODO: 스낵바로 변경
-    alert(`${name}님 위키 링크가 복사되었습니다.`);
+    await navigator.clipboard.writeText(`${WIKI_LINK}${code}`);
+    onSnackBarClick(name);
   };
 
   // 이미지 로딩 실패 시 대체 이미지 처리 함수
@@ -35,7 +37,7 @@ export default function ListItem({ data }: ListItemProps) {
   };
 
   return (
-    <li className="relative rounded-custom shadow-custom transition-all hover:bg-gray-100 hover:shadow-xl dark:shadow-custom-dark">
+    <li className="relative rounded-custom shadow-custom transition-all hover:scale-[1.02] hover:bg-gray-100 hover:shadow-xl dark:shadow-custom-dark">
       <Link
         href={`/wiki/${code}`}
         className="flex gap-8 rounded-full px-9 py-6 mo:gap-5 mo:px-6 mo:py-5"
@@ -53,7 +55,7 @@ export default function ListItem({ data }: ListItemProps) {
             {name}
           </h2>
           <p className="text-14 text-gray-400 mo:text-12">
-            {city}, {nationality}
+            {city && city + ','} {nationality}
             <br />
             {job}
           </p>

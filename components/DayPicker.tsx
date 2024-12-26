@@ -4,7 +4,7 @@ import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 
 interface CustomDayPickerProps {
-  selected?: Date;
+  selected: Date | undefined;
   onSelect?: (date: Date | undefined) => void;
 }
 
@@ -23,10 +23,6 @@ function CustomDayPicker({
         captionLayout="dropdown"
         modifiersStyles={{
           selected: {
-            backgroundColor: '#32A68A',
-            color: 'white',
-          },
-          today: {
             color: '#32A68A',
             fontWeight: 'bold',
           },
