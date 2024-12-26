@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FormEvent, useEffect, useState } from 'react';
@@ -8,9 +7,20 @@ import Button from '@/components/Button';
 import TextEditor from '@/components/TextEditor';
 import { getBoardDetail, patchBoard } from '@/services/api/boardsAPI';
 import { extractContent, formatDate } from '@/utils/boardHelpers';
+import SnackBar, { SnackBarProps } from '@/components/SnackBar';
+import ImageUploadModal from '@/components/Modal/ImageUploadModal';
+import instance from '@/lib/axios-client';
 
 // 제목 글자수 제한
 const MAX_TITLE = 30;
+
+// 이미지 업로드 응답 데이터 타입 정의
+interface ImageResponse {
+  data: {
+    url: string;
+  };
+  status: number;
+}
 
 /**
  * 게시글 수정하기 페이지
@@ -18,8 +28,15 @@ const MAX_TITLE = 30;
 export default function UpdateBoard() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [image, setImage] = useState<string | null>(null);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState('');
+  const [snackStyled, setSnackStyled] =
+    useState<SnackBarProps['severity']>(undefined);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [getImage, setGetImage] = useState<string | null>(null);
   const router = useRouter();
+  const formData = new FormData();
   const { articleId } = router.query;
 
   useEffect(() => {
@@ -29,7 +46,7 @@ export default function UpdateBoard() {
         const res = await getBoardDetail(articleId as string);
         setTitle(res.title);
         setContent(res.content);
-        setImage(res.image);
+        setGetImage(res.image);
       } catch {
         throw new Error('게시글을 불러오지 못했습니다.');
       }
@@ -58,18 +75,63 @@ export default function UpdateBoard() {
   // 작성 폼 서브밋 함수
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // 썸네일 이미지 주소
+    let imageUrl = '';
+
+    if (imageFile) {
+      formData.append('image', imageFile);
+      try {
+        const { data, status }: ImageResponse = await instance.post(
+          '/images/upload',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+
+        if (status === 201) {
+          console.log('--- 썸네일 업로드 성공 ---');
+          formData.delete('image');
+          imageUrl = data.url;
+        }
+      } catch (error) {
+        console.error('--- 썸네일 업로드 에러:', error);
+      }
+    }
+
     try {
       await patchBoard(articleId as number | string, {
         title,
         content,
-        image: image ?? 'https://ifh.cc/g/V26MYS.png',
+        image: imageUrl,
       });
       if (typeof articleId === 'string') {
-        await router.push(`/boards/${articleId}`);
+        setSnackStyled('success');
+        setSnackBarMessage(
+          '게시글이 수정되었습니다. 수정된 게시판으로 이동합니다.'
+        );
+        setSnackBarOpen(true);
+        setTimeout(() => {
+          router.push(`/boards/${articleId}`);
+        }, 2500);
       }
     } catch {
       throw new Error('게시글을 수정하지 못했습니다.');
     }
+  };
+  // 썸네일 이미지 클릭 콜백 함수
+  const handleAddThumbnail = () => {
+    setIsModalOpen(true);
+  };
+  // 이미지 모달 닫기
+  const handleImageModalClose = () => {
+    setIsModalOpen(false);
+  };
+  // 이미지 파일 가져오기
+  const getImageFile = (file: File | null) => {
+    setImageFile(file);
   };
 
   return (
@@ -104,32 +166,24 @@ export default function UpdateBoard() {
               className="mt-[33px] mo:mt-5 ta:mt-6"
               onSubmit={handleSubmit}
             >
-              {/* TODO : 추후 썸네일 등록 버튼 생성 되면 수정 할 수 있도록 작업 */}
-              <Image
-                src={image ?? 'https://ifh.cc/g/V26MYS.png'}
-                alt="게시물 썸네일"
-                width={500}
-                height={300}
-                priority
-                className="mo:h-auto mo:w-[295px]"
-              />
-              <fieldset className="my-5 flex items-center justify-between border-y border-gray-200 mo:mb-4">
-                <label htmlFor="title" className="sr-only">
-                  제목
-                </label>
+              <fieldset className="mb-5 flex items-center justify-between gap-4 border-y border-gray-200 py-3 mo:mb-4">
                 <input
                   id="title"
-                  className="w-0 flex-1 bg-transparent py-3 text-20md focus-visible:outline-green-200 mo:text-16md"
+                  className="w-0 flex-1 bg-transparent text-20md focus-visible:outline-green-200 mo:text-16md"
                   type="text"
                   maxLength={MAX_TITLE}
                   value={title}
                   onChange={handleInputChange}
                   placeholder="제목을 입력해주세요"
                 />
-                <div className="ml-4 w-10 text-14md mo:text-13md">
+                <div className="w-10 text-right text-14md mo:text-13md">
                   {title.length}/
                   <span className="text-green-200">{MAX_TITLE}</span>
                 </div>
+                <Button type="button" size="small" onClick={handleAddThumbnail}>
+                  썸네일 이미지{' '}
+                  {getImage === 'https://ifh.cc/g/V26MYS.png' ? '추가' : '변경'}
+                </Button>
               </fieldset>
 
               <p className="mb-[10px] mt-5 text-16md mo:my-4 mo:text-14md">
@@ -149,6 +203,22 @@ export default function UpdateBoard() {
             </Button>
           </div>
         </div>
+
+        <ImageUploadModal
+          imageFile={imageFile}
+          isOpen={isModalOpen}
+          onClose={handleImageModalClose}
+          onGetImageFile={getImageFile}
+        />
+
+        <SnackBar
+          severity={snackStyled}
+          open={snackBarOpen}
+          onClose={() => setSnackBarOpen(false)}
+          autoHideDuration={2000}
+        >
+          {snackBarMessage}
+        </SnackBar>
       </main>
     </div>
   );

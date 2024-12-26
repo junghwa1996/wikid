@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import { useState } from 'react';
-import { Comment as CommentType, Writer } from 'types/board';
+import { CommentType, Writer } from 'types/board';
 
 import dateConversion from '@/utils/dateConversion';
 
@@ -57,7 +57,7 @@ export default function Comment({
   return (
     <div className="flex items-start gap-5 rounded-custom px-[30px] py-[22px] shadow-custom dark:shadow-custom-dark mo:gap-[15px] mo:px-5 mo:py-4">
       <Image
-        src={profile}
+        src={profile ? profile : '/icon/icon-profile.svg'}
         alt="user profile"
         className="overflow-hidden rounded-full mo:size-10"
         width={50}

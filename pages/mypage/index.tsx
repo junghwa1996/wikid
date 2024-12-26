@@ -3,6 +3,7 @@ import React, { FormEvent, useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
+import SnackBar from '@/components/SnackBar';
 import { useValidation } from '@/hooks/useValidation';
 import { AuthAPI } from '@/services/api/auth';
 import { ProfileAPI } from '@/services/api/profileAPI';
@@ -15,6 +16,7 @@ function MyPage(): React.ReactElement {
   const [answer, setAnswer] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const router = useRouter();
 
   const currentPasswordValidation = useValidation({ type: 'password' });
@@ -36,10 +38,6 @@ function MyPage(): React.ReactElement {
     const value = e.target.value;
     setNewPassword(value);
     newPasswordValidation.validate(value);
-    // 새 비밀번호가 변경되면 확인 비밀번호도 다시 검증
-    if (newPasswordConfirm) {
-      newPasswordConfirmValidation.validate(newPasswordConfirm);
-    }
   };
 
   const handleNewPasswordConfirmChange = (
@@ -77,6 +75,7 @@ function MyPage(): React.ReactElement {
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
+        setSnackbarOpen(true);
       }
     } finally {
       setIsSubmitting(false);
@@ -93,13 +92,13 @@ function MyPage(): React.ReactElement {
 
     try {
       // 프로필 생성 API 호출
-      await ProfileAPI.createProfile({
+      const { code } = await ProfileAPI.createProfile({
         securityQuestion: question,
         securityAnswer: answer,
       });
 
       // 성공 시 위키 목록 페이지로 이동
-      await router.push('/wiki/{code}');
+      await router.push(`/wiki/${code}`);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -117,12 +116,10 @@ function MyPage(): React.ReactElement {
       newPassword.length > 0 &&
       typeof newPasswordConfirm === 'string' &&
       newPasswordConfirm.length > 0 &&
-      typeof currentPasswordValidation.errorMessage === 'string' &&
-      currentPasswordValidation.errorMessage.length === 0 &&
-      typeof newPasswordValidation.errorMessage === 'string' &&
-      newPasswordValidation.errorMessage.length === 0 &&
-      typeof newPasswordConfirmValidation.errorMessage === 'string' &&
-      newPasswordConfirmValidation.errorMessage.length === 0
+      newPassword === newPasswordConfirm &&
+      !currentPasswordValidation.errorMessage &&
+      !newPasswordValidation.errorMessage &&
+      !newPasswordConfirmValidation.errorMessage
   );
 
   const isWikiFormValid = Boolean(
@@ -162,10 +159,11 @@ function MyPage(): React.ReactElement {
               />
               <InputField
                 label=""
-                type="password"
+                type="passwordConfirm"
                 value={newPasswordConfirm}
                 width="100%"
                 onChange={handleNewPasswordConfirmChange}
+                compareValue={newPassword}
                 placeholder="새 비밀번호 확인"
               />
 
@@ -179,7 +177,6 @@ function MyPage(): React.ReactElement {
               >
                 변경하기
               </Button>
-              {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
             </div>{' '}
           </div>
           <div className="w-full border-b border-gray-200"></div>
@@ -201,20 +198,30 @@ function MyPage(): React.ReactElement {
                 onChange={handleAnswerChange}
                 placeholder="답을 입력해 주세요"
               />
+
               <Button
-                type="submit"
+                type="button"
                 disabled={!isWikiFormValid}
                 isLoading={Boolean(isSubmitting)}
                 variant="primary"
                 size="small"
                 className="mt-[8px] self-end"
-                onClick={(e) => handleWikiSubmit(e)}
+                onClick={handleWikiSubmit}
               >
                 생성하기
-              </Button>{' '}
+              </Button>
             </div>
           </div>
         </div>
+        {snackbarOpen && (
+          <SnackBar
+            severity="fail"
+            open={snackbarOpen}
+            onClose={() => setSnackbarOpen(false)}
+          >
+            {error}
+          </SnackBar>
+        )}
       </form>
     </div>
   );

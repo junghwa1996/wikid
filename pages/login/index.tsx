@@ -4,12 +4,18 @@ import React, { useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
+import SnackBar from '@/components/SnackBar';
 import { AuthAPI } from '@/services/api/auth';
 
 function Login(): React.ReactElement {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'fail'>(
+    'success'
+  );
   const [validFields, setValidFields] = useState({
     email: false,
     password: false,
@@ -45,12 +51,23 @@ function Login(): React.ReactElement {
       })) as { accessToken: string };
 
       localStorage.setItem('accessToken', response.accessToken);
-      await router.push('/');
+      setSnackbarMessage('로그인이 완료되었습니다');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+
+      // 3초 후 메인 페이지로 이동
+      setTimeout(() => {
+        router.push('/');
+      }, 3000);
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        setSnackbarMessage(error.message);
+        setSnackbarSeverity('fail');
+        setSnackbarOpen(true);
       } else {
-        alert('로그인 중 오류가 발생했습니다.');
+        setSnackbarMessage('로그인 중 오류가 발생했습니다');
+        setSnackbarSeverity('fail');
+        setSnackbarOpen(true);
       }
     } finally {
       setIsSubmitting(false);
@@ -100,6 +117,15 @@ function Login(): React.ReactElement {
             </Link>
           </div>
         </div>
+        {snackbarOpen && (
+          <SnackBar
+            severity={snackbarSeverity}
+            open={snackbarOpen}
+            onClose={() => setSnackbarOpen(false)}
+          >
+            {snackbarMessage}
+          </SnackBar>
+        )}
       </form>
     </div>
   );

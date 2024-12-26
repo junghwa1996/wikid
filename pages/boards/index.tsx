@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { GetServerSideProps } from 'next';
 import { Board } from 'types/board';
 
 import Button from '@/components/Button';
@@ -16,6 +17,7 @@ import 'swiper/css';
 import { useProfileContext } from '@/hooks/useProfileContext';
 import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import Router from 'next/router';
+import EmptyList from '@/components/EmptyList';
 
 const BoardCardList_Swiper = dynamic(
   () => import('@/components/boards.page/BoardCardList.swiper'),
@@ -24,46 +26,66 @@ const BoardCardList_Swiper = dynamic(
   }
 );
 
-/**
- * 게시판 페이지
- */
-export default function Boards() {
-  const [boards, setBoards] = useState<Board[]>([]);
-  const [likeBoards, setLikeBoards] = useState<Board[]>([]);
+interface BoardsProps {
+  initialBoards: Board[];
+  initialLikeBoards: Board[];
+  totalCount: number;
+}
 
-  const [totalCount, setTotalCount] = useState(0);
-  const [currentData, setCurrentData] = useState<Board[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [selectedOption, setSelectedOption] = useState('최신순');
-
-  const [value, setValue] = useState('');
-
-  const { isAuthenticated } = useProfileContext();
-
-  const isMobile = useCheckMobile();
+// SSR 데이터 패칭
+export const getServerSideProps: GetServerSideProps = async () => {
   const PAGE_SIZE = 10;
 
+  try {
+    const [likeBoardsRes, boardsRes] = await Promise.all([
+      getBoards({ orderBy: 'like', pageSize: 4 }),
+      getBoards({ orderBy: 'recent', pageSize: PAGE_SIZE, page: 1 }),
+    ]);
+
+    const initialLikeBoards = likeBoardsRes.list || [];
+    const initialBoards = boardsRes.list || [];
+    const totalCount = boardsRes.totalCount || 0;
+
+    return {
+      props: {
+        initialLikeBoards,
+        initialBoards,
+        totalCount,
+      },
+    };
+  } catch (error) {
+    console.error('SSR 데이터 패칭 중 에러 발생:', error);
+    return {
+      props: {
+        initialLikeBoards: [],
+        initialBoards: [],
+        totalCount: 0,
+      },
+    };
+  }
+};
+
+export default function Boards({
+  initialBoards,
+  initialLikeBoards,
+  totalCount,
+}: BoardsProps) {
+  const [boards, setBoards] = useState<Board[]>(initialBoards);
+  const [likeBoards] = useState<Board[]>(initialLikeBoards);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [value, setValue] = useState('');
+  const [selectedOption, setSelectedOption] = useState('최신순'); // 옵션 상태 추가
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState('');
   const [snackStyled, setSnackStyled] =
     useState<SnackBarProps['severity']>(undefined);
 
-  // 베스트 게시글 fetch
-  useEffect(() => {
-    const fetchBoardsLike = async () => {
-      const res = await getBoards({ orderBy: 'like', pageSize: 4 });
-      if (Array.isArray(res.list) && res.list.length > 0) {
-        setLikeBoards(res.list);
-      }
-    };
+  const isMobile = useCheckMobile();
+  const PAGE_SIZE = 10;
 
-    fetchBoardsLike().catch((error) =>
-      console.error('베스트 게시글 데이터를 불러오지 못했습니다 :', error)
-    );
-  }, []);
+  const { isAuthenticated } = useProfileContext();
 
-  // 모든 게시글 GET
+  // 선택된 옵션에 따라 게시글 다시 가져오기
   useEffect(() => {
     const fetchBoards = async () => {
       const orderBy = selectedOption === '최신순' ? 'recent' : 'like';
@@ -74,19 +96,15 @@ export default function Boards() {
       });
       if (Array.isArray(res.list) && res.list.length > 0) {
         setBoards(res.list);
-        setTotalCount(res.totalCount);
+      } else {
+        setBoards([]);
       }
     };
 
     fetchBoards().catch((error) =>
       console.error('게시글 데이터를 불러오지 못했습니다 :', error)
     );
-  }, [currentPage, selectedOption]);
-
-  // 게시글 목록 업데이트
-  useEffect(() => {
-    setCurrentData(boards);
-  }, [boards]);
+  }, [selectedOption, currentPage]);
 
   const handleSearchSubmit = async () => {
     const res = await getBoards({
@@ -96,12 +114,11 @@ export default function Boards() {
     });
     if (Array.isArray(res.list) && res.list.length > 0) {
       setBoards(res.list);
-      setTotalCount(res.totalCount);
+    } else {
+      setBoards([]);
     }
   };
 
-  // 정렬 옵션
-  const options = ['최신순', '인기순'];
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
     setCurrentPage(1);
@@ -114,12 +131,14 @@ export default function Boards() {
       setSnackStyled('fail');
       setSnackBarMessage('로그인 후 이용해주세요');
       setSnackBarOpen(true);
-      setTimeout(() => {
-        Router.push('/login');
-      }, 3000);
       return;
     }
   };
+
+  const emptyListText =
+    value === ''
+      ? '게시글이 존재하지 않습니다.'
+      : `${value}와(과) 일치하는 검색 결과가 없습니다.`;
 
   const pxTablet = 'ta:px-[60px]';
 
@@ -157,25 +176,31 @@ export default function Boards() {
             </div>
             <Button onClick={handleSearchSubmit}>검색</Button>
             <Dropdown
-              options={options}
+              options={['최신순', '인기순']}
               onSelect={handleOptionSelect}
               dropdownSize="w-[140px] ta:w-[120px] mo:w-[89.337vw]"
             />
           </div>
 
           {/* 게시글 목록 */}
-          <BoardList data={currentData} />
+          {boards.length > 0 ? (
+            <BoardList data={boards} />
+          ) : (
+            <EmptyList classNames="mt-[60px] mo:mt-10" text={emptyListText} />
+          )}
         </div>
 
         {/* 페이지네이션 */}
-        <div className="mo:-mt-2">
-          <Pagination
-            totalCount={totalCount}
-            currentPage={currentPage}
-            pageSize={PAGE_SIZE}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
-        </div>
+        {boards.length > 0 && (
+          <div className="mo:-mt-2">
+            <Pagination
+              totalCount={totalCount}
+              currentPage={currentPage}
+              pageSize={PAGE_SIZE}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </div>
+        )}
       </div>
       <SnackBar
         severity={snackStyled}

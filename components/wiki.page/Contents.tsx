@@ -12,7 +12,7 @@ import instance from '@/lib/axios-client';
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
 import { useProfileContext } from '@/hooks/useProfileContext';
-import Router from 'next/router';
+import SnackBar from '../SnackBar';
 
 interface ProfileProps {
   profile: ProfileAnswer;
@@ -26,6 +26,18 @@ export default function Contents({ profile }: ProfileProps) {
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile.content || '');
   const [profileData, setProfileData] = useState<ProfileAnswer>(profile);
+  const [snackBarState, setSnackBarState] = useState<{
+    open: boolean;
+    severity: 'fail' | 'success' | 'info';
+    message: string;
+    autoHideDuration?: number;
+  }>({
+    open: false,
+    severity: 'fail',
+    message: '',
+    autoHideDuration: 1000,
+  });
+  const [diffTime, setDiffTime] = useState<number>(0);
 
   const previousContent = useRef<string>(newContent);
   const isEmpty = newContent === '';
@@ -33,8 +45,11 @@ export default function Contents({ profile }: ProfileProps) {
 
   const handleQuizOpen = async () => {
     if (!isAuthenticated) {
-      alert('로그인 후 이용해주세요.');
-      Router.push('/login');
+      setSnackBarState({
+        open: true,
+        severity: 'fail',
+        message: '로그인 후 이용해주세요.',
+      });
       return;
     }
     const res = await instance.get(`/profiles/${profile.code}/ping`);
@@ -42,13 +57,25 @@ export default function Contents({ profile }: ProfileProps) {
       setIsInfoSnackBarOpen(false);
       setIsQuizOpen(true);
     } else {
+      const registeredDate = new Date(res.data.registeredAt);
+      const nowDate = new Date();
+      const diff = nowDate.getTime() - registeredDate.getTime();
+      setDiffTime(diff);
       setIsInfoSnackBarOpen(true);
     }
   };
 
   //퀴즈 성공 후 위키 편집모드
   const handleQuizSuccess = async () => {
-    alert('퀴즈를 성공하셨습니다.');
+    setSnackBarState({
+      open: true,
+      severity: 'success',
+      message: '정답입니다!',
+    });
+
+    setTimeout(() => {
+      setSnackBarState((prev) => ({ ...prev, open: false }));
+    }, 1500);
     setIsQuizOpen(false);
 
     const accessToken = localStorage.getItem('accessToken');
@@ -57,6 +84,7 @@ export default function Contents({ profile }: ProfileProps) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
     const userCode = (res.data as { profile: ProfileAnswer }).profile.code;
     if (profile.code === userCode) {
       setIsProfileEdit(true);
@@ -143,14 +171,24 @@ export default function Contents({ profile }: ProfileProps) {
       <div>
         <ContentHeader
           name={profile.name || ''}
-          link={`https://www.wikid.kr/wiki/${profile.code}`}
+          link={`https://wikied-ten.vercel.app/wiki/${profile.code}`}
           isEditing={isEditing}
           isInfoSnackBarOpen={isInfoSnackBarOpen}
           handleQuizOpen={handleQuizOpen}
           isEmpty={isEmpty}
           closeAndNoSave={closeAndNoSave}
           saveContent={saveContent}
+          diffTime={diffTime}
         />
+
+        <SnackBar
+          severity={snackBarState.severity}
+          open={snackBarState.open}
+          onClose={() => setSnackBarState({ ...snackBarState, open: false })}
+          autoHideDuration={snackBarState.autoHideDuration}
+        >
+          {snackBarState.message}
+        </SnackBar>
       </div>
       <WikiQuizModal
         isOpen={isQuizOpen}
@@ -170,6 +208,7 @@ export default function Contents({ profile }: ProfileProps) {
 
       {isEmpty && !isEditing && (
         <Blank
+          onQuizOpen={handleQuizOpen}
           onQuizSuccess={handleQuizSuccess}
           question={profile.securityQuestion || ''}
           code={profile.code || ''}

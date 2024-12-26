@@ -13,9 +13,9 @@ export default function EmptyList({
     <div
       className={`flex flex-col items-center justify-center gap-8 ${classNames}`}
     >
-      <p className="text-20sb text-gray-400 mo:text-18md">{text}</p>
+      <p className="text-20md text-gray-400 mo:text-18md">{text}</p>
       <Image
-        src="/images/empty.png"
+        src="/images/empty.svg"
         alt=""
         width={144}
         height={144}
