@@ -1,5 +1,6 @@
 import { useValidation } from 'hooks/useValidation';
 import React, { useState } from 'react';
+import { format } from 'date-fns';
 
 import CustomDayPicker from './DayPicker';
 
@@ -146,7 +147,18 @@ function InputField({
       {typeof showDayPicker === 'boolean' && showDayPicker && (
         <div className="absolute left-0 top-full z-50 mt-2 rounded bg-white p-4 shadow-md">
           <div>
-            <CustomDayPicker />
+            <CustomDayPicker
+              selected={value ? new Date(value) : undefined}
+              onSelect={(date) => {
+                if (date) {
+                  const formattedDate = format(date, 'yyyy-MM-dd');
+                  onChange({
+                    target: { value: formattedDate },
+                  } as React.ChangeEvent<HTMLInputElement>);
+                  setShowDayPicker(false);
+                }
+              }}
+            />
           </div>
           <button onClick={closeDayPicker} className="mt-2 text-gray-500">
             닫기

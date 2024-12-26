@@ -93,13 +93,13 @@ function MyPage(): React.ReactElement {
 
     try {
       // 프로필 생성 API 호출
-      await ProfileAPI.createProfile({
+      const { code } = await ProfileAPI.createProfile({
         securityQuestion: question,
         securityAnswer: answer,
       });
 
       // 성공 시 위키 목록 페이지로 이동
-      await router.push('/wiki/{code}');
+      await router.push(`/wiki/${code}`);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
