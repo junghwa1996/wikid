@@ -3,6 +3,7 @@ import { UserProfileProps } from 'types/profile';
 import { useProfileImage } from '@/hooks/useProfileImage';
 import { useExpandedState } from '@/hooks/useExpandedState';
 import InputField from './Input';
+import Spinner from './Spinner';
 
 /**
  * UserProfile 컴포넌트
@@ -99,8 +100,9 @@ function UserProfile({
             {isEditing && (
               <div className="absolute left-0 top-0 flex size-full items-center justify-center rounded-full bg-black/50">
                 {isLoading ? (
-                  // 로딩 중일 때 스피너 표시
-                  <div className="size-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
+
+                  <Spinner />
+
                 ) : (
                   // 카메라 아이콘 표시
                   <Image
