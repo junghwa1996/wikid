@@ -134,16 +134,14 @@ export default function ContentHeader({
         </SnackBar>
       )}
 
-      {
-        <SnackBar
-          severity={linkSnackBarState.severity}
-          open={linkSnackBarState.open}
-          onClose={handleCloseLinkSnackBar}
-          autoHideDuration={linkSnackBarState.autoHideDuration}
-        >
-          {linkSnackBarState.message}
-        </SnackBar>
-      }
+      <SnackBar
+        severity={linkSnackBarState.severity}
+        open={linkSnackBarState.open}
+        onClose={handleCloseLinkSnackBar}
+        autoHideDuration={linkSnackBarState.autoHideDuration}
+      >
+        {linkSnackBarState.message}
+      </SnackBar>
     </div>
   );
 }
