@@ -7,7 +7,7 @@ export const fetchComments = async (
   cursor: string | null
 ): Promise<CommentsData> => {
   const response = await instance.get(
-    `/articles/${articleId}/comments?limit=10${cursor ? `&cursor=${cursor}` : ''}`
+    `/articles/${articleId}/comments?limit=100${cursor ? `&cursor=${cursor}` : ''}`
   );
   return response.data;
 };
