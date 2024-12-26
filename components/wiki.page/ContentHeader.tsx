@@ -66,6 +66,11 @@ export default function ContentHeader({
     setIsUCOpen(false);
   };
 
+  const handleCloseAndNoSave = () => {
+    setIsUCOpen(false);
+    closeAndNoSave();
+  };
+
   const handleLinkClick = () => {
     navigator.clipboard
       .writeText(link)
@@ -112,7 +117,7 @@ export default function ContentHeader({
               </Button>
               <UnsavedChangesModal
                 isOpen={isUCOpen}
-                closeAndNoSave={closeAndNoSave}
+                closeAndNoSave={handleCloseAndNoSave}
                 onClose={onUCClose}
               />
               <Button onClick={saveContent}>저장</Button>
