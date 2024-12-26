@@ -155,7 +155,7 @@ export default function Contents({ profile }: ProfileProps) {
           isEmpty={isEmpty}
           closeAndNoSave={closeAndNoSave}
           saveContent={saveContent}
-          registeredAt={diffTime}
+          diffTime={diffTime}
         />
       </div>
       <WikiQuizModal

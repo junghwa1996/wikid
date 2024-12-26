@@ -11,7 +11,7 @@ interface ContentHeaderProps {
   isEditing: boolean;
   isInfoSnackBarOpen: boolean;
   isEmpty: boolean;
-  registeredAt?: number;
+  diffTime?: number;
   handleQuizOpen: () => void;
   closeAndNoSave: () => void;
   saveContent: () => void;
@@ -36,7 +36,7 @@ export default function ContentHeader({
   isInfoSnackBarOpen,
   handleQuizOpen,
   isEmpty,
-  registeredAt,
+  diffTime,
   closeAndNoSave,
   saveContent,
 }: ContentHeaderProps) {
@@ -65,15 +65,15 @@ export default function ContentHeader({
   });
 
   useEffect(() => {
-    const infoSnackBarMessage = registeredAt
-      ? `${Math.floor(5 - registeredAt / 60 / 1000)}분 후 위키 참여가 가능합니다.`
+    const infoSnackBarMessage = diffTime
+      ? `${Math.floor(5 - diffTime / 60 / 1000)}분 후 위키 참여가 가능합니다.`
       : '';
 
     setInfoSnackBarState((prevState) => ({
       ...prevState,
       message: infoSnackBarMessage,
     }));
-  }, [registeredAt]);
+  }, [diffTime]);
 
   const onUCClose = () => {
     setIsUCOpen(false);
