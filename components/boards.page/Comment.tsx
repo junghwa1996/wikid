@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import { useState } from 'react';
-import { Comment as CommentType, Writer } from 'types/board';
+import { CommentType, Writer } from 'types/board';
 
 import dateConversion from '@/utils/dateConversion';
 
