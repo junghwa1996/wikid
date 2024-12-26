@@ -20,7 +20,7 @@ export const getBoards = async (query: any) => {
 
 // 게시글 상세 내용 불러오기
 export const getBoardDetail = async (
-  articleId: number | string
+  articleId: string | string[]
 ): Promise<ArticleData> => {
   try {
     const res = await instance.get(`/articles/${articleId}`);
