@@ -99,7 +99,7 @@ function MyPage(): React.ReactElement {
       });
 
       // 성공 시 위키 목록 페이지로 이동
-      await router.push('/wiki/${code}');
+      await router.push('/wiki/{code}');
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
