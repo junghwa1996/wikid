@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import instance from '@/lib/axios-client';
 
 import InputField from './Input';
+import Spinner from './Spinner';
 
 // 프로필 데이터의 타입 정의
 interface ProfileData {
@@ -177,7 +178,7 @@ function UserProfile({
               <div className="absolute left-0 top-0 flex size-full items-center justify-center rounded-full bg-black/50">
                 {isLoading ? (
                   // 로딩 스피너
-                  <div className="size-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  <Spinner />
                 ) : (
                   // 카메라 아이콘
                   <Image
