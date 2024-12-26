@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 
 import { getProfiles } from '@/services/api/profileAPI';
-
 import EmptyList from '@/components/EmptyList';
 import ListItem from '@/components/wikiList.page/ListItem';
 import Pagination from '@/components/Pagination/Pagination';
@@ -30,15 +30,33 @@ export interface ListProps {
 // 페이지당 목록 개수
 const PAGE_SIZE = 5;
 
-// TODO: 서버사이드 렌더링 적용
-// export const getServerSideProps = async (context) => {}
+// 서버사이드 렌더링 적용
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const queryClient = new QueryClient();
+  const { page, name } = context.query;
+
+  await queryClient.prefetchQuery({
+    queryKey: ['profiles', page, name],
+    queryFn: () =>
+      getProfiles({
+        page: Number(page),
+        name: name as string,
+        pageSize: PAGE_SIZE,
+      }),
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
 
 /**
  * 위키 목록 페이지 컴포넌트
  */
 export default function WikiList() {
   const [searchValue, setSearchValue] = useState('');
-  // const [submitValue, setSubmitValue] = useState('');
   const router = useRouter();
 
   const { page, name } = router.query;

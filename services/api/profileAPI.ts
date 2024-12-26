@@ -49,7 +49,9 @@ interface GetProfilesProps {
   pageSize?: number;
 }
 // 위키 목록 페이지 요청 함수
-export const getProfiles = async (params: GetProfilesProps) => {
+export const getProfiles = async (
+  params: GetProfilesProps
+): Promise<ListProps> => {
   const { data } = await instance.get<ListProps>('/profiles', {
     params,
   });
