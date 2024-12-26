@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { BoardBase, Writer } from 'types/board';
 
@@ -13,6 +13,7 @@ import dateConversion from '@/utils/dateConversion';
 
 import ButtonIcon from './ButtonIcon';
 import { useProfileContext } from '@/hooks/useProfileContext';
+import ModalDefault from '../Modal/ModalDefault';
 
 interface BoardDetailCard extends BoardBase {
   title: string;
@@ -49,11 +50,16 @@ export default function BoardDetailCard({
   const [snackBarMessage, setSnackBarMessage] = useState('');
   const [snackStyled, setSnackStyled] =
     useState<SnackBarProps['severity']>(undefined);
+  const [isModal, setIsModal] = useState(false);
   const isMobile = useCheckMobile();
   const router = useRouter();
   const { articleId } = router.query;
   const id = articleId as string;
   const { isAuthenticated } = useProfileContext();
+
+  const handleModalClose = () => {
+    setIsModal(false);
+  };
 
   // 수정하기 버튼 클릭 시 수정 페이지 이동
   const handleUpdateClick = async () => {
@@ -61,12 +67,21 @@ export default function BoardDetailCard({
   };
 
   // 삭제하기 버튼 클릭 시 게시글 삭제
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = () => {
+    setIsModal(true);
+  };
+  const handleDeleteClickModal = async () => {
     try {
       await instance.delete(`/articles/${id}`);
-      setSnackBarMessage('게시글이 삭제되었습니다.');
+      setIsModal(false);
+      setSnackBarMessage(
+        '게시글이 삭제되었습니다. 게시판 메인으로 이동합니다.'
+      );
+      setSnackStyled('success');
       setSnackBarOpen(true);
-      await router.push('/boards');
+      setTimeout(() => {
+        router.push('/boards');
+      }, 2500);
     } catch (error) {
       console.error('게시글을 삭제하지 못했습니다.', error);
     }
@@ -94,9 +109,6 @@ export default function BoardDetailCard({
       setSnackBarMessage('로그인 후 이용해주세요.');
       setSnackBarOpen(true);
       setSnackStyled('fail');
-      setTimeout(() => {
-        Router.push('/login');
-      }, 2500);
     }
   };
 
@@ -144,7 +156,8 @@ export default function BoardDetailCard({
           alt="게시글 이미지"
           width={500}
           height={300}
-          className="mb-5 mo:mb-[15px] mo:max-h-[177px] mo:max-w-[295px]"
+          priority
+          className="mb-5 h-[300px] w-[500px] mo:mb-[15px] mo:h-auto mo:w-[295px]"
         />
         <EditorViewer content={content} />
       </div>
@@ -157,6 +170,19 @@ export default function BoardDetailCard({
       >
         {snackBarMessage}
       </SnackBar>
+
+      <ModalDefault
+        title="알림"
+        text="게시글을 삭제하시겠습니까?"
+        onClose={handleModalClose}
+        isOpen={isModal}
+        closeOnBackgroundClick={true}
+      >
+        <Button onClick={handleModalClose}>취소</Button>
+        <Button onClick={handleDeleteClickModal} variant="danger">
+          삭제
+        </Button>
+      </ModalDefault>
     </div>
   );
 }
