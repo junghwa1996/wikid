@@ -1,46 +1,20 @@
-import instance from 'lib/axios-client';
+import React, { FormEvent, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useState } from 'react';
+
+import { extractContent, formatDate } from '@/utils/boardHelpers';
+import useSnackBar from '@/hooks/useSnackBar';
+import { createArticle } from '@/services/api/boardsAPI';
+import { createImageUpload } from '@/services/api/imageAPI';
 
 import Button from '@/components/Button';
 import ImageUploadModal from '@/components/Modal/ImageUploadModal';
 import SnackBar from '@/components/SnackBar';
 import TextEditor from '@/components/TextEditor';
-import useSnackBar from '@/hooks/useSnackBar';
-
-// 게시글 상세 작성 응답 데이터 타입 정의
-interface ArticleResponse {
-  data: {
-    id: number;
-    title: string;
-    content: string;
-    image: string;
-  };
-  status: number;
-}
-// 이미지 업로드 응답 데이터 타입 정의
-interface ImageResponse {
-  data: {
-    url: string;
-  };
-  status: number;
-}
+import { useMutation } from '@tanstack/react-query';
 
 // 제목 글자수 제한
 const MAX_TITLE = 30;
-
-// HTML에서 Text만 추출하는 함수
-const extractContent = (str: string) => str.replace(/<[^>]*>/g, '').trim();
-
-// 포멧된 날짜 반환하는 함수
-const formatDate = (date: string) => {
-  const d = new Date(date);
-  const year = d.getFullYear();
-  const month = (d.getMonth() + 1).toString().padStart(2, '0');
-  const day = d.getDate().toString().padStart(2, '0');
-  return `${year}. ${month}. ${day}.`;
-};
 
 /**
  * 게시글 등록하기 페이지
@@ -48,6 +22,7 @@ const formatDate = (date: string) => {
 export default function Addboard() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -55,12 +30,38 @@ export default function Addboard() {
   const { snackBarValues, snackBarOpen } = useSnackBar();
   const formData = new FormData();
 
-  // 등록 버튼 비활성화
-  const submitDisabled = title.length === 0 || content.length === 0;
-  // 내용에서 추출된 텍스트
-  const textContent = extractContent(content);
-  // 오늘 날짜
-  const today = formatDate(new Date().toISOString());
+  const submitDisabled = title.length === 0 || content.length === 0; // 등록 버튼 비활성화
+  const textContent = extractContent(content); // 내용에서 추출된 텍스트
+  const today = formatDate(new Date().toISOString()); // 오늘 날짜
+
+  // 이미지 처리 tanstack
+  const { mutate: imageMutate } = useMutation({
+    mutationFn: async () => {
+      const data = await createImageUpload(formData);
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log('--- 썸네일 업로드 성공 ---');
+      setImageUrl(data.url);
+      formData.delete('image');
+    },
+  });
+  // 글작성 tanstack
+  const { mutate: articleMutate } = useMutation({
+    mutationFn: async () => {
+      const res = await createArticle(title, content, imageUrl);
+      return res;
+    },
+    onSuccess: (data) => {
+      snackBarOpen(
+        'success',
+        '게시물이 등록되었습니다. 작성된 게시물로 이동 됩니다.',
+        async () => {
+          await router.push('/boards/' + data.id);
+        }
+      );
+    },
+  });
 
   // 제목 input 콜백 함수
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,12 +73,10 @@ export default function Addboard() {
   };
   // 이미지 모달 닫기
   const handleImageModalClose = () => {
-    // console.log('--- handleImageModalClose ---');
     setIsModalOpen(false);
   };
   // 이미지 파일 가져오기
   const getImageFile = (file: File | null) => {
-    // console.log('--- getImageUrl:', file);
     setImageFile(file);
   };
   // 내용 에디터 콜백 함수
@@ -87,54 +86,12 @@ export default function Addboard() {
   // 작성 폼 서브밋 함수
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 썸네일 이미지 주소
-    let imageUrl = '';
 
     if (imageFile) {
       formData.append('image', imageFile);
-      try {
-        const { data, status }: ImageResponse = await instance.post(
-          '/images/upload',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        );
-
-        if (status === 201) {
-          console.log('--- 썸네일 업로드 성공 ---');
-          formData.delete('image');
-          imageUrl = data.url;
-        }
-      } catch (error) {
-        console.error('--- 썸네일 업로드 에러:', error);
-      }
+      imageMutate();
     }
-
-    try {
-      const { data, status }: ArticleResponse = await instance.post(
-        '/articles',
-        {
-          image: imageUrl || 'https://ifh.cc/g/V26MYS.png',
-          content,
-          title,
-        }
-      );
-
-      if (status === 201) {
-        snackBarOpen(
-          'success',
-          '게시물이 등록되었습니다. 작성된 게시물로 이동 됩니다.',
-          async () => {
-            await router.push('/boards/' + data.id);
-          }
-        );
-      }
-    } catch (error) {
-      console.error('--- 게시물 등록 실패:', error);
-    }
+    articleMutate();
   };
 
   return (
