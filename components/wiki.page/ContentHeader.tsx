@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Button from '@/components/Button';
 import LinkBar from '@/components/LinkBar';
@@ -11,6 +11,7 @@ interface ContentHeaderProps {
   isEditing: boolean;
   isInfoSnackBarOpen: boolean;
   isEmpty: boolean;
+  diffTime?: number;
   handleQuizOpen: () => void;
   closeAndNoSave: () => void;
   saveContent: () => void;
@@ -35,6 +36,7 @@ export default function ContentHeader({
   isInfoSnackBarOpen,
   handleQuizOpen,
   isEmpty,
+  diffTime,
   closeAndNoSave,
   saveContent,
 }: ContentHeaderProps) {
@@ -58,12 +60,28 @@ export default function ContentHeader({
   }>({
     open: true,
     severity: 'info',
-    message: '앞 사람의 편집이 끝나면 위키 참여가 가능합니다.',
+    message: '',
     autoHideDuration: 300000,
   });
 
+  useEffect(() => {
+    const infoSnackBarMessage = diffTime
+      ? `${Math.floor(5 - diffTime / 60 / 1000)}분 후 위키 참여가 가능합니다.`
+      : '';
+
+    setInfoSnackBarState((prevState) => ({
+      ...prevState,
+      message: infoSnackBarMessage,
+    }));
+  }, [diffTime]);
+
   const onUCClose = () => {
     setIsUCOpen(false);
+  };
+
+  const handleCloseAndNoSave = () => {
+    setIsUCOpen(false);
+    closeAndNoSave();
   };
 
   const handleLinkClick = () => {
@@ -112,7 +130,7 @@ export default function ContentHeader({
               </Button>
               <UnsavedChangesModal
                 isOpen={isUCOpen}
-                closeAndNoSave={closeAndNoSave}
+                closeAndNoSave={handleCloseAndNoSave}
                 onClose={onUCClose}
               />
               <Button onClick={saveContent}>저장</Button>
@@ -120,7 +138,9 @@ export default function ContentHeader({
           )}
         </div>
       </div>
-      {!isEditing && <LinkBar link={link} onClick={handleLinkClick} />}
+      {!isEditing && (
+        <LinkBar link={link.slice(0, 43)} onClick={handleLinkClick} />
+      )}
       {isInfoSnackBarOpen && (
         <SnackBar
           severity={infoSnackBarState.severity}
@@ -132,16 +152,14 @@ export default function ContentHeader({
         </SnackBar>
       )}
 
-      {
-        <SnackBar
-          severity={linkSnackBarState.severity}
-          open={linkSnackBarState.open}
-          onClose={handleCloseLinkSnackBar}
-          autoHideDuration={linkSnackBarState.autoHideDuration}
-        >
-          {linkSnackBarState.message}
-        </SnackBar>
-      }
+      <SnackBar
+        severity={linkSnackBarState.severity}
+        open={linkSnackBarState.open}
+        onClose={handleCloseLinkSnackBar}
+        autoHideDuration={linkSnackBarState.autoHideDuration}
+      >
+        {linkSnackBarState.message}
+      </SnackBar>
     </div>
   );
 }

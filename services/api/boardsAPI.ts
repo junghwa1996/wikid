@@ -3,9 +3,9 @@ import {
   BoardCreateData,
   BoardResponse,
   CommentsData,
+  BoardBase,
 } from 'types/board';
-
-import instance from '../../lib/axios-client';
+import instance from '@/lib/axios-client';
 
 // 게시글 리스트 불러오기
 export const getBoards = async (query: any) => {
@@ -54,4 +54,18 @@ export const patchBoard = async (
   } catch {
     throw new Error('게시글을 수정하지 못했습니다.');
   }
+};
+
+// 게시글 작성 요청
+export const createArticle = async (
+  title: string,
+  content: string,
+  imageUrl: string
+): Promise<BoardBase> => {
+  const { data } = await instance.post<BoardBase>('/articles', {
+    title,
+    content,
+    image: imageUrl || 'https://ifh.cc/g/V26MYS.png',
+  });
+  return data;
 };
