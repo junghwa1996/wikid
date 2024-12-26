@@ -19,10 +19,10 @@ interface CommentFormProps {
  * @param {boolean} props.update - 수정 모드 여부
  */
 export default function CommentForm({
-  value,
-  onChange,
-  onCancel,
-  onSubmit,
+  value = '',
+  onChange = () => {},
+  onCancel = () => {},
+  onSubmit = () => {},
   update = false,
 }: CommentFormProps) {
   const MAX_LENGTH = 500;

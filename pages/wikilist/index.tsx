@@ -6,7 +6,7 @@ import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
 import { instance } from '@/lib/axios-client';
 
-import ListItem from './ListItem';
+import ListItem from '@/components/wikiList.page/ListItem';
 
 // 위키 목록 페이지 프로필 데이터 타입
 export interface ProfileProps {

@@ -3,7 +3,8 @@ import Link from 'next/link';
 import React from 'react';
 
 import LinkBar from '@/components/LinkBar';
-import type { ProfileProps } from '@/pages/wikilist';
+
+import { ProfileProps } from '../../pages/wikilist/index';
 
 interface ListItemProps {
   data: ProfileProps;
@@ -14,6 +15,7 @@ interface ListItemProps {
  * @param data - 목록에 출력할 프로필 데이터
  */
 export default function ListItem({ data }: ListItemProps) {
+  if (!data) return null;
   const { name, code, image, city, nationality, job } = data;
   const shortUrl = `https://www.wikied.kr/${code.slice(0, 4)}...`;
   const baseProfileImage = '/icon/icon-profile.svg';
@@ -40,9 +42,9 @@ export default function ListItem({ data }: ListItemProps) {
       >
         <Image
           src={image || baseProfileImage}
-          className="self-start rounded-full mo:size-[60px]"
-          width="85"
-          height="85"
+          className="size-[85px] self-start rounded-full mo:size-[60px]"
+          width={85}
+          height={85}
           alt={`${name} 프로필 이미지`}
           onError={handleError}
         />

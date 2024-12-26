@@ -9,13 +9,16 @@ import SearchInput from '@/components/SearchInput';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import { getBoards } from '@/services/api/boardsAPI';
 
-import BoardCardList from './components/BoardCardList';
-import BoardList from './components/BoardList';
+import BoardCardList from '@/components/boards.page/BoardCardList';
+import BoardList from '@/components/boards.page/BoardList';
 
 import 'swiper/css';
+import { useProfileContext } from '@/hooks/useProfileContext';
+import SnackBar, { SnackBarProps } from '@/components/SnackBar';
+import Router from 'next/router';
 
 const BoardCardList_Swiper = dynamic(
-  () => import('./components/BoardCardList.swiper'),
+  () => import('@/components/boards.page/BoardCardList.swiper'),
   {
     ssr: false,
   }
@@ -36,13 +39,20 @@ export default function Boards() {
 
   const [value, setValue] = useState('');
 
+  const { isAuthenticated } = useProfileContext();
+
   const isMobile = useCheckMobile();
   const PAGE_SIZE = 10;
+
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState('');
+  const [snackStyled, setSnackStyled] =
+    useState<SnackBarProps['severity']>(undefined);
 
   // 베스트 게시글 fetch
   useEffect(() => {
     const fetchBoardsLike = async () => {
-      const res = await getBoards('orderBy=like&pageSize=4');
+      const res = await getBoards({ orderBy: 'like', pageSize: 4 });
       if (Array.isArray(res.list) && res.list.length > 0) {
         setLikeBoards(res.list);
       }
@@ -57,9 +67,11 @@ export default function Boards() {
   useEffect(() => {
     const fetchBoards = async () => {
       const orderBy = selectedOption === '최신순' ? 'recent' : 'like';
-      const res = await getBoards(
-        `orderBy=${orderBy}&pageSize=${PAGE_SIZE}&page=${currentPage}`
-      );
+      const res = await getBoards({
+        orderBy,
+        pageSize: PAGE_SIZE,
+        page: currentPage,
+      });
       if (Array.isArray(res.list) && res.list.length > 0) {
         setBoards(res.list);
         setTotalCount(res.totalCount);
@@ -76,11 +88,12 @@ export default function Boards() {
     setCurrentData(boards);
   }, [boards]);
 
-  // 검색 이벤트
   const handleSearchSubmit = async () => {
-    const res = await getBoards(
-      `keyword=${value}&pageSize=${PAGE_SIZE}&page=${currentPage}`
-    );
+    const res = await getBoards({
+      keyword: value,
+      pageSize: PAGE_SIZE,
+      page: currentPage,
+    });
     if (Array.isArray(res.list) && res.list.length > 0) {
       setBoards(res.list);
       setTotalCount(res.totalCount);
@@ -94,6 +107,20 @@ export default function Boards() {
     setCurrentPage(1);
   };
 
+  const handleCreateClick = async () => {
+    if (isAuthenticated) {
+      Router.push('/addboard');
+    } else {
+      setSnackStyled('fail');
+      setSnackBarMessage('로그인 후 이용해주세요');
+      setSnackBarOpen(true);
+      setTimeout(() => {
+        Router.push('/login');
+      }, 3000);
+      return;
+    }
+  };
+
   const pxTablet = 'ta:px-[60px]';
 
   return (
@@ -103,7 +130,7 @@ export default function Boards() {
           className={`container flex items-center justify-between ${pxTablet}`}
         >
           <h1 className="text-32sb mo:text-24sb">베스트 게시글</h1>
-          <Button href="/addboard">게시물 등록하기</Button>
+          <Button onClick={handleCreateClick}>게시물 등록하기</Button>
         </header>
 
         {/* 베스트 게시글 */}
@@ -150,6 +177,14 @@ export default function Boards() {
           />
         </div>
       </div>
+      <SnackBar
+        severity={snackStyled}
+        open={snackBarOpen}
+        onClose={() => setSnackBarOpen(false)}
+        autoHideDuration={2000}
+      >
+        {snackBarMessage}
+      </SnackBar>
     </main>
   );
 }

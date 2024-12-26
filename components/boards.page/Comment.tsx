@@ -12,6 +12,7 @@ interface CommentProps extends CommentType {
   updatedAt: string;
   onclick: { update: (value: string) => void; delete: () => void };
   isOwner: boolean;
+  profile: Writer['image'];
 }
 
 /**
@@ -25,7 +26,9 @@ interface CommentProps extends CommentType {
 export default function Comment({
   name = '유저이름',
   content = '코멘트',
+  createdAt = '2024-12-19T05:26:36.719Z',
   updatedAt = '2024-12-19T05:26:36.719Z',
+  profile = '/icon/icon-profile.svg',
   onclick = { update: () => {}, delete: () => {} },
   isOwner = false,
 }: CommentProps) {
@@ -54,9 +57,9 @@ export default function Comment({
   return (
     <div className="flex items-start gap-5 rounded-custom px-[30px] py-[22px] shadow-custom dark:shadow-custom-dark mo:gap-[15px] mo:px-5 mo:py-4">
       <Image
-        src="/icon/icon-profile.svg"
+        src={profile}
         alt="user profile"
-        className="mo:size-10"
+        className="overflow-hidden rounded-full mo:size-10"
         width={50}
         height={50}
       />
@@ -91,8 +94,12 @@ export default function Comment({
         {!isEditing ? (
           <>
             <p className="mb-[10px] text-16 mo:mb-1 mo:text-14">{content}</p>
+            <span className="mr-2 text-14 text-gray-400 mo:text-12">
+              등록일 : {dateConversion(createdAt)}
+            </span>
+
             <span className="text-14 text-gray-400 mo:text-12">
-              {dateConversion(updatedAt)}
+              수정일 : {dateConversion(updatedAt)}
             </span>
           </>
         ) : (

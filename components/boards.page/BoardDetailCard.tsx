@@ -1,18 +1,23 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
+import { useState } from 'react';
 import { BoardBase, Writer } from 'types/board';
 
 import Button from '@/components/Button';
 import EditorViewer from '@/components/EditorViewer';
 import Heart from '@/components/Heart/Heart';
+import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import instance from '@/lib/axios-client';
 import dateConversion from '@/utils/dateConversion';
 
 import ButtonIcon from './ButtonIcon';
+import { useProfileContext } from '@/hooks/useProfileContext';
 
 interface BoardDetailCard extends BoardBase {
+  title: string;
   isOwner: boolean;
+  isLiked: boolean;
 }
 
 /**
@@ -28,19 +33,27 @@ interface BoardDetailCard extends BoardBase {
  *
  */
 export default function BoardDetailCard({
-  title,
-  name = '',
+  title = '제목',
+  name = '이름',
   createdAt = '',
   updatedAt = '',
   likeCount = 0,
   content = '',
   image = 'https://ifh.cc/g/V26MYS.png',
   isOwner = false,
+  isLiked: initialIsLiked = false,
 }: BoardDetailCard & Writer) {
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const [likeCountState, setLikeCountState] = useState(likeCount);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState('');
+  const [snackStyled, setSnackStyled] =
+    useState<SnackBarProps['severity']>(undefined);
   const isMobile = useCheckMobile();
   const router = useRouter();
   const { articleId } = router.query;
   const id = articleId as string;
+  const { isAuthenticated } = useProfileContext();
 
   // 수정하기 버튼 클릭 시 수정 페이지 이동
   const handleUpdateClick = async () => {
@@ -51,10 +64,39 @@ export default function BoardDetailCard({
   const handleDeleteClick = async () => {
     try {
       await instance.delete(`/articles/${id}`);
-
+      setSnackBarMessage('게시글이 삭제되었습니다.');
+      setSnackBarOpen(true);
       await router.push('/boards');
     } catch (error) {
       console.error('게시글을 삭제하지 못했습니다.', error);
+    }
+  };
+
+  // 하트 클릭 시 동작
+  const handleHeartClick = async () => {
+    if (isAuthenticated) {
+      const method = isLiked ? 'delete' : 'post';
+      try {
+        await instance[method](`/articles/${id}/like`);
+        setIsLiked(!isLiked);
+        setLikeCountState((prevCount) =>
+          isLiked ? prevCount - 1 : prevCount + 1
+        );
+        setSnackBarMessage(
+          isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 반영되었습니다.'
+        );
+        setSnackBarOpen(true);
+        setSnackStyled('success');
+      } catch (error) {
+        console.error('--- handleHeartClick:error:', error);
+      }
+    } else {
+      setSnackBarMessage('로그인 후 이용해주세요.');
+      setSnackBarOpen(true);
+      setSnackStyled('fail');
+      setTimeout(() => {
+        Router.push('/login');
+      }, 2500);
     }
   };
 
@@ -62,7 +104,9 @@ export default function BoardDetailCard({
     <div className="rounded-custom bg-background px-[30px] py-10 shadow-custom dark:shadow-custom-dark mo:p-5">
       <header className="mb-[38px] mo:mb-[15px] mo:pb-[11px] ta:mb-[30px] ta:pb-2 tamo:border-b">
         <div className="mb-[30px] flex items-center justify-between gap-[14px] mo:mb-[14px] tamo:gap-3">
-          <h1 className="flex-1 text-32sb mo:text-24sb">{title}</h1>
+          <h1 className="flex-1 text-32sb mo:text-24sb">
+            {title ? title : '제목 없음'}
+          </h1>
           {isOwner &&
             (!isMobile ? (
               <>
@@ -85,7 +129,12 @@ export default function BoardDetailCard({
           <span className="flex-1">
             최근 수정일 : {dateConversion(updatedAt)}
           </span>
-          <Heart initialCount={likeCount} />
+
+          <Heart
+            initialCount={likeCountState}
+            isLiked={isLiked}
+            onClick={handleHeartClick}
+          />
         </div>
       </header>
 
@@ -99,6 +148,15 @@ export default function BoardDetailCard({
         />
         <EditorViewer content={content} />
       </div>
+
+      <SnackBar
+        severity={snackStyled}
+        open={snackBarOpen}
+        onClose={() => setSnackBarOpen(false)}
+        autoHideDuration={2000}
+      >
+        {snackBarMessage}
+      </SnackBar>
     </div>
   );
 }
