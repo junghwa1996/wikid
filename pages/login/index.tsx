@@ -4,22 +4,18 @@ import React, { useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
-import SnackBar from '@/components/SnackBar';
 import { AuthAPI } from '@/services/api/auth';
+import { useSnackbar } from 'context/SnackBarContext';
 
 function Login(): React.ReactElement {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'fail'>(
-    'success'
-  );
   const [validFields, setValidFields] = useState({
     email: false,
     password: false,
   });
+  const { showSnackbar } = useSnackbar();
   const router = useRouter();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,9 +47,7 @@ function Login(): React.ReactElement {
       })) as { accessToken: string };
 
       localStorage.setItem('accessToken', response.accessToken);
-      setSnackbarMessage('로그인이 완료되었습니다');
-      setSnackbarSeverity('success');
-      setSnackbarOpen(true);
+      showSnackbar('로그인이 완료되었습니다', 'success');
 
       // 3초 후 메인 페이지로 이동
       setTimeout(() => {
@@ -61,13 +55,9 @@ function Login(): React.ReactElement {
       }, 3000);
     } catch (error) {
       if (error instanceof Error) {
-        setSnackbarMessage(error.message);
-        setSnackbarSeverity('fail');
-        setSnackbarOpen(true);
+        showSnackbar(error.message, 'fail');
       } else {
-        setSnackbarMessage('로그인 중 오류가 발생했습니다');
-        setSnackbarSeverity('fail');
-        setSnackbarOpen(true);
+        showSnackbar('로그인 중 오류가 발생했습니다', 'fail');
       }
     } finally {
       setIsSubmitting(false);
@@ -117,15 +107,6 @@ function Login(): React.ReactElement {
             </Link>
           </div>
         </div>
-        {snackbarOpen && (
-          <SnackBar
-            severity={snackbarSeverity}
-            open={snackbarOpen}
-            onClose={() => setSnackbarOpen(false)}
-          >
-            {snackbarMessage}
-          </SnackBar>
-        )}
       </form>
     </div>
   );

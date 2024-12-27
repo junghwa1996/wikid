@@ -9,9 +9,8 @@ import EmptyList from '@/components/EmptyList';
 import ListItem from '@/components/wikiList.page/ListItem';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
-import useSnackBar from '@/hooks/useSanckBar';
-import SnackBar from '@/components/SnackBar';
 import FullCoverSpinner from '@/components/FullCoverSpinner';
+import { useSnackbar } from 'context/SnackBarContext';
 
 // 위키 목록 페이지 프로필 데이터 타입
 export interface ProfileProps {
@@ -61,8 +60,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function WikiList() {
   const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
-  const { snackBarValues, snackBarOpen } = useSnackBar();
-
+  const { showSnackbar } = useSnackbar();
   const { page, name } = router.query;
   const { isPending, error, data } = useQuery<ListProps, Error>({
     queryKey: ['profiles', page, name],
@@ -102,7 +100,7 @@ export default function WikiList() {
 
   // 목록의 위키 링크 클릭
   const handleSnackBarClick = (name: string) => {
-    snackBarOpen('success', `${name}님 위키 링크가 복사되었습니다.`);
+    showSnackbar(`${name}님 위키 링크가 복사되었습니다.`, 'success');
   };
 
   useEffect(() => {
@@ -166,14 +164,6 @@ export default function WikiList() {
           )}
         </div>
       </div>
-
-      <SnackBar
-        open={snackBarValues.open}
-        severity={snackBarValues.severity}
-        onClose={snackBarValues.onClose}
-      >
-        {snackBarValues.children}
-      </SnackBar>
     </div>
   );
 }

@@ -7,9 +7,9 @@ import Button from '@/components/Button';
 import TextEditor from '@/components/TextEditor';
 import { getBoardDetail, patchBoard } from '@/services/api/boardsAPI';
 import { extractContent, formatDate } from '@/utils/boardHelpers';
-import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import ImageUploadModal from '@/components/Modal/ImageUploadModal';
 import instance from '@/lib/axios-client';
+import { useSnackbar } from 'context/SnackBarContext';
 
 // 제목 글자수 제한
 const MAX_TITLE = 30;
@@ -28,13 +28,10 @@ interface ImageResponse {
 export default function UpdateBoard() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [snackBarOpen, setSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState('');
-  const [snackStyled, setSnackStyled] =
-    useState<SnackBarProps['severity']>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [getImage, setGetImage] = useState<string | null>(null);
+  const { showSnackbar } = useSnackbar();
   const router = useRouter();
   const formData = new FormData();
   const { articleId } = router.query;
@@ -116,14 +113,13 @@ export default function UpdateBoard() {
 
       await patchBoard(articleId as number | string, updateData);
       if (typeof articleId === 'string') {
-        setSnackStyled('success');
-        setSnackBarMessage(
-          '게시글이 수정되었습니다. 수정된 게시판으로 이동합니다.'
+        showSnackbar(
+          '게시글이 수정되었습니다. 수정된 게시판으로 이동합니다.',
+          'success'
         );
-        setSnackBarOpen(true);
         setTimeout(() => {
           router.push(`/boards/${articleId}`);
-        }, 2500);
+        }, 2300);
       }
     } catch {
       throw new Error('게시글을 수정하지 못했습니다.');
@@ -218,15 +214,6 @@ export default function UpdateBoard() {
           onClose={handleImageModalClose}
           onGetImageFile={getImageFile}
         />
-
-        <SnackBar
-          severity={snackStyled}
-          open={snackBarOpen}
-          onClose={() => setSnackBarOpen(false)}
-          autoHideDuration={2000}
-        >
-          {snackBarMessage}
-        </SnackBar>
       </main>
     </div>
   );

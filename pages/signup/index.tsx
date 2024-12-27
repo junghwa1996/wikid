@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
-import SnackBar from '@/components/SnackBar';
 import { AuthAPI } from '@/services/api/auth';
+import { useSnackbar } from 'context/SnackBarContext';
 
 function SignUp() {
   const [email, setEmail] = useState('');
@@ -14,11 +14,6 @@ function SignUp() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [name, setName] = useState('');
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'fail'>(
-    'success'
-  );
   const [validFields, setValidFields] = useState({
     name: false,
     email: false,
@@ -26,6 +21,7 @@ function SignUp() {
     passwordConfirm: false,
   });
   const router = useRouter();
+  const { showSnackbar } = useSnackbar();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -68,9 +64,7 @@ function SignUp() {
 
       setIsCompleted(true);
       // 회원가입 성공 시 스낵바 표시
-      setSnackbarMessage('회원가입이 완료되었습니다');
-      setSnackbarSeverity('success');
-      setSnackbarOpen(true);
+      showSnackbar('회원가입이 완료되었습니다', 'success');
 
       // 3초 후 로그인 페이지로 이동
       setTimeout(() => {
@@ -78,13 +72,9 @@ function SignUp() {
       }, 3000);
     } catch (error) {
       if (error instanceof Error) {
-        setSnackbarMessage(error.message);
-        setSnackbarSeverity('fail');
-        setSnackbarOpen(true);
+        showSnackbar(error.message, 'fail');
       } else {
-        setSnackbarMessage('회원가입 중 오류가 발생했습니다');
-        setSnackbarSeverity('fail');
-        setSnackbarOpen(true);
+        showSnackbar('회원가입 중 오류가 발생했습니다', 'fail');
       }
     } finally {
       setIsSubmitting(false);
@@ -161,15 +151,6 @@ function SignUp() {
             </Link>
           </div>
         </div>
-        {snackbarOpen && (
-          <SnackBar
-            severity={snackbarSeverity}
-            open={snackbarOpen}
-            onClose={() => setSnackbarOpen(false)}
-          >
-            {snackbarMessage}
-          </SnackBar>
-        )}
       </form>
     </div>
   );

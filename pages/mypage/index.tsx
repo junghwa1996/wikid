@@ -3,10 +3,10 @@ import React, { FormEvent, useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
-import SnackBar from '@/components/SnackBar';
 import { useValidation } from '@/hooks/useValidation';
 import { AuthAPI } from '@/services/api/auth';
 import { ProfileAPI } from '@/services/api/profileAPI';
+import { useSnackbar } from 'context/SnackBarContext';
 
 function MyPage(): React.ReactElement {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -14,10 +14,9 @@ function MyPage(): React.ReactElement {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
-  const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const router = useRouter();
+  const { showSnackbar } = useSnackbar();
 
   const currentPasswordValidation = useValidation({ type: 'password' });
   const newPasswordValidation = useValidation({ type: 'password' });
@@ -61,7 +60,6 @@ function MyPage(): React.ReactElement {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    setError('');
 
     try {
       await AuthAPI.changePassword({
@@ -74,8 +72,7 @@ function MyPage(): React.ReactElement {
       await router.push('/login');
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message);
-        setSnackbarOpen(true);
+        showSnackbar(error.message, 'fail');
       }
     } finally {
       setIsSubmitting(false);
@@ -88,7 +85,6 @@ function MyPage(): React.ReactElement {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    setError('');
 
     try {
       // 프로필 생성 API 호출
@@ -101,7 +97,7 @@ function MyPage(): React.ReactElement {
       await router.push(`/wiki/${code}`);
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message);
+        showSnackbar(error.message, 'fail');
       }
     } finally {
       setIsSubmitting(false);
@@ -213,15 +209,6 @@ function MyPage(): React.ReactElement {
             </div>
           </div>
         </div>
-        {snackbarOpen && (
-          <SnackBar
-            severity="fail"
-            open={snackbarOpen}
-            onClose={() => setSnackbarOpen(false)}
-          >
-            {error}
-          </SnackBar>
-        )}
       </form>
     </div>
   );
