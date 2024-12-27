@@ -157,7 +157,8 @@ export default function BoardDetailCard({
           width={500}
           height={300}
           priority
-          className="mb-5 h-[300px] w-[500px] mo:mb-[15px] mo:h-auto mo:w-[295px]"
+          className="h-[300px]] mb-5 w-auto mo:mb-[15px] mo:h-[177px]"
+          sizes="(max-width: 743px) 295px, 500px"
         />
         <EditorViewer content={content} />
       </div>
