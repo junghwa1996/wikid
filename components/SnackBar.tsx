@@ -66,10 +66,13 @@ export default function SnackBar({
 
   return (
     <div
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
       className={`rounded-custom ${style} flex items-center gap-[15px] border px-5 py-[11px] transition-opacity duration-300 mo:px-[15px] mo:py-[11px] ${
         visible ? 'opacity-100' : 'opacity-0'
       }`}
-      style={{ display: open || visible ? 'flex' : 'none' }}
+      style={{ display: open || visible ? 'flex' : 'none', zIndex: 9999 }}
     >
       {icon && <Image src={icon} alt="snackbar icon" width={20} height={20} />}
       <p className={`${textStyle} break-words mo:break-words`}>{children}</p>
