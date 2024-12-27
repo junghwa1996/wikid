@@ -28,6 +28,7 @@ import {
 import { CommentsData, CommentType } from 'types/board';
 import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import ModalDefault from '@/components/Modal/ModalDefault';
+import CommentEmpty from '@/components/boards.page/CommentEmpty';
 
 export default function BoardsDetails() {
   const [boardData, setBoardData] = useState<ArticleData | null>(null);
@@ -272,7 +273,7 @@ export default function BoardsDetails() {
                 ))}
               </ul>
             ) : (
-              <div className="text-gray-500">작성된 댓글이 없습니다.</div>
+              <CommentEmpty />
             )}
 
             {/* 무한 스크롤 로더 */}
