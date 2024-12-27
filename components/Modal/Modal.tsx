@@ -68,7 +68,7 @@ const Modal = ({
       />
 
       <div
-        className={`${width} relative max-h-[90vh] overflow-y-auto rounded-lg bg-white shadow-xl`}
+        className={`${width} relative max-h-[90vh] overflow-y-auto rounded-lg bg-background shadow-custom`}
       >
         {/* 닫기 버튼 영역 */}
         <button
@@ -84,7 +84,7 @@ const Modal = ({
           />
         </button>
         {/* 컨텐츠 영역 */}
-        <div className="px-5 pb-5 pt-[60px]">{children}</div>
+        <div className="bg-background px-5 pb-5 pt-[60px]">{children}</div>
       </div>
     </div>
   );

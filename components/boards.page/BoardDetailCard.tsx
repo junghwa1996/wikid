@@ -134,19 +134,21 @@ export default function BoardDetailCard({
               </>
             ))}
         </div>
-        <div className="flex items-center gap-[10px] text-14 text-gray-400 mo:text-12">
-          <span>{name}</span>
-          <span>등록일 : {dateConversion(createdAt)}</span>
-          <span>|</span>
-          <span className="flex-1">
-            최근 수정일 : {dateConversion(updatedAt)}
-          </span>
+        <div className="flex items-center gap-[10px] text-14 text-gray-400 mo:flex-wrap mo:text-12">
+          <span className="whitespace-nowrap mo:w-full mo:flex-1">{name}</span>
+          <div className="flex w-full justify-between">
+            <div className="flex items-center gap-[10px]">
+              <span>등록일 : {dateConversion(createdAt)}</span>
+              <span>|</span>
+              <span>최근 수정일 : {dateConversion(updatedAt)}</span>
+            </div>
 
-          <Heart
-            initialCount={likeCountState}
-            isLiked={isLiked}
-            onClick={handleHeartClick}
-          />
+            <Heart
+              initialCount={likeCountState}
+              isLiked={isLiked}
+              onClick={handleHeartClick}
+            />
+          </div>
         </div>
       </header>
 
@@ -157,7 +159,8 @@ export default function BoardDetailCard({
           width={500}
           height={300}
           priority
-          className="mb-5 h-[300px] w-[500px] mo:mb-[15px] mo:h-auto mo:w-[295px]"
+          className="h-[300px]] mb-5 w-auto mo:mb-[15px] mo:h-[177px]"
+          sizes="(max-width: 743px) 295px, 500px"
         />
         <EditorViewer content={content} />
       </div>
