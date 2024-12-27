@@ -71,13 +71,8 @@ export default function BoardDetailCard({
     try {
       await instance.delete(`/articles/${id}`);
       setIsModal(false);
-      showSnackbar(
-        '게시글이 삭제되었습니다. 게시판 메인으로 이동합니다.',
-        'success'
-      );
-      setTimeout(() => {
-        router.push('/boards');
-      }, 2300);
+      router.push('/boards');
+      showSnackbar('게시글이 삭제되었습니다.', 'success');
     } catch (error) {
       showSnackbar('게시글을 삭제하지 못했습니다.', 'fail');
     }

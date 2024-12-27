@@ -53,13 +53,8 @@ export default function Addboard() {
       return res;
     },
     onSuccess: (data) => {
-      showSnackbar(
-        '게시물이 등록되었습니다. 작성된 게시물로 이동 됩니다.',
-        'success'
-      );
-      setTimeout(() => {
-        router.push('/boards/' + data.id);
-      }, 2300);
+      router.push('/boards/' + data.id);
+      showSnackbar('게시물이 등록되었습니다.', 'success');
     },
   });
 

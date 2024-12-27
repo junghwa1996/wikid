@@ -113,13 +113,8 @@ export default function UpdateBoard() {
 
       await patchBoard(articleId as number | string, updateData);
       if (typeof articleId === 'string') {
-        showSnackbar(
-          '게시글이 수정되었습니다. 수정된 게시판으로 이동합니다.',
-          'success'
-        );
-        setTimeout(() => {
-          router.push(`/boards/${articleId}`);
-        }, 2300);
+        router.push(`/boards/${articleId}`);
+        showSnackbar('게시글이 수정되었습니다.', 'success');
       }
     } catch {
       throw new Error('게시글을 수정하지 못했습니다.');
