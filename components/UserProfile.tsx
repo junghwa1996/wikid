@@ -52,7 +52,7 @@ function UserProfile({
     }
 
     return (
-      <p className="flex h-[18px] w-[200px] text-14 mo:text-12">
+      <p className="flex h-[18px] w-[200px] text-14 mo:w-[180px] mo:text-12 pc:gap-[20px]">
         <span className="flex-[1] text-gray-400">{label}</span>
         <span className="flex-[2] text-gray-500">{data[field]}</span>
       </p>
@@ -61,14 +61,14 @@ function UserProfile({
 
   return (
     // 메인 컨테이너
-    <div className="mx-auto max-w-4xl rounded-custom bg-white shadow-custom dark:bg-gray-600 dark:shadow-custom-dark mo:w-11/12 ta:w-11/12 pc:w-[400px] pc:p-7 tamo:p-5">
+    <div className="max-w-4xl rounded-custom bg-white shadow-custom dark:bg-gray-600 dark:shadow-custom-dark pc:h-[671px] pc:w-[320px] pc:p-7 tamo:w-full tamo:p-5">
       {/* 레이아웃 컨테이너: PC에서는 세로, 모바일/태블릿에서는 가로 배치 */}
       <div
-        className={`flex ${isEditing ? 'flex-col' : 'flex-col mo:flex-row ta:flex-row pc:flex-col'} pc:items-center`}
+        className={`flex ${isEditing ? 'flex-col' : 'flex-col mo:flex-row ta:flex-row pc:flex-col'}`}
       >
         {/* 프로필 이미지 섹션 */}
         <div
-          className={`flex items-center justify-center tamo:pt-4 ${isEditing ? '' : 'mo:self-start ta:self-start'}`}
+          className={`flex items-center justify-center pc:pb-[60px] pc:pt-[40px] tamo:pl-[10px] tamo:pt-4 ${isEditing ? '' : 'mo:self-start ta:self-start'}`}
         >
           {/* 이미지 업로드 버튼 */}
           <button
@@ -127,7 +127,7 @@ function UserProfile({
 
         {/* 프로필 정보 섹션 */}
         <div
-          className={`${isEditing ? 'mt-4 mo:justify-center' : 'mo:ml-4 mo:flex-1 ta:ml-4 ta:flex-1 pc:mt-4'} mt-6 pc:w-full`}
+          className={`${isEditing ? 'mt-4 mo:justify-center' : 'mo:ml-4 mo:flex-1 mo:pl-[20px] ta:ml-4 ta:flex-1 ta:pl-[40px] pc:mt-4'} mt-6 mo:pc:w-full`}
         >
           <div className="space-y-3">
             {/* 기본 정보 영역 */}
