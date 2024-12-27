@@ -46,7 +46,7 @@ export default function LandingPage() {
       {/* 랜딩 본문 */}
       <main className="mt-[80px] font-['NEXON_Lv1_Gothic_Low'] tamo:mt-[60px]">
         {/* 나만의 위키 */}
-        <section className="pt-[100px] mo:pt-[100px]">
+        <section className="bg-[url('/images/img-landing-bg.svg')] bg-bottom bg-no-repeat pt-[100px] mo:pt-[100px] tamo:bg-[length:140%]">
           <div className={`flex flex-col items-center ${mainStyled.container}`}>
             <h1 className="mb-[40px] text-center">
               <p className="flex flex-col gap-[15px] text-[90px] font-bold leading-none text-gray-500 mo:text-[60px]">
@@ -72,18 +72,6 @@ export default function LandingPage() {
               className="h-auto object-contain mo:w-[336px]"
               priority
             />
-          </div>
-
-          {/* bg */}
-          <div className="absolute left-0 top-0 -z-10 h-[1100px] w-screen overflow-hidden bg-blue-50 mo:h-[820px]">
-            <Image
-              src="/images/img-landing-bg.svg"
-              alt="배경 이미지"
-              width={1920}
-              height={400}
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 mo:bottom-[195px] ta:bottom-[75px] ta:max-w-[1020px] ta:pb-[100px] pc:h-[400px] pc:max-w-[1920px]"
-            />
-            <div className="absolute bottom-0 left-0 w-full bg-gray-500 mo:h-[200px] ta:h-[180px] pc:hidden"></div>
           </div>
         </section>
 
