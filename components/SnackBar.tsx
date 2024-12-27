@@ -36,7 +36,7 @@ const severityConfig = {
  * @param children - Snackbar에 표시할 메시지
  * @param open - Snackbar가 열려있는지 여부
  * @param onClose - Snackbar를 닫기 위한 함수
- * @param autoHideDuration - 자동으로 닫히는 시간 (밀리초) 기본값은 3000
+ * @param autoHideDuration - 자동으로 닫히는 시간 (밀리초) 기본값은 2000
  */
 export default function SnackBar({
   severity,
