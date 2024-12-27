@@ -28,7 +28,7 @@ export default function DarkModeToggle() {
       onClick={() => setIsDarkMode((prev) => !prev)}
     >
       <Image
-        src={isDarkMode ? 'icon/icon-light.svg' : 'icon/icon-dark.svg'}
+        src={isDarkMode ? '/icon/icon-light.svg' : '/icon/icon-dark.svg'}
         width={24}
         height={24}
         alt="다크 모드 전환"

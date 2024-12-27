@@ -44,13 +44,11 @@ export const AuthAPI = {
       if (error instanceof AxiosError) {
         // 400 에러 (이미 존재하는 이메일)
         if (error.response?.status === 400) {
-          throw new Error('이미 존재하는 이메일입니다.');
+          throw new Error('이미 가입된 이메일 주소입니다.');
         }
         // 500 에러 (서버 내부 오류)
         if (error.response?.status === 500) {
-          throw new Error(
-            '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
-          );
+          throw new Error('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         }
       }
       // 기타 예상치 못한 에러

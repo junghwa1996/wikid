@@ -11,6 +11,7 @@ import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
 import useSnackBar from '@/hooks/useSanckBar';
 import SnackBar from '@/components/SnackBar';
+import FullCoverSpinner from '@/components/FullCoverSpinner';
 
 // 위키 목록 페이지 프로필 데이터 타입
 export interface ProfileProps {
@@ -112,8 +113,8 @@ export default function WikiList() {
       });
   }, [page, router]);
 
-  // TODO: 로딩 스피너 & 에러 페이지 컴포넌트 추가
-  if (isPending) return <div>Loading...</div>;
+  if (isPending)
+    return <FullCoverSpinner>위키 목록 가져오는 중...</FullCoverSpinner>;
 
   // TODO: 에러 컴포넌트 추가
   if (error) return <div>Error: {error.message}</div>;
@@ -124,10 +125,10 @@ export default function WikiList() {
         <title>위키 목록{name && ` - 검색어 '${name}'`} | wikied</title>
       </Head>
 
-      <div className="container pb-5 pt-20 mo:pt-10">
-        <div className="mt-20 px-20 mo:px-0">
+      <div className="container pb-5 pt-20 mo:pt-10 ta:pt-[60px]">
+        <div className="mt-20 px-20 mo:mt-10 ta:mt-[60px] tamo:px-0">
           <SearchInput
-            size="large"
+            size="full"
             value={searchValue}
             onChange={handleChange}
             onSubmit={handleSubmit}
@@ -154,7 +155,7 @@ export default function WikiList() {
           )}
 
           {hasList && (
-            <div className="my-[120px] flex justify-center mo:my-10">
+            <div className="my-[120px] flex justify-center mo:my-10 ta:my-20">
               <Pagination
                 totalCount={totalCount}
                 currentPage={Number(page)}
