@@ -183,14 +183,16 @@ export default function Contents({ profile }: ProfileProps) {
           />
         </div>
 
-        <SnackBar
-          severity={snackBarState.severity}
-          open={snackBarState.open}
-          onClose={() => setSnackBarState({ ...snackBarState, open: false })}
-          autoHideDuration={snackBarState.autoHideDuration}
-        >
-          {snackBarState.message}
-        </SnackBar>
+        <div className="fixed z-20">
+          <SnackBar
+            severity={snackBarState.severity}
+            open={snackBarState.open}
+            onClose={() => setSnackBarState({ ...snackBarState, open: false })}
+            autoHideDuration={snackBarState.autoHideDuration}
+          >
+            {snackBarState.message}
+          </SnackBar>
+        </div>
       </div>
       <WikiQuizModal
         isOpen={isQuizOpen}
