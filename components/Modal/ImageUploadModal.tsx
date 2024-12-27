@@ -11,12 +11,7 @@ interface ImageUploadModalProps {
   onGetImageFile: (file: File | null) => void;
 }
 
-/**
- * 이미지 업로드 모달 컴포넌트
- * @param isOpen 모달 오픈 여부
- * @param onClose 모달 닫기 함수
- * @returns ImageUploadModal 컴포넌트
- */
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB 를 바이트로
 
 const ImageUploadModal = ({
   imageFile: initialImageFile = null,
@@ -24,76 +19,94 @@ const ImageUploadModal = ({
   onClose,
   onGetImageFile,
 }: ImageUploadModalProps) => {
-  // input 요소를 참조하기 위한 ref
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // 선택한 이미지의 미리보기 url
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(initialImageFile);
-  const [isDragging, setIsDragging] = useState(false); // 드래그 중인지 여부
+  const [isDragging, setIsDragging] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // 파일 선택시
+  const validateFile = (file: File): boolean => {
+    setError(null);
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setError('JPG, PNG, GIF, WebP 형식의 이미지만 업로드 가능합니다.');
+      return false;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setError('파일 크기는 5MB를 초과할 수 없습니다.');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log('--- handleFileChange', e.target.files);
     const file = e.target.files?.[0];
     if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setPreviewUrl(previewUrl);
-      setImageFile(file);
+      if (validateFile(file)) {
+        const previewUrl = URL.createObjectURL(file);
+        setPreviewUrl(previewUrl);
+        setImageFile(file);
+      } else if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
-  // 이미지 파일 삭제
   const handleImageDelete = () => {
-    // console.log('--- handleImageDelete');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
       setPreviewUrl(null);
       setImageFile(null);
+      setError(null);
     }
   };
 
-  // 드래그 관련 이벤트
-  // 드래그 시작
   const handleDragEnter = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
-    e.stopPropagation(); // 이벤트 전파 중지
+    e.stopPropagation();
     setIsDragging(true);
   };
-  // 드래그가 영역을 벗어날 때
+
   const handleDragLeave = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
   };
-  // 드래그 중
+
   const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
   };
-  // 드래그로 파일을 드랍했을 때
+
   const handleDrop = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
 
-    // length로 파일 존재 여부를 먼저 체크
     if (e.dataTransfer.files.length > 0) {
       const file = e.dataTransfer.files[0];
-      if (file) {
+      if (file && validateFile(file)) {
         setPreviewUrl(URL.createObjectURL(file));
         setImageFile(file);
       }
     }
   };
 
-  // 썸네일로 선택
   const handleImageSelect = () => {
     onGetImageFile(imageFile);
     onClose();
   };
 
   useEffect(() => {
-    // cleanup
+    if (isOpen) {
+      setError(null);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
     return () => {
       if (previewUrl !== null) {
         URL.revokeObjectURL(previewUrl);
@@ -117,7 +130,7 @@ const ImageUploadModal = ({
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
-          accept="image/*"
+          accept="image/jpeg,image/png,image/gif,image/webp"
           className="hidden"
         />
         {previewUrl === null ? (
@@ -129,7 +142,7 @@ const ImageUploadModal = ({
             onDrop={handleDrop}
             className={`flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed ${
               isDragging
-                ? 'border-green-400 bg-green-50'
+                ? 'border-green-300 bg-green-100'
                 : 'border-gray-300 bg-gray-100 hover:border-gray-400'
             }`}
           >
@@ -142,6 +155,7 @@ const ImageUploadModal = ({
             <p className="mt-2 text-14 text-gray-400">
               클릭 또는 이미지를 드래그하여 올려주세요.
             </p>
+            <p className="mt-1 text-12 text-gray-400">(최대 5MB)</p>
           </label>
         ) : (
           <div className="relative flex h-40 w-full items-center justify-center rounded-lg border-2 border-dashed">
@@ -166,6 +180,8 @@ const ImageUploadModal = ({
             </button>
           </div>
         )}
+
+        {error && <p className="text-center text-12 text-red-100">{error}</p>}
 
         <div className="flex justify-end">
           <Button type="button" onClick={handleImageSelect}>
