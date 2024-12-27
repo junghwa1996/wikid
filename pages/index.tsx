@@ -46,7 +46,7 @@ export default function LandingPage() {
       {/* 랜딩 본문 */}
       <main className="mt-[80px] font-['NEXON_Lv1_Gothic_Low'] tamo:mt-[60px]">
         {/* 나만의 위키 */}
-        <section className="bg-[url('/images/img-landing-bg.svg')] bg-bottom bg-no-repeat pt-[100px] mo:pt-[100px] tamo:bg-[length:140%]">
+        <section className="my-wikied">
           <div className={`flex flex-col items-center ${mainStyled.container}`}>
             <h1 className="mb-[40px] text-center">
               <p className="flex flex-col gap-[15px] text-[90px] font-bold leading-none text-gray-500 mo:text-[60px]">
