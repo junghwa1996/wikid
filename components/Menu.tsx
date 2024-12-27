@@ -14,7 +14,7 @@ interface MenuProps {
 export default function Menu({ options, onSelect, menuSize }: MenuProps) {
   return (
     <ul
-      className={`${menuSize} absolute z-10 mt-2 rounded-xl border border-gray-300 bg-background p-1 text-14 shadow-custom mo:right-0 pc:right-1/2 pc:translate-x-1/2 tamo:right-0`}
+      className={`${menuSize} absolute z-10 mt-2 rounded-xl border border-gray-300 bg-background p-[4px] text-14 shadow-custom mo:right-0 pc:right-1/2 pc:translate-x-1/2 tamo:right-0`}
     >
       {options.map((option, index) => (
         <button
@@ -24,7 +24,7 @@ export default function Menu({ options, onSelect, menuSize }: MenuProps) {
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') onSelect(option);
           }}
-          className={`flex w-full cursor-pointer flex-col rounded-md px-3 py-2.5 hover:bg-green-100`}
+          className={`flex h-[35px] w-full cursor-pointer flex-col rounded-md px-[16px] py-[5px] hover:bg-green-100`}
         >
           {option}
         </button>
