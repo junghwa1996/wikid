@@ -149,7 +149,7 @@ export default {
       mo: { max: '743px' },
       ta: { min: '744px', max: '1023px' },
       pc: { min: '1024px' },
-      tamo: { max: '1024px' },
+      tamo: { max: '1023px' },
     },
   },
   plugins: [],
