@@ -165,30 +165,34 @@ export default function Contents({ profile }: ProfileProps) {
 
   return (
     <div
-      className={`pc:grid ${isEditing ? `pc:grid-rows-[75px]` : `pc:grid-rows-[150px]`} pc:gap-x-[80px] tamo:flex tamo:flex-col tamo:gap-[10px]`}
-      style={{ gridTemplateColumns: 'minmax(300px, 800px) 400px' }}
+      className={`pc:grid ${isEditing ? `pc:grid-rows-[75px]` : `pc:grid-rows-[200px]`} mo:px-[20px] ta:px-[60px] pc:gap-x-[80px] tamo:flex tamo:w-full tamo:flex-col tamo:gap-[10px]`}
+      style={{ gridTemplateColumns: 'minmax(300px, 800px) 320px' }}
     >
       <div>
-        <ContentHeader
-          name={profile.name || ''}
-          link={`https://wikied-ten.vercel.app/wiki/${profile.code}`}
-          isEditing={isEditing}
-          isInfoSnackBarOpen={isInfoSnackBarOpen}
-          handleQuizOpen={handleQuizOpen}
-          isEmpty={isEmpty}
-          closeAndNoSave={closeAndNoSave}
-          saveContent={saveContent}
-          diffTime={diffTime}
-        />
+        <div className="pc:pt-[40px]">
+          <ContentHeader
+            name={profile.name || ''}
+            link={`https://wikied-ten.vercel.app/wiki/${profile.code}`}
+            isEditing={isEditing}
+            isInfoSnackBarOpen={isInfoSnackBarOpen}
+            handleQuizOpen={handleQuizOpen}
+            isEmpty={isEmpty}
+            closeAndNoSave={closeAndNoSave}
+            saveContent={saveContent}
+            diffTime={diffTime}
+          />
+        </div>
 
-        <SnackBar
-          severity={snackBarState.severity}
-          open={snackBarState.open}
-          onClose={() => setSnackBarState({ ...snackBarState, open: false })}
-          autoHideDuration={snackBarState.autoHideDuration}
-        >
-          {snackBarState.message}
-        </SnackBar>
+        <div className="fixed z-20">
+          <SnackBar
+            severity={snackBarState.severity}
+            open={snackBarState.open}
+            onClose={() => setSnackBarState({ ...snackBarState, open: false })}
+            autoHideDuration={snackBarState.autoHideDuration}
+          >
+            {snackBarState.message}
+          </SnackBar>
+        </div>
       </div>
       <WikiQuizModal
         isOpen={isQuizOpen}
