@@ -12,6 +12,7 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [name, setName] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -19,10 +20,10 @@ function SignUp() {
     'success'
   );
   const [validFields, setValidFields] = useState({
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
+    name: false,
+    email: false,
+    password: false,
+    passwordConfirm: false,
   });
   const router = useRouter();
 
@@ -53,7 +54,7 @@ function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting || !isFormValid) return;
+    if (isSubmitting || !isFormValid || isCompleted) return;
 
     setIsSubmitting(true);
 
@@ -65,6 +66,7 @@ function SignUp() {
         name,
       });
 
+      setIsCompleted(true);
       // 회원가입 성공 시 스낵바 표시
       setSnackbarMessage('회원가입이 완료되었습니다');
       setSnackbarSeverity('success');
@@ -106,6 +108,7 @@ function SignUp() {
             onChange={handleNameChange}
             placeholder="이름을 입력해 주세요"
             onValidation={(isValid) => handleValidation('name', isValid)}
+            disabled={isCompleted}
           />
           <InputField
             label="이메일"
@@ -115,6 +118,7 @@ function SignUp() {
             onChange={handleEmailChange}
             placeholder="이메일을 입력해 주세요"
             onValidation={(isValid) => handleValidation('email', isValid)}
+            disabled={isCompleted}
           />
           <InputField
             label="비밀번호"
@@ -124,6 +128,7 @@ function SignUp() {
             onChange={handlePasswordChange}
             placeholder="비밀번호를 입력해 주세요"
             onValidation={(isValid) => handleValidation('password', isValid)}
+            disabled={isCompleted}
           />
           <InputField
             label="비밀번호 확인"
@@ -136,9 +141,10 @@ function SignUp() {
             onValidation={(isValid) =>
               handleValidation('passwordConfirm', isValid)
             }
+            disabled={isCompleted}
           />
           <Button
-            disabled={!isFormValid}
+            disabled={!isFormValid || isSubmitting || isCompleted}
             isLoading={isSubmitting}
             variant="primary"
             className="mt-[6px] h-[45px] w-full"

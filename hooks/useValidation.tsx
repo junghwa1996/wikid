@@ -35,7 +35,7 @@ export function useValidation({ type, compareValue }: UseValidationProps) {
         }
         break;
       case 'name':
-        if (value.length < 1 || value.length > 10) {
+        if (value.length <= 1 || value.length > 10) {
           return '1자 이상 10자 이하로 작성해주세요.';
         }
         break;
