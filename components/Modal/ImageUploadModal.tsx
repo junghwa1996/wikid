@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Button from '../Button';
 import Modal from './Modal';
+import SnackBar from '../SnackBar';
+import useSnackBar from '@/hooks/useSanckBar';
 
 interface ImageUploadModalProps {
   imageFile?: File | null;
@@ -12,6 +14,9 @@ interface ImageUploadModalProps {
 }
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB 를 바이트로
+const NOT_SVG_MESSAGE =
+  'JPG, PNG, GIF, WebP 형식의 이미지만 업로드 가능합니다.';
+const SIZE_LIMIT_MESSAGE = '파일 크기는 5MB를 초과할 수 없습니다.';
 
 const ImageUploadModal = ({
   imageFile: initialImageFile = null,
@@ -24,21 +29,20 @@ const ImageUploadModal = ({
   const [imageFile, setImageFile] = useState<File | null>(initialImageFile);
   const [isDragging, setIsDragging] = useState(false);
   const [isValidFile, setIsValidFile] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { snackBarValues, snackBarOpen } = useSnackBar();
 
   const validateFile = (file: File): boolean => {
-    setError(null);
     setIsValidFile(true);
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
-      setError('JPG, PNG, GIF, WebP 형식의 이미지만 업로드 가능합니다.');
+      snackBarOpen('fail', NOT_SVG_MESSAGE);
       setIsValidFile(false);
       return false;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      setError('파일 크기는 5MB를 초과할 수 없습니다.');
+      snackBarOpen('fail', SIZE_LIMIT_MESSAGE);
       setIsValidFile(false);
       return false;
     }
@@ -64,7 +68,6 @@ const ImageUploadModal = ({
       fileInputRef.current.value = '';
       setPreviewUrl(null);
       setImageFile(null);
-      setError(null);
       setIsValidFile(true);
     }
   };
@@ -72,23 +75,27 @@ const ImageUploadModal = ({
   const handleDragEnter = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    setIsDragging(true);
 
-    // 드래그된 파일 유효성 검사
     if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
       const file = e.dataTransfer.items[0]?.getAsFile();
       if (file) {
-        validateFile(file);
+        const allowedTypes = [
+          'image/jpeg',
+          'image/png',
+          'image/gif',
+          'image/webp',
+        ];
+        setIsValidFile(allowedTypes.includes(file.type));
       }
     }
-
-    setIsDragging(true);
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-    setIsValidFile(true); // 드래그가 영역을 벗어나면 상태 초기화
+    setIsValidFile(true); // 드래그가 끝나면 상태 초기화
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
@@ -109,7 +116,6 @@ const ImageUploadModal = ({
       }
     }
   };
-
   const handleImageSelect = () => {
     onGetImageFile(imageFile);
     onClose();
@@ -117,7 +123,6 @@ const ImageUploadModal = ({
 
   useEffect(() => {
     if (isOpen) {
-      setError(null);
       setIsValidFile(true);
     }
   }, [isOpen]);
@@ -199,14 +204,20 @@ const ImageUploadModal = ({
           </div>
         )}
 
-        {error && <p className="text-center text-12 text-red-100">{error}</p>}
-
         <div className="flex justify-end">
           <Button type="button" onClick={handleImageSelect}>
             선택하기
           </Button>
         </div>
       </div>
+
+      <SnackBar
+        severity={snackBarValues.severity}
+        onClose={snackBarValues.onClose}
+        open={snackBarValues.open}
+      >
+        {snackBarValues.children}
+      </SnackBar>
     </Modal>
   );
 };
