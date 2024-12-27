@@ -1,4 +1,5 @@
 import { useValidation } from 'hooks/useValidation';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 
@@ -15,6 +16,7 @@ interface InputFieldProps {
   width?: string;
   onValidation?: (isValid: boolean) => void;
   ref?: React.Ref<HTMLInputElement>;
+  disabled?: boolean;
 }
 
 function InputField({
@@ -28,6 +30,7 @@ function InputField({
   width,
   onValidation,
   ref,
+  disabled,
   ...props
 }: InputFieldProps) {
   const { errorMessage, validate } = useValidation({
@@ -36,6 +39,7 @@ function InputField({
   });
 
   const [showDayPicker, setShowDayPicker] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleFocus = () => {
     if (
@@ -53,37 +57,32 @@ function InputField({
   };
 
   const handleBlur = () => {
-    if (typeof layout === 'string' && layout === 'vertical') {
+    if (value) {
       const error = validate(value);
-      const isValid = !error && typeof value === 'string' && value.length > 0;
+      const isValid = !error && value.length > (type === 'name' ? 1 : 0);
       onValidation?.(isValid);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value.trim();
     onChange(e);
-    if (
-      typeof layout === 'string' &&
-      layout === 'vertical' &&
-      typeof errorMessage === 'string' &&
-      errorMessage.length > 0
-    ) {
-      const error = validate(e.target.value);
-      const isValid =
-        !error &&
-        typeof e.target.value === 'string' &&
-        e.target.value.length > 0;
-      onValidation?.(isValid);
-    }
+    const error = validate(newValue);
+    const isValid = !error && newValue.length > (type === 'name' ? 1 : 0);
+    onValidation?.(isValid);
   };
 
   const getInputType = () => {
     if (type === 'name') {
       return 'text';
-    } else if (type === 'passwordConfirm') {
-      return 'password';
+    } else if (type === 'passwordConfirm' || type === 'password') {
+      return showPassword ? 'text' : 'password';
     }
     return type;
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   //스타일에 따른 클래스
@@ -111,7 +110,7 @@ function InputField({
     errorMessage.length > 0
       ? variantClass.error
       : variantClass.normal
-  }`;
+  } ${disabled ? 'opacity-50 pointer-events-none' : ''}`;
 
   return (
     <div
@@ -127,23 +126,39 @@ function InputField({
       {typeof label === 'string' && label.length > 0 && (
         <label className={labelClass}>{label}</label>
       )}
-      <input
-        type={getInputType()}
-        value={value}
-        onChange={handleChange}
-        placeholder={placeholder}
-        onBlur={handleBlur}
-        onFocus={handleFocus}
-        className={inputClass}
-        ref={ref}
-        {...props}
-      />
-      {typeof layout === 'string' &&
-        layout === 'vertical' &&
-        typeof errorMessage === 'string' &&
-        errorMessage.length > 0 && (
-          <span className={variantClass.errorText}>{errorMessage}</span>
+      <div className="relative">
+        <input
+          type={getInputType()}
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
+          className={inputClass}
+          ref={ref}
+          disabled={disabled}
+          {...props}
+        />
+        {(type === 'password' || type === 'passwordConfirm') && (
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+          >
+            <Image
+              src={
+                showPassword ? '/icon/icon-eye.svg' : '/icon/icon-eye-off.svg'
+              }
+              alt={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
+              width={20}
+              height={20}
+            />
+          </button>
         )}
+      </div>
+      {errorMessage && (
+        <span className={variantClass.errorText}>{errorMessage}</span>
+      )}
       {typeof showDayPicker === 'boolean' && showDayPicker && (
         <div className="absolute left-0 top-full z-50 mt-2 rounded bg-white p-4 shadow-md">
           <div>

@@ -24,7 +24,7 @@ const severityConfig = {
     textStyle: 'text-green-300 text-14sb mo:text-12sb',
   },
   info: {
-    style: 'bg-background border-white',
+    style: 'bg-background border-background',
     icon: '/icon/icon-info.svg',
     textStyle: 'text-gray-500 text-14 mo:text-12',
   },

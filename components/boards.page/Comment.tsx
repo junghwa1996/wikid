@@ -59,11 +59,11 @@ export default function Comment({
       <Image
         src={profile ? profile : '/icon/icon-profile.svg'}
         alt="user profile"
-        className="overflow-hidden rounded-full mo:size-10"
+        className="size-10 overflow-hidden rounded-full object-cover mo:size-10"
         width={50}
         height={50}
       />
-      <div className="w-full">
+      <div className="flex-1">
         <div className="mb-2 flex items-center justify-between mo:mb-[6px]">
           <span className="text-18sb">{name}</span>
 

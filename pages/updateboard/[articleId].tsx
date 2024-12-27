@@ -75,8 +75,7 @@ export default function UpdateBoard() {
   // 작성 폼 서브밋 함수
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 썸네일 이미지 주소
-    let imageUrl = '';
+    let imageUrl = getImage;
 
     if (imageFile) {
       formData.append('image', imageFile);
@@ -102,11 +101,20 @@ export default function UpdateBoard() {
     }
 
     try {
-      await patchBoard(articleId as number | string, {
+      const updateData: {
+        title: string;
+        content: string;
+        image?: string | null;
+      } = {
         title,
         content,
-        image: imageUrl,
-      });
+      };
+
+      if (imageFile) {
+        updateData.image = imageUrl;
+      }
+
+      await patchBoard(articleId as number | string, updateData);
       if (typeof articleId === 'string') {
         setSnackStyled('success');
         setSnackBarMessage(
