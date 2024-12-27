@@ -8,6 +8,7 @@ import Headers from '@/components/Headers/Headers';
 import { ProfileProvider } from '../context/ProfileContext';
 
 import '@/styles/globals.css';
+import { SnackbarProvider } from 'context/SnackBarContext';
 
 const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
@@ -26,7 +27,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
         <Headers />
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
+          <SnackbarProvider>
+            <Component {...pageProps} />
+          </SnackbarProvider>
           {/* NOTE : 배포 시 false로 변경  */}
           <ReactQueryDevtools initialIsOpen={true} />
         </QueryClientProvider>
