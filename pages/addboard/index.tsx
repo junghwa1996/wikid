@@ -24,6 +24,7 @@ export default function Addboard() {
   const [content, setContent] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const router = useRouter();
@@ -58,7 +59,8 @@ export default function Addboard() {
         '게시물이 등록되었습니다. 작성된 게시물로 이동 됩니다.',
         async () => {
           await router.push('/boards/' + data.id);
-        }
+        },
+        1000
       );
     },
   });
@@ -87,6 +89,8 @@ export default function Addboard() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setIsLoading(true);
+    console.log('--- isLoading:', isLoading);
     if (imageFile) {
       formData.append('image', imageFile);
       imageMutate();
@@ -109,10 +113,11 @@ export default function Addboard() {
               </h1>
               <Button
                 form="write-form"
-                className="w-[140px] mo:w-auto"
+                className="min-w-[140px] mo:w-auto"
                 disabled={submitDisabled}
+                isLoading={isLoading}
               >
-                등록하기
+                {isLoading ? '등록중 입니다.' : '등록하기'}
               </Button>
             </header>
 

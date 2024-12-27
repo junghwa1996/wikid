@@ -127,7 +127,7 @@ export default function WikiList() {
       <div className="container pb-5 pt-20 mo:pt-10">
         <div className="mt-20 px-20 mo:px-0">
           <SearchInput
-            size="large"
+            size="full"
             value={searchValue}
             onChange={handleChange}
             onSubmit={handleSubmit}
