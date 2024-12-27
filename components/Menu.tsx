@@ -12,9 +12,10 @@ interface MenuProps {
  */
 
 export default function Menu({ options, onSelect, menuSize }: MenuProps) {
+  const fadeIn = 'pc:animate-pcFadeIn tamo:animate-tamoFadeIn';
   return (
     <ul
-      className={`${menuSize} absolute z-10 mt-2 rounded-xl border border-gray-300 bg-background p-[4px] text-14 shadow-custom mo:right-0 pc:right-1/2 pc:translate-x-1/2 tamo:right-0`}
+      className={`${menuSize} ${fadeIn} absolute z-10 mt-2 rounded-xl border border-gray-300 bg-background p-[4px] text-14 shadow-custom pc:right-1/2 pc:translate-x-1/2 tamo:right-0`}
     >
       {options.map((option, index) => (
         <button

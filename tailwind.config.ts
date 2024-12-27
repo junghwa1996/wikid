@@ -118,6 +118,32 @@ export default {
       borderRadius: {
         custom: '10px',
       },
+      keyframes: {
+        pcFadeIn: {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(-20px) translateX(50%)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0) translateX(50%)',
+          },
+        },
+        tamoFadeIn: {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(-20px)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
+        },
+      },
+      animation: {
+        pcFadeIn: 'pcFadeIn 0.1s ease-in-out',
+        tamoFadeIn: 'tamoFadeIn 0.1s ease-in-out',
+      },
     },
     screens: {
       mo: { max: '743px' },
