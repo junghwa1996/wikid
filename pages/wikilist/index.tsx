@@ -124,8 +124,8 @@ export default function WikiList() {
         <title>위키 목록{name && ` - 검색어 '${name}'`} | wikied</title>
       </Head>
 
-      <div className="container pb-5 pt-20 mo:pt-10">
-        <div className="mt-20 px-20 mo:px-0">
+      <div className="container pb-5 pt-20 mo:pt-10 ta:pt-[60px]">
+        <div className="mt-20 px-20 mo:mt-10 ta:mt-[60px] tamo:px-0">
           <SearchInput
             size="full"
             value={searchValue}
@@ -154,7 +154,7 @@ export default function WikiList() {
           )}
 
           {hasList && (
-            <div className="my-[120px] flex justify-center mo:my-10">
+            <div className="my-[120px] flex justify-center mo:my-10 ta:my-20">
               <Pagination
                 totalCount={totalCount}
                 currentPage={Number(page)}
