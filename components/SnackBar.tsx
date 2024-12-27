@@ -43,7 +43,7 @@ export default function SnackBar({
   children,
   open,
   onClose,
-  autoHideDuration = 3000,
+  autoHideDuration = 2000,
 }: SnackBarProps) {
   const { style, icon, textStyle } =
     severityConfig[severity ? severity : 'info'];
@@ -55,7 +55,7 @@ export default function SnackBar({
       if (autoHideDuration) {
         const timer = setTimeout(() => {
           setVisible(false);
-          setTimeout(onClose, 300);
+          setTimeout(onClose, 200);
         }, autoHideDuration);
         return () => clearTimeout(timer);
       }
