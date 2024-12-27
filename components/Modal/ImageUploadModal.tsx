@@ -23,19 +23,23 @@ const ImageUploadModal = ({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(initialImageFile);
   const [isDragging, setIsDragging] = useState(false);
+  const [isValidFile, setIsValidFile] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const validateFile = (file: File): boolean => {
     setError(null);
+    setIsValidFile(true);
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       setError('JPG, PNG, GIF, WebP 형식의 이미지만 업로드 가능합니다.');
+      setIsValidFile(false);
       return false;
     }
 
     if (file.size > MAX_FILE_SIZE) {
       setError('파일 크기는 5MB를 초과할 수 없습니다.');
+      setIsValidFile(false);
       return false;
     }
 
@@ -61,12 +65,22 @@ const ImageUploadModal = ({
       setPreviewUrl(null);
       setImageFile(null);
       setError(null);
+      setIsValidFile(true);
     }
   };
 
   const handleDragEnter = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // 드래그된 파일 유효성 검사
+    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+      const file = e.dataTransfer.items[0]?.getAsFile();
+      if (file) {
+        validateFile(file);
+      }
+    }
+
     setIsDragging(true);
   };
 
@@ -74,6 +88,7 @@ const ImageUploadModal = ({
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
+    setIsValidFile(true); // 드래그가 영역을 벗어나면 상태 초기화
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
@@ -103,6 +118,7 @@ const ImageUploadModal = ({
   useEffect(() => {
     if (isOpen) {
       setError(null);
+      setIsValidFile(true);
     }
   }, [isOpen]);
 
@@ -142,7 +158,9 @@ const ImageUploadModal = ({
             onDrop={handleDrop}
             className={`flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed ${
               isDragging
-                ? 'border-green-300 bg-green-100'
+                ? isValidFile
+                  ? 'border-green-300 bg-green-100'
+                  : 'border-red-100 bg-red-50'
                 : 'border-gray-300 bg-gray-100 hover:border-gray-400'
             }`}
           >
