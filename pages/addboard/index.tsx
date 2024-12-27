@@ -88,9 +88,8 @@ export default function Addboard() {
   // 작성 폼 서브밋 함수
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setIsLoading(true);
-    console.log('--- isLoading:', isLoading);
+
     if (imageFile) {
       formData.append('image', imageFile);
       imageMutate();
