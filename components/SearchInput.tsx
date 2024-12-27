@@ -45,9 +45,17 @@ function SearchInput({
     'text-gray-500',
     'text-16',
     'placeholder:text-gray-400',
-    isFocused
-      ? 'outline outline-2 outline-green-100'
-      : 'focus:outline-green-100',
+    'focus:outline-none',
+    'w-full',
+  ].join(' ');
+
+  const formStyles = [
+    'flex',
+    'items-center',
+    'rounded-lg',
+    'bg-gray-100',
+    'px-[20px]',
+    isFocused ? 'outline outline-2 outline-green-100' : '',
   ].join(' ');
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -62,21 +70,26 @@ function SearchInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center rounded-lg bg-gray-100 px-[20px]"
+      className={formStyles}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setIsFocused(false);
+        }
+      }}
     >
-      <label htmlFor="searchInput">
+      <label htmlFor="searchInput" className="flex items-center gap-2 w-full">
         <Image src="/icon/icon-search.svg" alt="검색" width={22} height={22} />
+        <input
+          id="searchInput"
+          className={inputStyles}
+          type="text"
+          value={value}
+          placeholder={placeholder}
+          onChange={handleInputChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
       </label>
-      <input
-        id="searchInput"
-        className={inputStyles}
-        type="text"
-        value={value}
-        placeholder={placeholder}
-        onChange={handleInputChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-      />
     </form>
   );
 }

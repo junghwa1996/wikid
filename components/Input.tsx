@@ -1,9 +1,6 @@
 import { useValidation } from 'hooks/useValidation';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { format } from 'date-fns';
-
-import CustomDayPicker from './DayPicker';
 
 interface InputFieldProps {
   value: string;
@@ -38,23 +35,9 @@ function InputField({
     compareValue: compareValue ?? '',
   });
 
-  const [showDayPicker, setShowDayPicker] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleFocus = () => {
-    if (
-      typeof layout === 'string' &&
-      layout === 'horizontal' &&
-      typeof label === 'string' &&
-      label === '생일'
-    ) {
-      setShowDayPicker(true);
-    }
-  };
-
-  const closeDayPicker = () => {
-    setShowDayPicker(false);
-  };
+  const handleFocus = () => {};
 
   const handleBlur = () => {
     if (value) {
@@ -65,8 +48,34 @@ function InputField({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value.trim();
-    onChange(e);
+    let newValue = e.target.value.trim();
+
+    if (label === '생일') {
+      // 숫자만 추출
+      const numbers = newValue.replace(/\D/g, '');
+
+      // YYYY-MM-DD 형식으로 변환
+      if (numbers.length > 0) {
+        newValue = numbers.slice(0, 4);
+        if (numbers.length > 4) {
+          newValue += '-' + numbers.slice(4, 6);
+        }
+        if (numbers.length > 6) {
+          newValue += '-' + numbers.slice(6, 8);
+        }
+      }
+
+      onChange({
+        ...e,
+        target: {
+          ...e.target,
+          value: newValue,
+        },
+      });
+    } else {
+      onChange(e);
+    }
+
     const error = validate(newValue);
     const isValid = !error && newValue.length > (type === 'name' ? 1 : 0);
     onValidation?.(isValid);
@@ -126,12 +135,12 @@ function InputField({
       {typeof label === 'string' && label.length > 0 && (
         <label className={labelClass}>{label}</label>
       )}
-      <div className="relative">
+      <div className="relative flex-1">
         <input
           type={getInputType()}
           value={value}
           onChange={handleChange}
-          placeholder={placeholder}
+          placeholder={label === '생일' ? 'YYYY-MM-DD' : placeholder}
           onBlur={handleBlur}
           onFocus={handleFocus}
           className={inputClass}
@@ -158,27 +167,6 @@ function InputField({
       </div>
       {errorMessage && (
         <span className={variantClass.errorText}>{errorMessage}</span>
-      )}
-      {typeof showDayPicker === 'boolean' && showDayPicker && (
-        <div className="absolute left-0 top-full z-50 mt-2 rounded bg-white p-4 shadow-md">
-          <div>
-            <CustomDayPicker
-              selected={value ? new Date(value) : undefined}
-              onSelect={(date) => {
-                if (date) {
-                  const formattedDate = format(date, 'yyyy-MM-dd');
-                  onChange({
-                    target: { value: formattedDate },
-                  } as React.ChangeEvent<HTMLInputElement>);
-                  setShowDayPicker(false);
-                }
-              }}
-            />
-          </div>
-          <button onClick={closeDayPicker} className="mt-2 text-gray-500">
-            닫기
-          </button>
-        </div>
       )}
     </div>
   );
