@@ -8,8 +8,14 @@ export default function dateConversion(isoString: string): string {
   const createdDate = new Date(isoString); // 생성일
   const currentDate = new Date(); // 현재 날짜
   const timeDifference = currentDate.getTime() - createdDate.getTime(); // 오차 계산
-  const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60)); // 시간 환산
-  const minutesDifference = Math.floor(timeDifference / (1000 * 60)); // 분 환산
+  const hoursDifference = Math.max(
+    Math.floor(timeDifference / (1000 * 60 * 60)),
+    0
+  );
+  const minutesDifference = Math.max(
+    Math.floor(timeDifference / (1000 * 60)),
+    0
+  );
 
   if (hoursDifference < 1) {
     return `${minutesDifference}분 전`; // 생성한지 1시간이 안되었을 때
