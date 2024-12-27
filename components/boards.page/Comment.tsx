@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { CommentType, Writer } from 'types/board';
 
@@ -34,6 +34,7 @@ export default function Comment({
 }: CommentProps) {
   const [value, setValue] = useState(content);
   const [isEditing, setIsEditing] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
@@ -53,6 +54,12 @@ export default function Comment({
   const handleUpdateClick = () => {
     setIsEditing(true);
   };
+
+  useEffect(() => {
+    if (createdAt !== updatedAt) {
+      setIsUpdate(true);
+    }
+  }, [createdAt, updatedAt]);
 
   return (
     <div className="flex items-start gap-5 rounded-custom px-[30px] py-[22px] shadow-custom dark:shadow-custom-dark mo:gap-[15px] mo:px-5 mo:py-4">
@@ -99,12 +106,13 @@ export default function Comment({
               {content}
             </p>
             <span className="mr-2 text-14 text-gray-400 mo:text-12">
-              등록일 : {dateConversion(createdAt)}
+              {dateConversion(createdAt)}
             </span>
-
-            <span className="text-14 text-gray-400 mo:text-12">
-              수정일 : {dateConversion(updatedAt)}
-            </span>
+            {isUpdate && (
+              <span className="text-14 text-gray-400 mo:text-12">
+                (수정된 댓글)
+              </span>
+            )}
           </div>
         ) : (
           <CommentForm

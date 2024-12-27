@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BoardBase, Writer } from 'types/board';
 
 import Button from '@/components/Button';
@@ -51,11 +51,18 @@ export default function BoardDetailCard({
   const [snackStyled, setSnackStyled] =
     useState<SnackBarProps['severity']>(undefined);
   const [isModal, setIsModal] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const isMobile = useCheckMobile();
   const router = useRouter();
   const { articleId } = router.query;
   const id = articleId as string;
   const { isAuthenticated } = useProfileContext();
+
+  useEffect(() => {
+    if (createdAt !== updatedAt) {
+      setIsUpdate(true);
+    }
+  }, [createdAt, updatedAt]);
 
   const handleModalClose = () => {
     setIsModal(false);
@@ -138,20 +145,17 @@ export default function BoardDetailCard({
           )}
         </div>
         <div className="flex items-center gap-[10px] text-14 text-gray-400 mo:flex-wrap mo:text-12">
-          <span className="whitespace-nowrap mo:w-full mo:flex-1">{name}</span>
-          <div className="flex w-full justify-between">
-            <div className="flex items-center gap-[10px]">
-              <span>등록일 : {dateConversion(createdAt)}</span>
-              <span>|</span>
-              <span>최근 수정일 : {dateConversion(updatedAt)}</span>
-            </div>
-
-            <Heart
-              initialCount={likeCountState}
-              isLiked={isLiked}
-              onClick={handleHeartClick}
-            />
+          <span>{name}</span>
+          <div className="flex flex-1 items-center gap-[10px]">
+            <span>{dateConversion(createdAt)}</span>
+            {isUpdate && <span>(수정된 게시글)</span>}
           </div>
+
+          <Heart
+            initialCount={likeCountState}
+            isLiked={isLiked}
+            onClick={handleHeartClick}
+          />
         </div>
       </header>
 
