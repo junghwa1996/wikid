@@ -27,6 +27,7 @@ import {
 } from '@/services/api/commentAPI';
 import { CommentsData, CommentType } from 'types/board';
 import SnackBar, { SnackBarProps } from '@/components/SnackBar';
+import ModalDefault from '@/components/Modal/ModalDefault';
 
 export default function BoardsDetails() {
   const [boardData, setBoardData] = useState<ArticleData | null>(null);
@@ -38,6 +39,8 @@ export default function BoardsDetails() {
   const [snackStyled, setSnackStyled] =
     useState<SnackBarProps['severity']>(undefined);
 
+  const [isModal, setIsModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const router = useRouter();
   const { articleId } = router.query;
   const { isAuthenticated } = useProfileContext();
@@ -172,12 +175,26 @@ export default function BoardsDetails() {
   };
 
   // 댓글 삭제 핸들러
-  const handleDelete = async (id: number) => {
-    try {
-      await deleteCommentMutation.mutateAsync(id);
-    } catch (error) {
-      console.error('댓글을 삭제하지 못했습니다.', error);
+  const handleDelete = async () => {
+    if (commentToDelete !== null) {
+      try {
+        await deleteCommentMutation.mutateAsync(commentToDelete);
+        setIsModal(false);
+        setCommentToDelete(null);
+      } catch (error) {
+        console.error('댓글을 삭제하지 못했습니다.', error);
+      }
     }
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setCommentToDelete(id);
+    setIsModal(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModal(false);
+    setCommentToDelete(null);
   };
 
   // 게시글 데이터 로딩 상태
@@ -247,7 +264,7 @@ export default function BoardsDetails() {
                       onclick={{
                         update: (newContent: string) =>
                           handleUpdate(item.id, newContent),
-                        delete: () => handleDelete(item.id),
+                        delete: () => handleDeleteClick(item.id),
                       }}
                       isOwner={item.writer.id === userId}
                     />
@@ -275,6 +292,18 @@ export default function BoardsDetails() {
         >
           {snackBarMessage}
         </SnackBar>
+        <ModalDefault
+          title="알림"
+          text="댓글을 삭제하시겠습니까?"
+          onClose={handleModalClose}
+          isOpen={isModal}
+          closeOnBackgroundClick={true}
+        >
+          <Button onClick={handleModalClose}>취소</Button>
+          <Button onClick={handleDelete} variant="danger">
+            삭제
+          </Button>
+        </ModalDefault>
       </main>
     </>
   );

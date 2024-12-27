@@ -20,7 +20,7 @@ export interface BoardBase extends BaseEntity {
 export interface BoardCreateData {
   title: string;
   content: string;
-  image: string;
+  image?: string | null;
 }
 
 export interface Board extends BoardBase {
