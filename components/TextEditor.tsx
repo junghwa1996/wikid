@@ -27,7 +27,7 @@ export default function TextEditor({ value = '', onChange }: Props) {
         ['bold', 'italic', 'underline'],
         [{ align: null }, { align: 'center' }, { align: 'right' }],
         [{ list: 'ordered' }, { list: 'bullet' }],
-        ['blockquote', 'link', 'image'],
+        ['blockquote', 'link'],
       ],
     },
   };
