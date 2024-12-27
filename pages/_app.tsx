@@ -25,14 +25,14 @@ export default function App({ Component, pageProps }: AppProps) {
           <title>wikid</title>
         </Head>
 
-        <Headers />
-        <QueryClientProvider client={queryClient}>
-          <SnackbarProvider>
+        <SnackbarProvider>
+          <Headers />
+          <QueryClientProvider client={queryClient}>
             <Component {...pageProps} />
-          </SnackbarProvider>
-          {/* NOTE : 배포 시 false로 변경  */}
-          <ReactQueryDevtools initialIsOpen={true} />
-        </QueryClientProvider>
+            {/* NOTE : 배포 시 false로 변경  */}
+            <ReactQueryDevtools initialIsOpen={true} />
+          </QueryClientProvider>
+        </SnackbarProvider>
       </ProfileProvider>
     </>
   );
