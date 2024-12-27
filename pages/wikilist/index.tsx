@@ -11,6 +11,7 @@ import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
 import useSnackBar from '@/hooks/useSanckBar';
 import SnackBar from '@/components/SnackBar';
+import FullCoverSpinner from '@/components/FullCoverSpinner';
 
 // 위키 목록 페이지 프로필 데이터 타입
 export interface ProfileProps {
@@ -112,8 +113,8 @@ export default function WikiList() {
       });
   }, [page, router]);
 
-  // TODO: 로딩 스피너 & 에러 페이지 컴포넌트 추가
-  if (isPending) return <div>Loading...</div>;
+  if (isPending)
+    return <FullCoverSpinner>위키 목록 가져오는 중...</FullCoverSpinner>;
 
   // TODO: 에러 컴포넌트 추가
   if (error) return <div>Error: {error.message}</div>;
