@@ -166,7 +166,7 @@ export default function Contents({ profile }: ProfileProps) {
   return (
     <div
       className={`pc:grid ${isEditing ? `pc:grid-rows-[75px]` : `pc:grid-rows-[200px]`} mo:px-[20px] ta:px-[60px] pc:gap-x-[80px] tamo:flex tamo:w-full tamo:flex-col tamo:gap-[10px]`}
-      style={{ gridTemplateColumns: 'minmax(300px, 800px) 400px' }}
+      style={{ gridTemplateColumns: 'minmax(300px, 800px) 320px' }}
     >
       <div>
         <div className="pc:pt-[40px]">
