@@ -39,24 +39,6 @@ export default function LandingPage() {
             body {
               font-family: 'NEXON Lv1 Gothic Low', sans-serif;
             }
-
-            body {
-              font-size: 6.25%;
-            }
-
-            /* 태블릿 */
-            @media screen and (min-width: 744px) and (max-width: 1023px) {
-              html {
-                font-size: 1.3441vw;
-              }
-            }
-
-            /* 모바일 */
-            @media screen and (max-width: 743px) {
-              html {
-                font-size: 2.6667vw;
-              }
-            }
           `}
         </style>
       </Head>
@@ -198,14 +180,14 @@ export default function LandingPage() {
                   alt="벨 이미지"
                   width={280}
                   height={280}
-                  className="h-auto w-full mo:w-[10.2rem] ta:w-[19.8rem]"
+                  className="h-auto w-full mo:w-[25vw] ta:w-[26vw]"
                 />
                 <Image
                   src="/images/img-alert.svg"
                   alt="알림 이미지"
                   width={604}
                   height={280}
-                  className="h-auto w-full mo:w-[22.3rem] ta:w-[42.8rem]"
+                  className="h-auto w-full mo:w-[53.6vw] ta:w-[57vw]"
                 />
               </div>
             </div>
