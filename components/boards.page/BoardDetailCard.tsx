@@ -6,7 +6,6 @@ import { BoardBase, Writer } from 'types/board';
 import Button from '@/components/Button';
 import EditorViewer from '@/components/EditorViewer';
 import Heart from '@/components/Heart/Heart';
-import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import instance from '@/lib/axios-client';
 import dateConversion from '@/utils/dateConversion';
