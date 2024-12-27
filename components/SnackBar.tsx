@@ -69,7 +69,7 @@ export default function SnackBar({
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
-      className={`rounded-custom ${style} flex items-start gap-[15px] border px-5 py-[11px] transition-opacity duration-300 mo:px-[15px] mo:py-[11px] ${
+      className={`rounded-custom ${style} flex items-center gap-[15px] border px-5 py-[11px] transition-opacity duration-300 mo:px-[15px] mo:py-[11px] ${
         visible ? 'opacity-100' : 'opacity-0'
       }`}
       style={{ display: open || visible ? 'flex' : 'none', zIndex: 9999 }}
