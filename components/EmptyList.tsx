@@ -15,7 +15,7 @@ export default function EmptyList({
     >
       <p className="text-20md text-gray-400 mo:text-18md">{text}</p>
       <Image
-        src="/images/empty.png"
+        src="/images/empty.svg"
         alt=""
         width={144}
         height={144}
