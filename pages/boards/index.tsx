@@ -74,7 +74,8 @@ export default function Boards({
   const [likeBoards] = useState<Board[]>(initialLikeBoards);
   const [currentPage, setCurrentPage] = useState(1);
   const [value, setValue] = useState('');
-  const [selectedOption, setSelectedOption] = useState('최신순'); // 옵션 상태 추가
+  const [searchValue, setSearchValue] = useState('');
+  const [selectedOption, setSelectedOption] = useState('최신순');
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState('');
   const [snackStyled, setSnackStyled] =
@@ -93,6 +94,7 @@ export default function Boards({
         orderBy,
         pageSize: PAGE_SIZE,
         page: currentPage,
+        keyword: searchValue,
       });
       if (Array.isArray(res.list) && res.list.length > 0) {
         setBoards(res.list);
@@ -104,19 +106,10 @@ export default function Boards({
     fetchBoards().catch((error) =>
       console.error('게시글 데이터를 불러오지 못했습니다 :', error)
     );
-  }, [selectedOption, currentPage]);
+  }, [selectedOption, currentPage, searchValue]);
 
   const handleSearchSubmit = async () => {
-    const res = await getBoards({
-      keyword: value,
-      pageSize: PAGE_SIZE,
-      page: currentPage,
-    });
-    if (Array.isArray(res.list) && res.list.length > 0) {
-      setBoards(res.list);
-    } else {
-      setBoards([]);
-    }
+    setSearchValue(value);
   };
 
   const handleOptionSelect = (option: string) => {
@@ -136,9 +129,9 @@ export default function Boards({
   };
 
   const emptyListText =
-    value === ''
+    searchValue === ''
       ? '게시글이 존재하지 않습니다.'
-      : `${value}와(과) 일치하는 검색 결과가 없습니다.`;
+      : `${searchValue}와(과) 일치하는 검색 결과가 없습니다.`;
 
   const pxTablet = 'ta:px-[60px]';
 
