@@ -123,7 +123,7 @@ const ImageUploadModal = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 bg-background">
         <p className="text-center text-18sb">이미지</p>
         <input
           id="image"

@@ -70,7 +70,7 @@ function WikiQuizModal({
           }`}
         >
           <div
-            className={`flex size-[42px] items-center justify-center rounded-full bg-white ${
+            className={`flex size-[42px] items-center justify-center rounded-full bg-background ${
               keyboardVisible ? '!size-auto' : ''
             }`}
           >
