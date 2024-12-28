@@ -4,11 +4,13 @@ import { useRouter } from 'next/router';
 
 interface NotificationContentsProps {
   createdAt: Date;
+  handleNotiContent: () => void;
   onClose: () => void;
 }
 
 export default function NotificationContents({
   createdAt,
+  handleNotiContent,
   onClose,
 }: NotificationContentsProps) {
   const { profile } = useProfileContext();
@@ -36,6 +38,7 @@ export default function NotificationContents({
   const handleLinkClick = async () => {
     const url = `/wiki/${profile?.code}`;
     await router.replace(url);
+    handleNotiContent();
     onClose();
   };
 
@@ -47,7 +50,7 @@ export default function NotificationContents({
       <div>
         <div className="flex w-full items-center justify-between">
           <div className="size-[5px] rounded-full bg-red-100"></div>
-          <button onClick={onClose}>
+          <button onClick={handleNotiContent}>
             <Image
               src="/icon/icon-close.svg"
               alt="닫기 버튼"

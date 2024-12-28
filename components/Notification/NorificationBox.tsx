@@ -62,7 +62,8 @@ export default function NotificationBox({
             <NotificationContents
               key={notification.id}
               createdAt={notification.createdAt}
-              onClose={() => handleNotiContent(notification.id)}
+              handleNotiContent={() => handleNotiContent(notification.id)}
+              onClose={onClose}
             />
           ))
         ) : (
