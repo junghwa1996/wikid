@@ -62,7 +62,7 @@ export default function Comment({
   }, [createdAt, updatedAt]);
 
   return (
-    <div className="flex items-start gap-5 rounded-custom px-[30px] py-[22px] shadow-custom dark:shadow-custom-dark mo:gap-[15px] mo:px-5 mo:py-4">
+    <div className="bgCard flex items-start gap-5 rounded-custom px-[30px] py-[22px] shadow-custom dark:shadow-custom-dark mo:gap-[15px] mo:px-5 mo:py-4">
       <div className="size-[50px] overflow-hidden rounded-full mo:size-10">
         <Image
           src={profile ? profile : '/icon/icon-profile.svg'}

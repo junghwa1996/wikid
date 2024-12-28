@@ -24,7 +24,7 @@ export default function LinkBar({
       className={`flex min-w-20 items-center gap-[5px] rounded-custom bg-green-100 px-[10px] py-[3px] text-green-200 transition-colors hover:bg-green-200 hover:text-green-100 mo:py-1 ${classNames}`}
     >
       <IconLink width={20} height={20} className="size-5 mo:size-4" />
-      <p className="flex-1 truncate whitespace-nowrap text-14 mo:text-12">
+      <p className="flex-1 truncate whitespace-nowrap text-14 dark:text-green-300 mo:text-12">
         {link}
       </p>
     </button>
