@@ -155,3 +155,30 @@ body {
   font-weight: normal;
   font-style: normal;
 }
+
+.my-wikied {
+  --pos1: 713px;
+  --pos2: 714px;
+
+  @apply bg-blue-50 bg-no-repeat pt-[100px];
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 145' fill='%23F1F4FD' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1920 0H0V144.814C121.395 61.7089 505.249 1 960 1C1414.75 1 1798.6 61.7089 1920 144.814V0Z'/%3E%3C/svg%3E%0A"),
+    linear-gradient(to bottom, var(--blue-50) var(--pos1), #474d66 var(--pos2));
+  background-position:
+    center var(--pos1),
+    0;
+  background-size: 100%;
+
+  .dark & {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 145' fill='%231a1f2e' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1920 0H0V144.814C121.395 61.7089 505.249 1 960 1C1414.75 1 1798.6 61.7089 1920 144.814V0Z'/%3E%3C/svg%3E%0A"),
+      linear-gradient(
+        to bottom,
+        var(--blue-50) var(--pos1),
+        #474d66 var(--pos2)
+      );
+  }
+
+  @media (max-width: 743px) {
+    --pos1: 502px;
+    --pos2: 503px;
+  }
+}
