@@ -22,7 +22,7 @@ export default function PaginationButton({
 }: PaginationButtonProps) {
   return (
     <button
-      className={`${className} flex size-[45px] items-center justify-center rounded-custom bg-background text-18 text-gray-400 shadow-custom dark:shadow-custom-dark mo:size-[40px]`}
+      className={`${className} scaleStyle flex size-[45px] items-center justify-center rounded-custom bg-background text-18 text-gray-400 shadow-custom dark:shadow-custom-dark mo:size-[40px]`}
       onClick={onClick}
       disabled={disabled}
     >
