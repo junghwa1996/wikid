@@ -26,8 +26,8 @@ import {
   deleteComment,
 } from '@/services/api/commentAPI';
 import { CommentsData, CommentType } from 'types/board';
-import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import ModalDefault from '@/components/Modal/ModalDefault';
+import { useSnackbar } from 'context/SnackBarContext';
 import CommentEmpty from '@/components/boards.page/CommentEmpty';
 
 export default function BoardsDetails() {
@@ -35,16 +35,12 @@ export default function BoardsDetails() {
   const [value, setValue] = useState('');
   const [userId, setUserId] = useState<number | string | null>(null);
 
-  const [snackBarOpen, setSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState('');
-  const [snackStyled, setSnackStyled] =
-    useState<SnackBarProps['severity']>(undefined);
-
   const [isModal, setIsModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const router = useRouter();
   const { articleId } = router.query;
   const { isAuthenticated } = useProfileContext();
+  const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
   // 유저 정보 페칭
@@ -157,9 +153,7 @@ export default function BoardsDetails() {
         await addCommentMutation.mutateAsync(value);
         setValue('');
       } else {
-        setSnackBarMessage('로그인이 필요한 서비스입니다.');
-        setSnackStyled('fail');
-        setSnackBarOpen(true);
+        showSnackbar('로그인이 필요한 서비스입니다.', 'fail');
       }
     } catch (error) {
       console.error('댓글을 등록하지 못했습니다.', error);
@@ -285,14 +279,6 @@ export default function BoardsDetails() {
             {isFetching && !isFetchingNextPage && <p>로딩 중...</p>}
           </div>
         </div>
-        <SnackBar
-          severity={snackStyled}
-          open={snackBarOpen}
-          onClose={() => setSnackBarOpen(false)}
-          autoHideDuration={2000}
-        >
-          {snackBarMessage}
-        </SnackBar>
         <ModalDefault
           title="알림"
           text="댓글을 삭제하시겠습니까?"

@@ -3,8 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Button from '../Button';
 import Modal from './Modal';
-import SnackBar from '../SnackBar';
-import useSnackBar from '@/hooks/useSanckBar';
+import { useSnackbar } from 'context/SnackBarContext';
 
 interface ImageUploadModalProps {
   imageFile?: File | null;
@@ -29,20 +28,20 @@ const ImageUploadModal = ({
   const [imageFile, setImageFile] = useState<File | null>(initialImageFile);
   const [isDragging, setIsDragging] = useState(false);
   const [isValidFile, setIsValidFile] = useState<boolean>(true);
-  const { snackBarValues, snackBarOpen } = useSnackBar();
+  const { showSnackbar } = useSnackbar();
 
   const validateFile = (file: File): boolean => {
     setIsValidFile(true);
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
-      snackBarOpen('fail', NOT_SVG_MESSAGE);
+      showSnackbar(NOT_SVG_MESSAGE, 'fail');
       setIsValidFile(false);
       return false;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      snackBarOpen('fail', SIZE_LIMIT_MESSAGE);
+      showSnackbar(SIZE_LIMIT_MESSAGE, 'fail');
       setIsValidFile(false);
       return false;
     }
@@ -210,14 +209,6 @@ const ImageUploadModal = ({
           </Button>
         </div>
       </div>
-
-      <SnackBar
-        severity={snackBarValues.severity}
-        onClose={snackBarValues.onClose}
-        open={snackBarValues.open}
-      >
-        {snackBarValues.children}
-      </SnackBar>
     </Modal>
   );
 };

@@ -6,7 +6,6 @@ import { BoardBase, Writer } from 'types/board';
 import Button from '@/components/Button';
 import EditorViewer from '@/components/EditorViewer';
 import Heart from '@/components/Heart/Heart';
-import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import useCheckMobile from '@/hooks/useCheckMobile';
 import instance from '@/lib/axios-client';
 import dateConversion from '@/utils/dateConversion';
@@ -14,6 +13,7 @@ import dateConversion from '@/utils/dateConversion';
 import ButtonIcon from './ButtonIcon';
 import { useProfileContext } from '@/hooks/useProfileContext';
 import ModalDefault from '../Modal/ModalDefault';
+import { useSnackbar } from 'context/SnackBarContext';
 
 interface BoardDetailCard extends BoardBase {
   title: string;
@@ -46,10 +46,6 @@ export default function BoardDetailCard({
 }: BoardDetailCard & Writer) {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCountState, setLikeCountState] = useState(likeCount);
-  const [snackBarOpen, setSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState('');
-  const [snackStyled, setSnackStyled] =
-    useState<SnackBarProps['severity']>(undefined);
   const [isModal, setIsModal] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const isMobile = useCheckMobile();
@@ -57,6 +53,7 @@ export default function BoardDetailCard({
   const { articleId } = router.query;
   const id = articleId as string;
   const { isAuthenticated } = useProfileContext();
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (createdAt !== updatedAt) {
@@ -81,16 +78,10 @@ export default function BoardDetailCard({
     try {
       await instance.delete(`/articles/${id}`);
       setIsModal(false);
-      setSnackBarMessage(
-        '게시글이 삭제되었습니다. 게시판 메인으로 이동합니다.'
-      );
-      setSnackStyled('success');
-      setSnackBarOpen(true);
-      setTimeout(() => {
-        router.push('/boards');
-      }, 2500);
+      router.push('/boards');
+      showSnackbar('게시글이 삭제되었습니다.', 'success');
     } catch (error) {
-      console.error('게시글을 삭제하지 못했습니다.', error);
+      showSnackbar('게시글을 삭제하지 못했습니다.', 'fail');
     }
   };
 
@@ -104,18 +95,15 @@ export default function BoardDetailCard({
         setLikeCountState((prevCount) =>
           isLiked ? prevCount - 1 : prevCount + 1
         );
-        setSnackBarMessage(
-          isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 반영되었습니다.'
+        showSnackbar(
+          isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 반영되었습니다.',
+          'success'
         );
-        setSnackBarOpen(true);
-        setSnackStyled('success');
       } catch (error) {
-        console.error('--- handleHeartClick:error:', error);
+        showSnackbar('좋아요를 반영하지 못했습니다.', 'fail');
       }
     } else {
-      setSnackBarMessage('로그인 후 이용해주세요.');
-      setSnackBarOpen(true);
-      setSnackStyled('fail');
+      showSnackbar('로그인 후 이용해주세요.', 'fail');
     }
   };
 
@@ -171,15 +159,6 @@ export default function BoardDetailCard({
         />
         <EditorViewer content={content} />
       </div>
-
-      <SnackBar
-        severity={snackStyled}
-        open={snackBarOpen}
-        onClose={() => setSnackBarOpen(false)}
-        autoHideDuration={2000}
-      >
-        {snackBarMessage}
-      </SnackBar>
 
       <ModalDefault
         title="알림"

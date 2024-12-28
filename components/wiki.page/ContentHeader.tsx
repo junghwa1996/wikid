@@ -4,6 +4,7 @@ import Button from '@/components/Button';
 import LinkBar from '@/components/LinkBar';
 import UnsavedChangesModal from '@/components/Modal/UnsavedChangesModal';
 import SnackBar from '@/components/SnackBar';
+import { useSnackbar } from 'context/SnackBarContext';
 
 interface ContentHeaderProps {
   name: string;
@@ -41,17 +42,7 @@ export default function ContentHeader({
   saveContent,
 }: ContentHeaderProps) {
   const [isUCOpen, setIsUCOpen] = useState(false);
-  const [linkSnackBarState, setLinkSnackBarState] = useState<{
-    open: boolean;
-    severity: 'fail' | 'success' | 'info';
-    message: string;
-    autoHideDuration?: number;
-  }>({
-    open: false,
-    severity: 'success',
-    message: '',
-  });
-
+  const { showSnackbar } = useSnackbar();
   const [infoSnackBarState, setInfoSnackBarState] = useState<{
     open: boolean;
     severity: 'fail' | 'success' | 'info';
@@ -88,23 +79,11 @@ export default function ContentHeader({
     navigator.clipboard
       .writeText(link)
       .then(() => {
-        setLinkSnackBarState({
-          open: true,
-          severity: 'success',
-          message: '클립보드에 복사되었습니다.',
-          autoHideDuration: 1500,
-        });
+        showSnackbar('클립보드에 복사되었습니다.', 'success');
       })
       .catch(() => {
         alert('링크 복사에 실패했습니다.');
       });
-  };
-
-  const handleCloseLinkSnackBar = () => {
-    setLinkSnackBarState({
-      ...linkSnackBarState,
-      open: false,
-    });
   };
 
   const handleCloseInfoSnackBar = () => {
@@ -151,15 +130,6 @@ export default function ContentHeader({
           {infoSnackBarState.message}
         </SnackBar>
       )}
-
-      <SnackBar
-        severity={linkSnackBarState.severity}
-        open={linkSnackBarState.open}
-        onClose={handleCloseLinkSnackBar}
-        autoHideDuration={linkSnackBarState.autoHideDuration}
-      >
-        {linkSnackBarState.message}
-      </SnackBar>
     </div>
   );
 }
