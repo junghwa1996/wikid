@@ -61,7 +61,7 @@ export default function NotificationContents({
         <div className="flex w-full items-center justify-between">
           <div
             className={`size-[5px] rounded-full ${
-              days > 0 ? 'bg-red-100' : 'bg-blue-600'
+              hours > 6 ? 'bg-red-100' : 'bg-blue-600'
             }`}
           ></div>
           <button onClick={handleCloseClick}>
