@@ -181,7 +181,7 @@ export default function Boards({
         {/* 전체 게시글 */}
         <div className={`container ${pxTablet}`}>
           {/* search, dropdown bar */}
-          <div className="mb-5 flex items-center gap-5 mo:mb-[30px] mo:flex-wrap mo:gap-x-[15px]">
+          <div className="mb-5 flex items-center gap-5 mo:mb-4 mo:flex-wrap mo:gap-x-[15px]">
             <div className="flex-1 basis-8/12">
               <SearchInput
                 size="full"
