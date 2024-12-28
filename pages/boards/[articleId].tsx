@@ -39,6 +39,7 @@ export default function BoardsDetails() {
 
   const [isModal, setIsModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
+  const [dataError, setDataError] = useState(false);
   const router = useRouter();
   const { articleId } = router.query;
   const { isAuthenticated } = useProfileContext();
@@ -53,7 +54,9 @@ export default function BoardsDetails() {
         if (res) {
           setUserId(res.id);
         }
+        setDataError(false);
       } catch (error) {
+        setDataError(true);
         console.log('유저 정보를 불러오지 못했습니다.', error);
       }
     };
@@ -69,7 +72,9 @@ export default function BoardsDetails() {
       try {
         const res = await getBoardDetail(articleId);
         setBoardData(res);
+        setDataError(false);
       } catch (error) {
+        setDataError(true);
         console.error('게시글 데이터를 불러오지 못했습니다.', error);
       }
     };
@@ -204,7 +209,7 @@ export default function BoardsDetails() {
   }
 
   // 댓글 페칭 에러 처리
-  if (commentsError) {
+  if (commentsError || dataError) {
     return (
       <div className="container flex min-h-screen items-center justify-center pb-5">
         <ErrorMessage

@@ -20,7 +20,6 @@ import EmptyList from '@/components/EmptyList';
 import { useSnackbar } from 'context/SnackBarContext';
 import Spinner from '@/components/Spinner';
 import ErrorMessage from '@/components/ErrorMessage';
-import { set } from 'date-fns';
 
 const BoardCardList_Swiper = dynamic(
   () => import('@/components/boards.page/BoardCardList.swiper'),
@@ -145,7 +144,7 @@ export default function Boards({
 
   const pxTablet = 'ta:px-[60px]';
 
-  if (hasError && isError) {
+  if (hasError || isError) {
     return (
       <div className="container flex min-h-screen items-center justify-center pb-5">
         <ErrorMessage
