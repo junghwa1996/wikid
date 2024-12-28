@@ -17,19 +17,22 @@ export default function Menu({ options, onSelect, menuSize }: MenuProps) {
     <ul
       className={`${menuSize} ${fadeIn} absolute z-10 mt-2 rounded-xl border border-gray-300 bg-background p-[4px] text-14 shadow-custom pc:right-1/2 pc:translate-x-1/2 tamo:right-0`}
     >
-      {options.map((option, index) => (
-        <button
-          key={index}
-          tabIndex={0}
-          onClick={() => onSelect(option)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') onSelect(option);
-          }}
-          className={`flex h-[35px] w-full cursor-pointer flex-col rounded-md px-[16px] py-[5px] hover:bg-green-100`}
-        >
-          {option}
-        </button>
-      ))}
+      {options.map((option, index) => {
+        const isLogout = option === '로그아웃';
+        return (
+          <button
+            key={index}
+            tabIndex={0}
+            onClick={() => onSelect(option)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') onSelect(option);
+            }}
+            className={`flex h-[35px] w-full cursor-pointer flex-col rounded-md px-[16px] py-[5px] hover:bg-green-100 ${isLogout ? 'text-gray-400' : ''}`}
+          >
+            {option}
+          </button>
+        );
+      })}
     </ul>
   );
 }
