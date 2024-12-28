@@ -54,7 +54,11 @@ export default function NotificationContents({
     >
       <div>
         <div className="flex w-full items-center justify-between">
-          <div className="size-[5px] rounded-full bg-red-100"></div>
+          <div
+            className={`size-[5px] rounded-full ${
+              days > 0 ? 'bg-red-100' : 'bg-blue-600'
+            }`}
+          ></div>
           <button onClick={handleCloseClick}>
             <Image
               src="/icon/icon-close.svg"
@@ -64,7 +68,7 @@ export default function NotificationContents({
             />
           </button>
         </div>
-        <div className="w-[288px] text-left text-14 mo:w-[172px]">
+        <div className="w-[288px] text-left text-14 mo:w-[186px]">
           내 위키가 수정되었습니다.
         </div>
       </div>
