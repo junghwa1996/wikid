@@ -19,6 +19,7 @@ import Router from 'next/router';
 import EmptyList from '@/components/EmptyList';
 import { useSnackbar } from 'context/SnackBarContext';
 import Spinner from '@/components/Spinner';
+import ErrorMessage from '@/components/ErrorMessage';
 
 const BoardCardList_Swiper = dynamic(
   () => import('@/components/boards.page/BoardCardList.swiper'),
@@ -31,6 +32,7 @@ interface BoardsProps {
   initialBoards: Board[];
   initialLikeBoards: Board[];
   totalCount: number;
+  hasError: boolean;
 }
 
 // SSR 데이터 패칭
@@ -52,6 +54,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         initialLikeBoards,
         initialBoards,
         totalCount,
+        hasError: false,
       },
     };
   } catch (error) {
@@ -61,6 +64,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         initialLikeBoards: [],
         initialBoards: [],
         totalCount: 0,
+        hasError: true,
       },
     };
   }
@@ -70,6 +74,7 @@ export default function Boards({
   initialBoards,
   initialLikeBoards,
   totalCount,
+  hasError,
 }: BoardsProps) {
   const [boards, setBoards] = useState<Board[]>(initialBoards);
   const [likeBoards] = useState<Board[]>(initialLikeBoards);
@@ -77,6 +82,7 @@ export default function Boards({
   const [value, setValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [selectedOption, setSelectedOption] = useState('최신순');
+  const [isError, setIsError] = useState(false);
   const { showSnackbar } = useSnackbar();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -91,6 +97,7 @@ export default function Boards({
       const orderBy = selectedOption === '최신순' ? 'recent' : 'like';
       try {
         setIsLoading(true);
+        setIsError(false);
         const res = await getBoards({
           orderBy,
           pageSize: PAGE_SIZE,
@@ -100,8 +107,10 @@ export default function Boards({
         setBoards(res.list);
       } catch {
         setBoards([]);
+        setIsError(true);
       } finally {
         setIsLoading(false);
+        setIsError(false);
       }
     };
 
@@ -135,6 +144,21 @@ export default function Boards({
 
   const pxTablet = 'ta:px-[60px]';
 
+  if (hasError || isError) {
+    return (
+      <div className="container flex min-h-screen items-center justify-center pb-5">
+        <ErrorMessage
+          title="데이터를 가져오는데 문제가 발생했습니다."
+          code="500"
+        >
+          서버에서 전송한 데이터를 가져오는데 문제가 발생했습니다.
+          <br />
+          다시 한 번 시도해주세요.
+        </ErrorMessage>
+      </div>
+    );
+  }
+
   return (
     <main className="pt-[80px] tamo:pt-[60px]">
       <div className="flex flex-col gap-[60px] py-[60px] mo:gap-10 mo:py-10">
@@ -157,7 +181,7 @@ export default function Boards({
         {/* 전체 게시글 */}
         <div className={`container ${pxTablet}`}>
           {/* search, dropdown bar */}
-          <div className="mb-5 flex items-center gap-5 mo:mb-[30px] mo:flex-wrap mo:gap-x-[15px]">
+          <div className="mb-5 flex items-center gap-5 mo:mb-4 mo:flex-wrap mo:gap-x-[15px]">
             <div className="flex-1 basis-8/12">
               <SearchInput
                 size="full"

@@ -18,11 +18,11 @@ export default function ButtonIcon({
   type,
 }: ButtonIconProps) {
   return (
-    <button onClick={onClick}>
+    <button onClick={onClick} className="mo:size-[22px]">
       <Image
         src={`/icon/icon-${type}.svg`}
         alt={type === 'write' ? '수정하기' : '삭제하기'}
-        className={`mo:size-5 ${classNames}`}
+        className={`mo:size-[22px] ${classNames}`}
         width={20}
         height={20}
       />
