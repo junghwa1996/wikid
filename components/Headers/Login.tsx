@@ -41,9 +41,16 @@ export default function Login({ isMobile }: LoginProps) {
     if (!isAuthenticated) {
       if (isMobile) return ['로그인', '위키목록', '자유게시판'];
     } else if (isMobile) {
-      return ['위키목록', '자유게시판', '알림', '마이페이지', '로그아웃'];
+      return [
+        '위키목록',
+        '자유게시판',
+        '내 위키',
+        '알림',
+        '마이페이지',
+        '로그아웃',
+      ];
     } else {
-      return ['마이페이지', '로그아웃'];
+      return ['마이페이지', '내 위키', '로그아웃'];
     }
     return [];
   }, [isAuthenticated, isMobile]); // 의존성 배열에 필요한 값만 포함
@@ -71,6 +78,8 @@ export default function Login({ isMobile }: LoginProps) {
       showSnackbar('로그아웃 되었습니다.', 'fail');
     } else if (option === '알림') {
       setShowNotification(true);
+    } else if (option === '내 위키') {
+      await router.push(`/wiki/${profile?.code}`);
     }
   };
 
