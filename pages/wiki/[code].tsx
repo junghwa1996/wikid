@@ -5,19 +5,21 @@ import { ProfileAnswer } from 'types/profile';
 import instance from '@/lib/axios-client';
 import Contents from '@/components/wiki.page/Contents';
 import Spinner from '@/components/Spinner';
+import IconFaceDizzy from '@/components/Svg/IconFaceDizzy';
+import ErrorMessage from '@/components/ErrorMessage';
 
 const getProfileData = async (code: string): Promise<ProfileAnswer | null> => {
   try {
     const res = await instance.get<ProfileAnswer>(`/profiles/${code}`);
     return res.data;
   } catch (e) {
-    console.error('프로필을 불러오지 못했습니다.', e);
-    return null; // 오류 발생 시 null 반환
+    return null;
   }
 };
 
 export default function Wiki() {
   const [profile, setProfile] = useState<ProfileAnswer | null>(null);
+  const [isError, setIsError] = useState(false);
   const router = useRouter();
   const { code } = router.query;
 
@@ -29,24 +31,37 @@ export default function Wiki() {
           if (profileData) {
             setProfile(profileData); // 프로필 상태 업데이트
           } else {
-            alert('프로필을 불러오지 못했습니다.');
+            setIsError(true);
           }
         } catch (error) {
-          console.error('프로필을 불러오는 중에 오류가 발생했습니다.', error);
-          alert('프로필을 불러오는 중에 오류가 발생했습니다.');
+          setIsError(true);
         }
       }
     };
 
-    fetchProfile().catch((error) => {
-      // Promise 거부 처리
-      console.error('useEffect에서 오류가 발생했습니다.', error);
-    });
+    fetchProfile();
   }, [code]);
 
   return (
     <>
-      {profile ? (
+      {isError ? (
+        <div className="min-h-screen">
+          <div className="container flex min-h-screen items-center justify-center">
+            <div className="inline-flex gap-8 px-4 mo:flex-col mo:gap-2">
+              <IconFaceDizzy width={180} height={180} className="mo:mx-auto" />
+
+              <ErrorMessage
+                title="데이터를 가져오는데 문제가 있어요."
+                code="500"
+              >
+                서버에서 전송한 데이터를 가져오는데 문제가 발생했습니다.
+                <br />
+                다시 한 번 시도해주세요.
+              </ErrorMessage>
+            </div>
+          </div>
+        </div>
+      ) : profile ? (
         <div className="mt-[120px] flex justify-center pc:mx-[100px]">
           <Contents profile={profile} />
         </div>

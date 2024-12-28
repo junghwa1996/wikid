@@ -38,16 +38,20 @@ export default function Contents({ profile }: ProfileProps) {
       showSnackbar('로그인 후 이용해주세요.', 'fail');
       return;
     }
-    const res = await instance.get(`/profiles/${profile.code}/ping`);
-    if (res.status === 204) {
-      setIsInfoSnackBarOpen(false);
-      setIsQuizOpen(true);
-    } else {
-      const registeredDate = new Date(res.data.registeredAt);
-      const nowDate = new Date();
-      const diff = nowDate.getTime() - registeredDate.getTime();
-      setDiffTime(diff);
-      setIsInfoSnackBarOpen(true);
+    try {
+      const res = await instance.get(`/profiles/${profile.code}/ping`);
+      if (res.status === 204) {
+        setIsInfoSnackBarOpen(false);
+        setIsQuizOpen(true);
+      } else {
+        const registeredDate = new Date(res.data.registeredAt);
+        const nowDate = new Date();
+        const diff = nowDate.getTime() - registeredDate.getTime();
+        setDiffTime(diff);
+        setIsInfoSnackBarOpen(true);
+      }
+    } catch (error) {
+      showSnackbar('다시 시도해주세요.', 'fail');
     }
   };
 
@@ -56,20 +60,23 @@ export default function Contents({ profile }: ProfileProps) {
     showSnackbar('정답입니다!', 'success');
     setIsQuizOpen(false);
 
-    const accessToken = localStorage.getItem('accessToken');
-    const res = await instance.get('/users/me', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    const userCode = (res.data as { profile: ProfileAnswer }).profile.code;
-    if (profile.code === userCode) {
-      setIsProfileEdit(true);
-    } else {
-      setIsProfileEdit(false);
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const res = await instance.get('/users/me', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const userCode = (res.data as { profile: ProfileAnswer }).profile.code;
+      if (profile.code === userCode) {
+        setIsProfileEdit(true);
+      } else {
+        setIsProfileEdit(false);
+      }
+      setIsEditing(true);
+    } catch (error) {
+      showSnackbar('다시 시도해주세요.', 'fail');
     }
-    setIsEditing(true);
   };
 
   //위키 제목과 내용 편집
@@ -111,9 +118,9 @@ export default function Contents({ profile }: ProfileProps) {
       setProfileData(profileData);
       setIsEditing(false);
       setIsProfileEdit(false);
+      showSnackbar('저장되었습니다.', 'success');
     } catch (error) {
-      console.error('프로필을 저장하는 데 실패했습니다.', error);
-      // 요청 실패시 오류 처리 추가 (예: 사용자에게 알림)
+      showSnackbar('저장에 실패했습니다.', 'fail');
     }
   };
 
