@@ -3,10 +3,10 @@ import React, { FormEvent, useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
-import SnackBar from '@/components/SnackBar';
 import { useValidation } from '@/hooks/useValidation';
 import { AuthAPI } from '@/services/api/auth';
 import { ProfileAPI } from '@/services/api/profileAPI';
+import { useSnackbar } from 'context/SnackBarContext';
 import { AxiosError } from 'axios';
 
 function MyPage(): React.ReactElement {
@@ -15,11 +15,10 @@ function MyPage(): React.ReactElement {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
-  const [error, setError] = useState<AxiosError | null>(null);
   const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
   const [isWikiSubmitting, setIsWikiSubmitting] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const router = useRouter();
+  const { showSnackbar } = useSnackbar();
 
   const currentPasswordValidation = useValidation({ type: 'password' });
   const newPasswordValidation = useValidation({ type: 'password' });
@@ -63,7 +62,6 @@ function MyPage(): React.ReactElement {
     if (isPasswordSubmitting) return;
 
     setIsPasswordSubmitting(true);
-    setError(null);
 
     try {
       await AuthAPI.changePassword({
@@ -72,7 +70,7 @@ function MyPage(): React.ReactElement {
         newPasswordConfirm,
       });
 
-      setSnackbarOpen(true);
+      showSnackbar('비밀번호가 성공적으로 변경되었습니다.', 'success');
       setCurrentPassword('');
       setNewPassword('');
       setNewPasswordConfirm('');
@@ -82,11 +80,9 @@ function MyPage(): React.ReactElement {
       }, 2000);
     } catch (error) {
       if (error instanceof AxiosError) {
-        setError(error);
-        setSnackbarOpen(true);
+        showSnackbar(error.message, 'fail');
       } else if (error instanceof Error) {
-        setError(error as AxiosError);
-        setSnackbarOpen(true);
+        showSnackbar(error.message, 'fail');
       }
     } finally {
       setIsPasswordSubmitting(false);
@@ -100,7 +96,6 @@ function MyPage(): React.ReactElement {
     if (isWikiSubmitting) return;
 
     setIsWikiSubmitting(true);
-    setError(null);
 
     try {
       // 프로필 생성 API 호출
@@ -114,8 +109,7 @@ function MyPage(): React.ReactElement {
     } catch (error) {
       if (error instanceof AxiosError) {
         const errorResponse = error.response?.data;
-        setError(error);
-        setSnackbarOpen(true);
+        showSnackbar(error.message, 'fail');
 
         // 이미 프로필이 존재하는 경우
         if (errorResponse?.code) {
@@ -127,8 +121,7 @@ function MyPage(): React.ReactElement {
         }
       }
       // 기타 에러 처리
-      setError(error as AxiosError);
-      setSnackbarOpen(true);
+      showSnackbar('알 수 없는 에러가 발생했습니다.', 'fail');
     } finally {
       // 제출 상태 해제
       setIsWikiSubmitting(false);
@@ -249,14 +242,6 @@ function MyPage(): React.ReactElement {
           </div>
         </form>
       </div>
-      <SnackBar
-        open={snackbarOpen}
-        onClose={() => setSnackbarOpen(false)}
-        severity={error ? 'fail' : 'success'}
-        autoHideDuration={2000}
-      >
-        {error?.message || '비밀번호가 성공적으로 변경되었습니다.'}
-      </SnackBar>
     </div>
   );
 }

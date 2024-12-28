@@ -3,15 +3,14 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { extractContent, formatDate } from '@/utils/boardHelpers';
-import useSnackBar from '@/hooks/useSnackBar';
 import { createArticle } from '@/services/api/boardsAPI';
 import { createImageUpload } from '@/services/api/imageAPI';
 
 import Button from '@/components/Button';
 import ImageUploadModal from '@/components/Modal/ImageUploadModal';
-import SnackBar from '@/components/SnackBar';
 import TextEditor from '@/components/TextEditor';
 import { useMutation } from '@tanstack/react-query';
+import { useSnackbar } from 'context/SnackBarContext';
 
 // 제목 글자수 제한
 const MAX_TITLE = 30;
@@ -25,9 +24,9 @@ export default function Addboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const { showSnackbar } = useSnackbar();
 
   const router = useRouter();
-  const { snackBarValues, snackBarOpen } = useSnackBar();
   const formData = new FormData();
 
   const submitDisabled = title.length === 0 || content.length === 0; // 등록 버튼 비활성화
@@ -55,15 +54,8 @@ export default function Addboard() {
       return res;
     },
     onSuccess: (data) => {
-      // console.log('--- 게시물 등록 성공:', data);
-      snackBarOpen(
-        'success',
-        '게시물이 등록되었습니다. 작성된 게시물로 이동 됩니다.',
-        async () => {
-          await router.push('/boards/' + data.id);
-        },
-        500
-      );
+      router.push('/boards/' + data.id);
+      showSnackbar('게시물이 등록되었습니다.', 'success');
     },
     onError: (err) => {
       console.error('--- 게시물 등록 에러:', err);
@@ -186,14 +178,6 @@ export default function Addboard() {
         onClose={handleImageModalClose}
         onGetImageFile={getImageFile}
       />
-
-      <SnackBar
-        open={snackBarValues.open}
-        severity={snackBarValues.severity}
-        onClose={() => snackBarValues.onClose()}
-      >
-        {snackBarValues.children}
-      </SnackBar>
     </div>
   );
 }

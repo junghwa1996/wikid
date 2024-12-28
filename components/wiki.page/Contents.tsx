@@ -12,7 +12,7 @@ import instance from '@/lib/axios-client';
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
 import { useProfileContext } from '@/hooks/useProfileContext';
-import SnackBar from '../SnackBar';
+import { useSnackbar } from 'context/SnackBarContext';
 
 interface ProfileProps {
   profile: ProfileAnswer;
@@ -26,17 +26,7 @@ export default function Contents({ profile }: ProfileProps) {
   const [isDMOpen, setIsDMOpen] = useState(false);
   const [newContent, setNewContent] = useState<string>(profile.content || '');
   const [profileData, setProfileData] = useState<ProfileAnswer>(profile);
-  const [snackBarState, setSnackBarState] = useState<{
-    open: boolean;
-    severity: 'fail' | 'success' | 'info';
-    message: string;
-    autoHideDuration?: number;
-  }>({
-    open: false,
-    severity: 'fail',
-    message: '',
-    autoHideDuration: 1000,
-  });
+  const { showSnackbar } = useSnackbar();
   const [diffTime, setDiffTime] = useState<number>(0);
 
   const previousContent = useRef<string>(newContent);
@@ -45,11 +35,7 @@ export default function Contents({ profile }: ProfileProps) {
 
   const handleQuizOpen = async () => {
     if (!isAuthenticated) {
-      setSnackBarState({
-        open: true,
-        severity: 'fail',
-        message: '로그인 후 이용해주세요.',
-      });
+      showSnackbar('로그인 후 이용해주세요.', 'fail');
       return;
     }
     const res = await instance.get(`/profiles/${profile.code}/ping`);
@@ -67,15 +53,7 @@ export default function Contents({ profile }: ProfileProps) {
 
   //퀴즈 성공 후 위키 편집모드
   const handleQuizSuccess = async () => {
-    setSnackBarState({
-      open: true,
-      severity: 'success',
-      message: '정답입니다!',
-    });
-
-    setTimeout(() => {
-      setSnackBarState((prev) => ({ ...prev, open: false }));
-    }, 1500);
+    showSnackbar('정답입니다!', 'success');
     setIsQuizOpen(false);
 
     const accessToken = localStorage.getItem('accessToken');
@@ -181,17 +159,6 @@ export default function Contents({ profile }: ProfileProps) {
             saveContent={saveContent}
             diffTime={diffTime}
           />
-        </div>
-
-        <div className="fixed z-20">
-          <SnackBar
-            severity={snackBarState.severity}
-            open={snackBarState.open}
-            onClose={() => setSnackBarState({ ...snackBarState, open: false })}
-            autoHideDuration={snackBarState.autoHideDuration}
-          >
-            {snackBarState.message}
-          </SnackBar>
         </div>
       </div>
       <WikiQuizModal

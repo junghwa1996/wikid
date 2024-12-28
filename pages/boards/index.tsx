@@ -15,9 +15,9 @@ import BoardList from '@/components/boards.page/BoardList';
 
 import 'swiper/css';
 import { useProfileContext } from '@/hooks/useProfileContext';
-import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import Router from 'next/router';
 import EmptyList from '@/components/EmptyList';
+import { useSnackbar } from 'context/SnackBarContext';
 import Spinner from '@/components/Spinner';
 
 const BoardCardList_Swiper = dynamic(
@@ -77,10 +77,7 @@ export default function Boards({
   const [value, setValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [selectedOption, setSelectedOption] = useState('최신순');
-  const [snackBarOpen, setSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState('');
-  const [snackStyled, setSnackStyled] =
-    useState<SnackBarProps['severity']>(undefined);
+  const { showSnackbar } = useSnackbar();
 
   const [isLoading, setIsLoading] = useState(false);
   const isMobile = useCheckMobile();
@@ -126,9 +123,7 @@ export default function Boards({
     if (isAuthenticated) {
       Router.push('/addboard');
     } else {
-      setSnackStyled('fail');
-      setSnackBarMessage('로그인 후 이용해주세요');
-      setSnackBarOpen(true);
+      showSnackbar('로그인 후 이용해주세요', 'fail');
       return;
     }
   };
@@ -208,14 +203,6 @@ export default function Boards({
           )}
         </div>
       </div>
-      <SnackBar
-        severity={snackStyled}
-        open={snackBarOpen}
-        onClose={() => setSnackBarOpen(false)}
-        autoHideDuration={2000}
-      >
-        {snackBarMessage}
-      </SnackBar>
     </main>
   );
 }
