@@ -13,6 +13,7 @@ import Blank from './Blank';
 import ContentHeader from './ContentHeader';
 import { useSnackbar } from 'context/SnackBarContext';
 import { useAuth } from '@/hooks/useAuth';
+import { ProfileAPI } from '@/services/api/profileAPI';
 
 interface ProfileProps {
   profile: ProfileAnswer;
@@ -59,7 +60,16 @@ export default function Contents({ profile }: ProfileProps) {
   const handleQuizSuccess = async () => {
     showSnackbar('정답입니다!', 'success');
     setIsQuizOpen(false);
-    setIsProfileEdit(true);
+    // 내 위키인지 확인
+    try {
+      const { code } = await ProfileAPI.getProfile();
+      const userCode = code;
+      if (profile.code === userCode) {
+        setIsProfileEdit(true);
+      }
+    } catch (error) {
+      setIsProfileEdit(false);
+    }
     setIsEditing(true);
   };
 
