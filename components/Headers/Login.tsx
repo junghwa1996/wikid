@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Profile } from 'types/profile';
 
 import Menu from '../Menu';
+import { useSnackbar } from 'context/SnackBarContext';
 
 interface LoginProps {
   isMobile: boolean;
@@ -23,6 +24,7 @@ interface LoginProps {
 export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
+  const { showSnackbar } = useSnackbar();
 
   const profileImage = profile?.image ?? '/icon/icon-profile.svg';
   const router = useRouter();
@@ -56,6 +58,7 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       await router.push('/');
+      showSnackbar('로그아웃 되었습니다.', 'fail');
     }
   };
 
