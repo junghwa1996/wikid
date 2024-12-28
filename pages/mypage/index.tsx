@@ -3,23 +3,24 @@ import React, { FormEvent, useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
-import SnackBar from '@/components/SnackBar';
 import { useValidation } from '@/hooks/useValidation';
+import { useProfileContext } from '@/hooks/useProfileContext';
 import { AuthAPI } from '@/services/api/auth';
 import { ProfileAPI } from '@/services/api/profileAPI';
+import { useSnackbar } from 'context/SnackBarContext';
 import { AxiosError } from 'axios';
 
 function MyPage(): React.ReactElement {
+  const { profile } = useProfileContext();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
-  const [error, setError] = useState<AxiosError | null>(null);
   const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
   const [isWikiSubmitting, setIsWikiSubmitting] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const router = useRouter();
+  const { showSnackbar } = useSnackbar();
 
   const currentPasswordValidation = useValidation({ type: 'password' });
   const newPasswordValidation = useValidation({ type: 'password' });
@@ -63,7 +64,6 @@ function MyPage(): React.ReactElement {
     if (isPasswordSubmitting) return;
 
     setIsPasswordSubmitting(true);
-    setError(null);
 
     try {
       await AuthAPI.changePassword({
@@ -72,7 +72,7 @@ function MyPage(): React.ReactElement {
         newPasswordConfirm,
       });
 
-      setSnackbarOpen(true);
+      showSnackbar('비밀번호가 성공적으로 변경되었습니다.', 'success');
       setCurrentPassword('');
       setNewPassword('');
       setNewPasswordConfirm('');
@@ -82,11 +82,9 @@ function MyPage(): React.ReactElement {
       }, 2000);
     } catch (error) {
       if (error instanceof AxiosError) {
-        setError(error);
-        setSnackbarOpen(true);
+        showSnackbar(error.message, 'fail');
       } else if (error instanceof Error) {
-        setError(error as AxiosError);
-        setSnackbarOpen(true);
+        showSnackbar(error.message, 'fail');
       }
     } finally {
       setIsPasswordSubmitting(false);
@@ -100,7 +98,6 @@ function MyPage(): React.ReactElement {
     if (isWikiSubmitting) return;
 
     setIsWikiSubmitting(true);
-    setError(null);
 
     try {
       // 프로필 생성 API 호출
@@ -114,8 +111,7 @@ function MyPage(): React.ReactElement {
     } catch (error) {
       if (error instanceof AxiosError) {
         const errorResponse = error.response?.data;
-        setError(error);
-        setSnackbarOpen(true);
+        showSnackbar(error.message, 'fail');
 
         // 이미 프로필이 존재하는 경우
         if (errorResponse?.code) {
@@ -127,8 +123,7 @@ function MyPage(): React.ReactElement {
         }
       }
       // 기타 에러 처리
-      setError(error as AxiosError);
-      setSnackbarOpen(true);
+      showSnackbar('알 수 없는 에러가 발생했습니다.', 'fail');
     } finally {
       // 제출 상태 해제
       setIsWikiSubmitting(false);
@@ -210,53 +205,49 @@ function MyPage(): React.ReactElement {
             </div>
           </div>
         </form>
-        <div className="w-[400px] border-b border-gray-200 mo:w-[335px]"></div>
-        {/* 위키 생성 폼 */}
-        <form
-          onSubmit={handleWikiSubmit}
-          className="flex w-[400px] flex-col items-center gap-[32px] mo:w-[335px]"
-        >
-          <div className={inputSectionStyle}>
-            <div className={inputContainerStyle}>
-              <InputField
-                label="위키 생성하기"
-                type="text"
-                value={question}
-                width="100%"
-                onChange={handleQuestionChange}
-                placeholder="질문을 입력해 주세요"
-              />
-              <InputField
-                label=""
-                type="text"
-                value={answer}
-                width="100%"
-                onChange={handleAnswerChange}
-                placeholder="답을 입력해 주세요"
-              />
+        {/* 위키가 없을 때만 구분선과 위키 생성 폼 표시 */}
+        {!profile?.code && (
+          <>
+            <div className="w-[400px] border-b border-gray-200 mo:w-[335px]"></div>
+            <form
+              onSubmit={handleWikiSubmit}
+              className="flex w-[400px] flex-col items-center gap-[32px] mo:w-[335px]"
+            >
+              <div className={inputSectionStyle}>
+                <div className={inputContainerStyle}>
+                  <InputField
+                    label="위키 생성하기"
+                    type="text"
+                    value={question}
+                    width="100%"
+                    onChange={handleQuestionChange}
+                    placeholder="질문을 입력해 주세요"
+                  />
+                  <InputField
+                    label=""
+                    type="text"
+                    value={answer}
+                    width="100%"
+                    onChange={handleAnswerChange}
+                    placeholder="답을 입력해 주세요"
+                  />
 
-              <Button
-                type="submit"
-                disabled={!isWikiFormValid}
-                isLoading={Boolean(isWikiSubmitting)}
-                variant="primary"
-                size="small"
-                className="mt-[8px] self-end"
-              >
-                생성하기
-              </Button>
-            </div>
-          </div>
-        </form>
+                  <Button
+                    type="submit"
+                    disabled={!isWikiFormValid}
+                    isLoading={Boolean(isWikiSubmitting)}
+                    variant="primary"
+                    size="small"
+                    className="mt-[8px] self-end"
+                  >
+                    생성하기
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </>
+        )}
       </div>
-      <SnackBar
-        open={snackbarOpen}
-        onClose={() => setSnackbarOpen(false)}
-        severity={error ? 'fail' : 'success'}
-        autoHideDuration={2000}
-      >
-        {error?.message || '비밀번호가 성공적으로 변경되었습니다.'}
-      </SnackBar>
     </div>
   );
 }

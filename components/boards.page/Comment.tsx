@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { CommentType, Writer } from 'types/board';
 
@@ -34,6 +34,7 @@ export default function Comment({
 }: CommentProps) {
   const [value, setValue] = useState(content);
   const [isEditing, setIsEditing] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
@@ -54,15 +55,23 @@ export default function Comment({
     setIsEditing(true);
   };
 
+  useEffect(() => {
+    if (createdAt !== updatedAt) {
+      setIsUpdate(true);
+    }
+  }, [createdAt, updatedAt]);
+
   return (
     <div className="flex items-start gap-5 rounded-custom px-[30px] py-[22px] shadow-custom dark:shadow-custom-dark mo:gap-[15px] mo:px-5 mo:py-4">
-      <Image
-        src={profile ? profile : '/icon/icon-profile.svg'}
-        alt="user profile"
-        className="size-10 overflow-hidden rounded-full object-cover mo:size-10"
-        width={50}
-        height={50}
-      />
+      <div className="size-[50px] overflow-hidden rounded-full mo:size-10">
+        <Image
+          src={profile ? profile : '/icon/icon-profile.svg'}
+          alt="user profile"
+          width={50}
+          height={50}
+          className="object-cover"
+        />
+      </div>
       <div className="flex-1">
         <div className="mb-2 flex items-center justify-between mo:mb-[6px]">
           <span className="text-18sb">{name}</span>
@@ -92,16 +101,19 @@ export default function Comment({
         </div>
 
         {!isEditing ? (
-          <>
-            <p className="mb-[10px] text-16 mo:mb-1 mo:text-14">{content}</p>
+          <div>
+            <p className="mb-[10px] w-full break-all text-16 mo:mb-1 mo:text-14">
+              {content}
+            </p>
             <span className="mr-2 text-14 text-gray-400 mo:text-12">
-              등록일 : {dateConversion(createdAt)}
+              {dateConversion(createdAt)}
             </span>
-
-            <span className="text-14 text-gray-400 mo:text-12">
-              수정일 : {dateConversion(updatedAt)}
-            </span>
-          </>
+            {isUpdate && (
+              <span className="text-14 text-gray-400 mo:text-12">
+                (수정된 댓글)
+              </span>
+            )}
+          </div>
         ) : (
           <CommentForm
             value={value}
