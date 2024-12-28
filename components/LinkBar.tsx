@@ -9,6 +9,7 @@ interface LinkBarProps {
 /**
  * 링크 주소를 표시하는 컴포넌트
  * @param link 링크 주소
+ * @param classNames 클래스 문자열
  * @param onClick 링크 클릭 시 실행할 함수
  */
 export default function LinkBar({

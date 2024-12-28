@@ -26,6 +26,7 @@ const limitText = (text: string, limit: number = MAX_TEXT_LENGTH): string => {
 /**
  * 위키 목록 페이지 리스트 아이템 컴포넌트
  * @param data - 목록에 출력할 프로필 데이터
+ * @param onSnackBarClick - 스낵바 클릭 함수
  */
 export default function ListItem({ data, onSnackBarClick }: ListItemProps) {
   const { name, code, image, city, nationality, job } = data;
@@ -61,6 +62,7 @@ export default function ListItem({ data, onSnackBarClick }: ListItemProps) {
             onError={handleError}
           />
         </figure>
+
         <div className="mr-auto mo:mb-10">
           <h2 className="mb-[14px] text-24sb mo:mb-[10px] mo:text-20sb">
             {name}
