@@ -13,7 +13,9 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'fail'>('success');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'fail'>(
+    'success'
+  );
   const [validFields, setValidFields] = useState({
     email: false,
     password: false,
