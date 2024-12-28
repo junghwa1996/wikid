@@ -11,6 +11,7 @@ import Pagination from '@/components/Pagination/Pagination';
 import SearchInput from '@/components/SearchInput';
 import FullCoverSpinner from '@/components/FullCoverSpinner';
 import { useSnackbar } from 'context/SnackBarContext';
+import ErrorMessage from '@/components/ErrorMessage';
 
 // 위키 목록 페이지 프로필 데이터 타입
 export interface ProfileProps {
@@ -114,8 +115,26 @@ export default function WikiList() {
   if (isPending)
     return <FullCoverSpinner>위키 목록 가져오는 중...</FullCoverSpinner>;
 
-  // TODO: 에러 컴포넌트 추가
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) {
+    console.error('--- 위키 목록 에러:', error.name, error.message);
+    const errorTitle = error.message || '서버 에러가 발생하였습니다.';
+
+    return (
+      <div className="min-h-svh">
+        <Head>
+          <title>위키 목록 - {errorTitle} | wikied</title>
+        </Head>
+
+        <div className="container flex min-h-screen items-center justify-center pb-5">
+          <ErrorMessage title={errorTitle} code="500">
+            위키 목록을 가져오는 중 서버 에러가 발생하였습니다.
+            <br />
+            이용에 불편을 드려 죄송합니다. 잠시 후 다시 시도해 주십시오.
+          </ErrorMessage>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-svh">
