@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/Input';
 import { AuthAPI } from '@/services/api/auth';
 import { useSnackbar } from 'context/SnackBarContext';
+import { ProfileContext } from 'context/ProfileContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ export default function Login() {
     email: false,
     password: false,
   });
+  const profileContext = useContext(ProfileContext);
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
 
@@ -38,22 +40,20 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || !isFormValid) return;
+    if (!profileContext) {
+      showSnackbar('ProfileContext를 찾을 수 없습니다.', 'fail');
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
-      const response = (await AuthAPI.signin({
-        email,
-        password,
-      })) as { accessToken: string };
+      await AuthAPI.signin({ email, password }, profileContext.setAccessToken);
 
-      localStorage.setItem('accessToken', response.accessToken);
+      router.push('/');
       showSnackbar('로그인이 완료되었습니다', 'success');
 
       // 페이지 이동 전까지는 버튼을 비활성화 상태로 유지
-      setTimeout(() => {
-        router.push('/');
-      }, 1000);
     } catch (error) {
       if (error instanceof Error) {
         showSnackbar(error.message, 'fail');
