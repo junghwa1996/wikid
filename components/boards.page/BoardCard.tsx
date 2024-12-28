@@ -43,7 +43,7 @@ export default function BoardCard({
         <h3 className="mb-[6px] truncate text-18sb mo:mb-0 mo:text-16sb">
           {title}
         </h3>
-        <div className="flex items-center gap-2 text-14 text-gray-300 mo:text-12">
+        <div className="flex items-center gap-2 text-14 text-gray-400 mo:text-12">
           <p>{name}</p>
           <span className="flex-1">
             {updatedAt && dateConversion(updatedAt)}

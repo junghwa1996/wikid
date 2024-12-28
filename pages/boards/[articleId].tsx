@@ -209,7 +209,7 @@ export default function BoardsDetails() {
       <Head>
         <title>{boardData.title} - 자유게시판 | wikied</title>
       </Head>
-      <main className="mt-20 py-[50px] mo:py-5 ta:py-10 tamo:mt-[60px]">
+      <main className="mt-20 py-[60px] mo:py-5 ta:py-10 tamo:mt-[60px]">
         <div className="container flex flex-col gap-[60px] ta:px-[60px] pc:max-w-[1095px] tamo:gap-10">
           <BoardDetailCard
             id={boardData.id}

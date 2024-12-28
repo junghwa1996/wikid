@@ -37,7 +37,7 @@ export default function CommentForm({
 
   return (
     <form
-      className="relative h-[133px] w-full rounded-custom bg-gray-100 px-[15px] py-[13px]"
+      className="relative h-[133px] w-full rounded-custom bg-gray-100 px-[15px] py-[13px] pb-[14px] mo:pl-5 mo:pr-[14px] mo:pt-[16px] ta:pb-[15px] ta:pl-5 ta:pt-5"
       onSubmit={onSubmit}
     >
       <textarea
@@ -47,10 +47,10 @@ export default function CommentForm({
         onChange={handleChange}
         placeholder="댓글을 입력해 주세요"
       />
-      <span className="absolute bottom-3 left-[15px] text-14 text-gray-400 mo:text-12">
+      <span className="absolute bottom-3 left-[15px] text-14 text-gray-300 mo:bottom-4 mo:left-5 mo:text-12">
         {length} / {MAX_LENGTH}
       </span>
-      <div className="absolute bottom-3 right-[15px] flex items-center gap-3 mo:gap-1">
+      <div className="absolute bottom-3 right-[15px] flex items-center gap-3 mo:bottom-[14px] mo:right-[14px] mo:gap-1">
         {update && (
           <Button
             variant="secondary"
