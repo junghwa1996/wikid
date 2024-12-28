@@ -11,8 +11,9 @@ import instance from '@/lib/axios-client';
 
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
-import { useProfileContext } from '@/hooks/useProfileContext';
 import { useSnackbar } from 'context/SnackBarContext';
+import { useAuth } from '@/hooks/useAuth';
+import { ProfileAPI } from '@/services/api/profileAPI';
 
 interface ProfileProps {
   profile: ProfileAnswer;
@@ -31,11 +32,11 @@ export default function Contents({ profile }: ProfileProps) {
 
   const previousContent = useRef<string>(newContent);
   const isEmpty = newContent === '';
-  const { isAuthenticated } = useProfileContext();
+  const { isAuthenticated } = useAuth();
 
   const handleQuizOpen = async () => {
     if (!isAuthenticated) {
-      showSnackbar('로그인 후 이용해주세요.', 'fail');
+      showSnackbar('로그인이 필요한 서비스 입니다.', 'fail');
       return;
     }
     try {
@@ -51,7 +52,7 @@ export default function Contents({ profile }: ProfileProps) {
         setIsInfoSnackBarOpen(true);
       }
     } catch (error) {
-      showSnackbar('다시 시도해주세요.', 'fail');
+      showSnackbar('다시 시도해주세요. -1', 'fail');
     }
   };
 
@@ -59,24 +60,17 @@ export default function Contents({ profile }: ProfileProps) {
   const handleQuizSuccess = async () => {
     showSnackbar('정답입니다!', 'success');
     setIsQuizOpen(false);
-
+    // 내 위키인지 확인
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const res = await instance.get('/users/me', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const userCode = (res.data as { profile: ProfileAnswer }).profile.code;
+      const { code } = await ProfileAPI.getProfile();
+      const userCode = code;
       if (profile.code === userCode) {
         setIsProfileEdit(true);
-      } else {
-        setIsProfileEdit(false);
       }
-      setIsEditing(true);
     } catch (error) {
-      showSnackbar('다시 시도해주세요.', 'fail');
+      setIsProfileEdit(false);
     }
+    setIsEditing(true);
   };
 
   //위키 제목과 내용 편집
