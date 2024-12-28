@@ -42,6 +42,8 @@ function SearchInput({
     'rounded-lg',
     'bg-gray-100',
     'px-[20px]',
+    currentSize.container,
+    currentSize.padding,
     isFocused ? 'outline outline-2 outline-green-100' : '',
   ].join(' ');
 

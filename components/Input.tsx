@@ -28,7 +28,6 @@ function InputField({
   onValidation,
   ref,
   disabled,
-  ...props
 }: InputFieldProps) {
   const { errorMessage, validate } = useValidation({
     type,
