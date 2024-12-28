@@ -36,19 +36,6 @@ function SearchInput({
 
   const currentSize = sizeStyles[size];
 
-  const inputStyles = [
-    currentSize.container,
-    currentSize.padding,
-    'rounded-lg',
-    'border-none',
-    'bg-gray-100',
-    'text-gray-500',
-    'text-16',
-    'placeholder:text-gray-400',
-    'focus:outline-none',
-    'w-full',
-  ].join(' ');
-
   const formStyles = [
     'flex',
     'items-center',
@@ -81,13 +68,13 @@ function SearchInput({
         <Image src="/icon/icon-search.svg" alt="검색" width={22} height={22} />
         <input
           id="searchInput"
-          className={inputStyles}
           type="text"
           value={value}
-          placeholder={placeholder}
           onChange={handleInputChange}
+          placeholder={placeholder}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          className="h-[48px] w-full rounded-[8px] bg-transparent px-[16px] py-[12px] text-16 text-gray-500 outline-none placeholder:text-gray-300 hover:border-gray-300 focus:border-gray-500 [&:-webkit-autofill]:!bg-white [&:-webkit-autofill]:!transition-[background-color] [&:-webkit-autofill]:!duration-[5000s]"
         />
       </label>
     </form>
