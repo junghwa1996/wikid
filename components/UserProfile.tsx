@@ -54,14 +54,15 @@ function UserProfile({
     return (
       <p className="flex h-[18px] w-[200px] text-14 mo:w-[180px] mo:text-12 pc:gap-[20px]">
         <span className="flex-[1] text-gray-400">{label}</span>
-        <span className="flex-[2] text-gray-500">{data[field]}</span>
+        <span className="flex-[2] truncate text-gray-500">{data[field]}</span>
+        {/* truncate 클래스 - overflow:hidden, text-overflow:ellipsis, white-space:nowrap */}
       </p>
     );
   };
 
   return (
     // 메인 컨테이너
-    <div className="max-w-4xl rounded-custom bg-white shadow-custom dark:bg-gray-600 dark:shadow-custom-dark pc:h-[671px] pc:w-[320px] pc:p-7 tamo:w-full tamo:p-5">
+    <div className="max-w-4xl rounded-custom bg-background shadow-custom dark:shadow-custom-dark pc:h-auto pc:w-[320px] pc:p-7 tamo:w-full tamo:p-5">
       {/* 레이아웃 컨테이너: PC에서는 세로, 모바일/태블릿에서는 가로 배치 */}
       <div
         className={`flex ${isEditing ? 'flex-col' : 'flex-col mo:flex-row ta:flex-row pc:flex-col'}`}
@@ -156,7 +157,6 @@ function UserProfile({
                 {renderField('별명', 'nickname')}
                 {renderField('혈액형', 'bloodType')}
                 {renderField('국적', 'nationality')}
-                {renderField('가족관계', 'family')}
               </div>
             ) : (
               // 조회 모드: PC와 모바일/태블릿에서 다르게 표시
