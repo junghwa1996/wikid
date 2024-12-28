@@ -42,6 +42,11 @@ export default function NotificationContents({
     onClose();
   };
 
+  const handleCloseClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleNotiContent();
+  };
+
   return (
     <button
       onClick={handleLinkClick}
@@ -50,7 +55,7 @@ export default function NotificationContents({
       <div>
         <div className="flex w-full items-center justify-between">
           <div className="size-[5px] rounded-full bg-red-100"></div>
-          <button onClick={handleNotiContent}>
+          <button onClick={handleCloseClick}>
             <Image
               src="/icon/icon-close.svg"
               alt="닫기 버튼"
