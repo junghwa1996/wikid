@@ -3,15 +3,14 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { extractContent, formatDate } from '@/utils/boardHelpers';
-import useSnackBar from '@/hooks/useSnackBar';
 import { createArticle } from '@/services/api/boardsAPI';
 import { createImageUpload } from '@/services/api/imageAPI';
 
 import Button from '@/components/Button';
 import ImageUploadModal from '@/components/Modal/ImageUploadModal';
-import SnackBar from '@/components/SnackBar';
 import TextEditor from '@/components/TextEditor';
 import { useMutation } from '@tanstack/react-query';
+import { useSnackbar } from 'context/SnackBarContext';
 
 // 제목 글자수 제한
 const MAX_TITLE = 30;
@@ -22,13 +21,12 @@ const MAX_TITLE = 30;
 export default function Addboard() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const { showSnackbar } = useSnackbar();
 
   const router = useRouter();
-  const { snackBarValues, snackBarOpen } = useSnackBar();
   const formData = new FormData();
 
   const submitDisabled = title.length === 0 || content.length === 0; // 등록 버튼 비활성화
@@ -36,32 +34,31 @@ export default function Addboard() {
   const today = formatDate(new Date().toISOString()); // 오늘 날짜
 
   // 이미지 처리 tanstack
-  const { mutate: imageMutate } = useMutation({
-    mutationFn: async () => {
-      const data = await createImageUpload(formData);
+  const imageMutate = useMutation({
+    mutationFn: async (formdata: FormData) => {
+      const data = await createImageUpload(formdata);
       return data;
     },
-    onSuccess: (data) => {
-      console.log('--- 썸네일 업로드 성공 ---');
-      setImageUrl(data.url);
+    onSuccess: () => {
+      // console.log('--- 썸네일 업로드 성공:', data);
       formData.delete('image');
+    },
+    onError: (err) => {
+      console.error('--- 썸네일 업로드 에러:', err);
     },
   });
   // 글작성 tanstack
-  const { mutate: articleMutate } = useMutation({
-    mutationFn: async () => {
+  const articleMutate = useMutation({
+    mutationFn: async (imageUrl: string) => {
       const res = await createArticle(title, content, imageUrl);
       return res;
     },
     onSuccess: (data) => {
-      snackBarOpen(
-        'success',
-        '게시물이 등록되었습니다. 작성된 게시물로 이동 됩니다.',
-        async () => {
-          await router.push('/boards/' + data.id);
-        },
-        1000
-      );
+      router.push('/boards/' + data.id);
+      showSnackbar('게시물이 등록되었습니다.', 'success');
+    },
+    onError: (err) => {
+      console.error('--- 게시물 등록 에러:', err);
     },
   });
 
@@ -89,12 +86,14 @@ export default function Addboard() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    let imageUrl = '';
 
     if (imageFile) {
       formData.append('image', imageFile);
-      imageMutate();
+      const { url } = await imageMutate.mutateAsync(formData);
+      if (url) imageUrl = url;
     }
-    articleMutate();
+    articleMutate.mutate(imageUrl);
   };
 
   return (
@@ -179,14 +178,6 @@ export default function Addboard() {
         onClose={handleImageModalClose}
         onGetImageFile={getImageFile}
       />
-
-      <SnackBar
-        open={snackBarValues.open}
-        severity={snackBarValues.severity}
-        onClose={() => snackBarValues.onClose()}
-      >
-        {snackBarValues.children}
-      </SnackBar>
     </div>
   );
 }
