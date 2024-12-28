@@ -18,7 +18,6 @@ import { useProfileContext } from '@/hooks/useProfileContext';
 import Router from 'next/router';
 import EmptyList from '@/components/EmptyList';
 import { useSnackbar } from 'context/SnackBarContext';
-import Spinner from '@/components/Spinner';
 import ErrorMessage from '@/components/ErrorMessage';
 
 const BoardCardList_Swiper = dynamic(
