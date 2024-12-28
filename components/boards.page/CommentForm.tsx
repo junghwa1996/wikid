@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Button from '@/components/Button';
+import useCheckMobile from '@/hooks/useCheckMobile';
 
 interface CommentFormProps {
   value: string;
@@ -32,6 +33,8 @@ export default function CommentForm({
     onChange(e);
   };
 
+  const isMobile = useCheckMobile();
+
   return (
     <form
       className="relative h-[133px] w-full rounded-custom bg-gray-100 px-[15px] py-[13px]"
@@ -44,17 +47,25 @@ export default function CommentForm({
         onChange={handleChange}
         placeholder="댓글을 입력해 주세요"
       />
-      <span className="absolute bottom-3 left-[15px] text-14 text-gray-400">
+      <span className="absolute bottom-3 left-[15px] text-14 text-gray-400 mo:text-12">
         {length} / {MAX_LENGTH}
       </span>
-      <div className="absolute bottom-3 right-[15px] flex items-center gap-3">
+      <div className="absolute bottom-3 right-[15px] flex items-center gap-3 mo:gap-1">
         {update && (
-          <Button variant="secondary" onClick={onCancel}>
+          <Button
+            variant="secondary"
+            onClick={onCancel}
+            size={isMobile && update ? 'small' : 'normal'}
+          >
             취소
           </Button>
         )}
-        <Button type="submit" disabled={value.length === 0}>
-          댓글 등록
+        <Button
+          type="submit"
+          disabled={value.length === 0}
+          size={isMobile && update ? 'small' : 'normal'}
+        >
+          {update ? '수정' : '댓글 등록'}
         </Button>
       </div>
     </form>
