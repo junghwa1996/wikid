@@ -62,7 +62,7 @@ export default function LandingPage() {
               size="large"
               className="mb-[54px] font-['Pretendard'] mo:mb-[44px] mo:text-20b"
             >
-              {isAuthenticated && profile ? '위키 구경하기' : '위키 만들기'}
+              {isAuthenticated && profile ? '내 위키 보러가기' : '위키 만들기'}
             </Button>
             <Image
               src="/images/img-wiki.png"
