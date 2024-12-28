@@ -73,11 +73,11 @@ export default function Comment({
         />
       </div>
       <div className="flex-1">
-        <div className="mb-2 flex items-center justify-between mo:mb-[6px]">
-          <span className="text-18sb">{name}</span>
+        <div className="mb-[6px] flex items-center justify-between">
+          <span className="text-18sb mo:text-16sb">{name}</span>
 
           {!isEditing && isOwner && (
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-5 mo:gap-[15px]">
               <button onClick={handleUpdateClick}>
                 <Image
                   src="/icon/icon-write.svg"
