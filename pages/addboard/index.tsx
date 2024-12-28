@@ -21,7 +21,6 @@ const MAX_TITLE = 30;
 export default function Addboard() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -35,26 +34,31 @@ export default function Addboard() {
   const today = formatDate(new Date().toISOString()); // 오늘 날짜
 
   // 이미지 처리 tanstack
-  const { mutate: imageMutate } = useMutation({
-    mutationFn: async () => {
-      const data = await createImageUpload(formData);
+  const imageMutate = useMutation({
+    mutationFn: async (formdata: FormData) => {
+      const data = await createImageUpload(formdata);
       return data;
     },
-    onSuccess: (data) => {
-      console.log('--- 썸네일 업로드 성공 ---');
-      setImageUrl(data.url);
+    onSuccess: () => {
+      // console.log('--- 썸네일 업로드 성공:', data);
       formData.delete('image');
+    },
+    onError: (err) => {
+      console.error('--- 썸네일 업로드 에러:', err);
     },
   });
   // 글작성 tanstack
-  const { mutate: articleMutate } = useMutation({
-    mutationFn: async () => {
+  const articleMutate = useMutation({
+    mutationFn: async (imageUrl: string) => {
       const res = await createArticle(title, content, imageUrl);
       return res;
     },
     onSuccess: (data) => {
       router.push('/boards/' + data.id);
       showSnackbar('게시물이 등록되었습니다.', 'success');
+    },
+    onError: (err) => {
+      console.error('--- 게시물 등록 에러:', err);
     },
   });
 
@@ -82,12 +86,14 @@ export default function Addboard() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    let imageUrl = '';
 
     if (imageFile) {
       formData.append('image', imageFile);
-      imageMutate();
+      const { url } = await imageMutate.mutateAsync(formData);
+      if (url) imageUrl = url;
     }
-    articleMutate();
+    articleMutate.mutate(imageUrl);
   };
 
   return (

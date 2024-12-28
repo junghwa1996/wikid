@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BoardBase, Writer } from 'types/board';
 
 import Button from '@/components/Button';
@@ -47,12 +47,19 @@ export default function BoardDetailCard({
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCountState, setLikeCountState] = useState(likeCount);
   const [isModal, setIsModal] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const isMobile = useCheckMobile();
   const router = useRouter();
   const { articleId } = router.query;
   const id = articleId as string;
   const { isAuthenticated } = useProfileContext();
   const { showSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (createdAt !== updatedAt) {
+      setIsUpdate(true);
+    }
+  }, [createdAt, updatedAt]);
 
   const handleModalClose = () => {
     setIsModal(false);
@@ -103,40 +110,40 @@ export default function BoardDetailCard({
   return (
     <div className="rounded-custom bg-background px-[30px] py-10 shadow-custom dark:shadow-custom-dark mo:p-5">
       <header className="mb-[38px] mo:mb-[15px] mo:pb-[11px] ta:mb-[30px] ta:pb-2 tamo:border-b">
-        <div className="mb-[30px] flex items-center justify-between gap-[14px] mo:mb-[14px] tamo:gap-3">
-          <h1 className="flex-1 text-32sb mo:text-24sb">
+        <div className="mb-[30px] flex items-center justify-between mo:mb-[14px]">
+          <h1 className="w-full break-all text-32sb mo:text-24sb">
             {title ? title : '제목 없음'}
           </h1>
-          {isOwner &&
-            (!isMobile ? (
-              <>
-                <Button onClick={handleUpdateClick}>수정하기</Button>
-                <Button onClick={handleDeleteClick} variant="danger">
-                  삭제하기
-                </Button>
-              </>
-            ) : (
-              <>
-                <ButtonIcon onClick={handleUpdateClick} type="write" />
-                <ButtonIcon onClick={handleDeleteClick} type="delete" />
-              </>
-            ))}
+          {isOwner && (
+            <div className="flex items-center gap-[14px] tamo:gap-3">
+              {!isMobile ? (
+                <>
+                  <Button onClick={handleUpdateClick}>수정하기</Button>
+                  <Button onClick={handleDeleteClick} variant="danger">
+                    삭제하기
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <ButtonIcon onClick={handleUpdateClick} type="write" />
+                  <ButtonIcon onClick={handleDeleteClick} type="delete" />
+                </>
+              )}
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-[10px] text-14 text-gray-400 mo:flex-wrap mo:text-12">
-          <span className="whitespace-nowrap mo:w-full mo:flex-1">{name}</span>
-          <div className="flex w-full justify-between">
-            <div className="flex items-center gap-[10px]">
-              <span>등록일 : {dateConversion(createdAt)}</span>
-              <span>|</span>
-              <span>최근 수정일 : {dateConversion(updatedAt)}</span>
-            </div>
-
-            <Heart
-              initialCount={likeCountState}
-              isLiked={isLiked}
-              onClick={handleHeartClick}
-            />
+          <span>{name}</span>
+          <div className="flex flex-1 items-center gap-[10px]">
+            <span>{dateConversion(createdAt)}</span>
+            {isUpdate && <span>(수정된 게시글)</span>}
           </div>
+
+          <Heart
+            initialCount={likeCountState}
+            isLiked={isLiked}
+            onClick={handleHeartClick}
+          />
         </div>
       </header>
 
