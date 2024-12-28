@@ -126,6 +126,7 @@ export default function Login({ isMobile }: LoginProps) {
                 options={profileMenu}
                 onSelect={handleLoginMenu}
                 menuSize="w-28"
+                isBorder={false}
               />
             )}
           </div>
@@ -144,6 +145,7 @@ export default function Login({ isMobile }: LoginProps) {
                 options={profileMenu}
                 onSelect={handleLoginMenu}
                 menuSize="w-28"
+                isBorder={false}
               />
             )}
           </button>
