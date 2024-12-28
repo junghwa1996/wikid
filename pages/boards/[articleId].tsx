@@ -29,6 +29,8 @@ import { CommentsData, CommentType } from 'types/board';
 import ModalDefault from '@/components/Modal/ModalDefault';
 import { useSnackbar } from 'context/SnackBarContext';
 import CommentEmpty from '@/components/boards.page/CommentEmpty';
+import Spinner from '@/components/Spinner';
+import ErrorMessage from '@/components/ErrorMessage';
 
 export default function BoardsDetails() {
   const [boardData, setBoardData] = useState<ArticleData | null>(null);
@@ -156,7 +158,7 @@ export default function BoardsDetails() {
         showSnackbar('로그인이 필요한 서비스입니다.', 'fail');
       }
     } catch (error) {
-      console.error('댓글을 등록하지 못했습니다.', error);
+      showSnackbar('댓글을 등록하지 못했습니다.', 'fail');
     }
   };
 
@@ -165,7 +167,7 @@ export default function BoardsDetails() {
     try {
       await updateCommentMutation.mutateAsync({ id, newContent });
     } catch (error) {
-      console.error('댓글을 수정하지 못했습니다.', error);
+      showSnackbar('댓글을 수정하지 못했습니다.', 'fail');
     }
   };
 
@@ -177,7 +179,7 @@ export default function BoardsDetails() {
         setIsModal(false);
         setCommentToDelete(null);
       } catch (error) {
-        console.error('댓글을 삭제하지 못했습니다.', error);
+        showSnackbar('댓글을 삭제하지 못했습니다.', 'fail');
       }
     }
   };
@@ -194,13 +196,26 @@ export default function BoardsDetails() {
 
   // 게시글 데이터 로딩 상태
   if (!boardData) {
-    return <div>게시글을 불러오는 중입니다...</div>;
+    return (
+      <div className="flex h-[540px] items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   // 댓글 페칭 에러 처리
   if (commentsError) {
     return (
-      <div>댓글을 불러오지 못했습니다: {(commentsError as Error).message}</div>
+      <div className="container flex min-h-screen items-center justify-center pb-5">
+        <ErrorMessage
+          title="데이터를 가져오는데 문제가 발생했습니다."
+          code="500"
+        >
+          서버에서 전송한 데이터를 가져오는데 문제가 발생했습니다.
+          <br />
+          다시 한 번 시도해주세요.
+        </ErrorMessage>
+      </div>
     );
   }
 
@@ -272,11 +287,19 @@ export default function BoardsDetails() {
 
             {/* 무한 스크롤 로더 */}
             <div ref={ref} className="h-10">
-              {isFetchingNextPage && <p>로딩 중...</p>}
+              {isFetchingNextPage && (
+                <div className="flex h-[540px] items-center justify-center">
+                  <Spinner />
+                </div>
+              )}
             </div>
 
             {/* 일반 로딩 표시기 */}
-            {isFetching && !isFetchingNextPage && <p>로딩 중...</p>}
+            {isFetching && !isFetchingNextPage && (
+              <div className="flex h-[540px] items-center justify-center">
+                <Spinner />
+              </div>
+            )}
           </div>
         </div>
         <ModalDefault
