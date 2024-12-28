@@ -6,6 +6,7 @@ import { Profile } from 'types/profile';
 
 import Menu from '../Menu';
 import { useSnackbar } from 'context/SnackBarContext';
+import NotificationWrapper from '../Notification/NotificationWrapper';
 
 interface LoginProps {
   isMobile: boolean;
@@ -24,6 +25,7 @@ interface LoginProps {
 export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
+  const [showNotification, setShowNotification] = useState(false);
   const { showSnackbar } = useSnackbar();
 
   const profileImage = profile?.image ?? '/icon/icon-profile.svg';
@@ -59,74 +61,90 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
       localStorage.removeItem('refreshToken');
       await router.push('/');
       showSnackbar('로그아웃 되었습니다.', 'fail');
+    } else if (option === '알림') {
+      setShowNotification(true);
     }
+  };
+
+  const closeNotification = () => {
+    setShowNotification(false);
   };
 
   useOutsideClick(loginMenuRef, () => setIsOpen(false));
 
-  return isLoggedIn ? (
-    <div ref={loginMenuRef} className="flex">
-      <div
-        role="button"
-        tabIndex={0}
-        className="relative cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            setIsOpen(!isOpen);
-          }
-        }}
-      >
-        <div className="flex size-[32px] overflow-hidden rounded-full mo:hidden">
-          <Image
-            src={profileImage}
-            className="object-cover mo:hidden"
-            alt="프로필 아이콘"
-            width={32}
-            height={32}
-          />
-        </div>
-        <Image
-          src="/icon/icon-menu.svg"
-          className="hidden mo:block"
-          alt="메뉴 아이콘"
-          width={32}
-          height={32}
-        />
+  return (
+    <>
+      {isLoggedIn ? (
+        <div ref={loginMenuRef} className="flex">
+          <div
+            role="button"
+            tabIndex={0}
+            className="relative cursor-pointer"
+            onClick={() => setIsOpen(!isOpen)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setIsOpen(!isOpen);
+              }
+            }}
+          >
+            <div className="flex size-[32px] overflow-hidden rounded-full mo:hidden">
+              <Image
+                src={profileImage}
+                className="object-cover mo:hidden"
+                alt="프로필 아이콘"
+                width={32}
+                height={32}
+              />
+            </div>
+            <Image
+              src="/icon/icon-menu.svg"
+              className="hidden mo:block"
+              alt="메뉴 아이콘"
+              width={32}
+              height={32}
+            />
 
-        {isOpen && (
-          <Menu
-            options={profileMenu}
-            onSelect={handleLoginMenu}
-            menuSize="w-28"
-          />
-        )}
-      </div>
-    </div>
-  ) : isMobile ? (
-    <div ref={loginMenuRef} className="flex">
-      <button className="relative" onClick={() => setIsOpen(!isOpen)}>
-        <Image
-          src="/icon/icon-menu.svg"
-          alt="메뉴 아이콘"
-          width={24}
-          height={24}
+            {isOpen && (
+              <Menu
+                options={profileMenu}
+                onSelect={handleLoginMenu}
+                menuSize="w-28"
+              />
+            )}
+          </div>
+        </div>
+      ) : isMobile ? (
+        <div ref={loginMenuRef} className="flex">
+          <button className="relative" onClick={() => setIsOpen(!isOpen)}>
+            <Image
+              src="/icon/icon-menu.svg"
+              alt="메뉴 아이콘"
+              width={24}
+              height={24}
+            />
+            {isOpen && (
+              <Menu
+                options={profileMenu}
+                onSelect={handleLoginMenu}
+                menuSize="w-28"
+              />
+            )}
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => router.push('/login')}
+          className="text-14 text-gray-400"
+        >
+          로그인
+        </button>
+      )}
+      {showNotification && (
+        <NotificationWrapper
+          isOpen={showNotification}
+          onClose={closeNotification}
         />
-        {isOpen && (
-          <Menu
-            options={profileMenu}
-            onSelect={handleLoginMenu}
-            menuSize="w-28"
-          />
-        )}
-      </button>
-    </div>
-  ) : (
-    <button
-      onClick={() => router.push('/login')}
-      className="text-14 text-gray-400"
-    >
-      로그인
-    </button>
+      )}
+    </>
   );
 }

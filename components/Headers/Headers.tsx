@@ -27,7 +27,7 @@ export default function Headers() {
         <GNB />
       </div>
       {/* 로그인 여부에 따라 조건부로 노출 */}
-      <div className="flex items-center gap-5 mo:gap-2">
+      <div className="flex items-center gap-5 mo:gap-0">
         <DarkModeToggle />
         <Alarm isLoggedIn={isAuthenticated} />
         <Login

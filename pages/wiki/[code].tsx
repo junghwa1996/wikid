@@ -46,7 +46,11 @@ export default function Wiki() {
   return (
     <>
       <div className="mt-[120px] flex justify-center pc:mx-[100px]">
-        {profile ? <Contents profile={profile} /> : <p>불러오는 중입니다...</p>}
+        {profile ? (
+          <Contents key={profile.code} profile={profile} />
+        ) : (
+          <p>불러오는 중입니다...</p>
+        )}
       </div>
     </>
   );
