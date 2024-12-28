@@ -7,7 +7,7 @@ import InputField from '@/components/Input';
 import { AuthAPI } from '@/services/api/auth';
 import { useSnackbar } from 'context/SnackBarContext';
 
-function Login(): React.ReactElement {
+export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,11 +35,12 @@ function Login(): React.ReactElement {
 
   const isFormValid = validFields.email && validFields.password;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || !isFormValid) return;
 
     setIsSubmitting(true);
+
     try {
       const response = (await AuthAPI.signin({
         email,
@@ -49,17 +50,17 @@ function Login(): React.ReactElement {
       localStorage.setItem('accessToken', response.accessToken);
       showSnackbar('로그인이 완료되었습니다', 'success');
 
-      // 3초 후 메인 페이지로 이동
+      // 페이지 이동 전까지는 버튼을 비활성화 상태로 유지
       setTimeout(() => {
         router.push('/');
-      }, 3000);
+      }, 1000);
     } catch (error) {
       if (error instanceof Error) {
         showSnackbar(error.message, 'fail');
       } else {
         showSnackbar('로그인 중 오류가 발생했습니다', 'fail');
       }
-    } finally {
+      // 에러가 발생한 경우에만 isSubmitting을 false로 변경
       setIsSubmitting(false);
     }
   };
@@ -91,7 +92,7 @@ function Login(): React.ReactElement {
           />
           <Button
             type="submit"
-            disabled={!isFormValid}
+            disabled={!isFormValid || isSubmitting}
             isLoading={isSubmitting}
             variant="primary"
             className="mt-[6px] h-[45px] w-full"
@@ -111,5 +112,3 @@ function Login(): React.ReactElement {
     </div>
   );
 }
-
-export default Login;
