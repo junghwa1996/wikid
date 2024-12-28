@@ -4,6 +4,7 @@ import { ProfileAnswer } from 'types/profile';
 
 import instance from '@/lib/axios-client';
 import Contents from '@/components/wiki.page/Contents';
+import Spinner from '@/components/Spinner';
 
 const getProfileData = async (code: string): Promise<ProfileAnswer | null> => {
   try {
@@ -45,9 +46,15 @@ export default function Wiki() {
 
   return (
     <>
-      <div className="mt-[120px] flex justify-center pc:mx-[100px]">
-        {profile ? <Contents profile={profile} /> : <p>불러오는 중입니다...</p>}
-      </div>
+      {profile ? (
+        <div className="mt-[120px] flex justify-center pc:mx-[100px]">
+          <Contents profile={profile} />
+        </div>
+      ) : (
+        <div className="flex h-[calc(100vh-120px)] items-center justify-center">
+          <Spinner size={10} />
+        </div>
+      )}
     </>
   );
 }
