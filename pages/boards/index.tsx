@@ -85,7 +85,6 @@ export default function Boards({
   const [isError, setIsError] = useState(false);
   const { showSnackbar } = useSnackbar();
 
-  const [isLoading, setIsLoading] = useState(false);
   const isMobile = useCheckMobile();
   const PAGE_SIZE = 10;
 
@@ -96,7 +95,6 @@ export default function Boards({
     const fetchBoards = async () => {
       const orderBy = selectedOption === '최신순' ? 'recent' : 'like';
       try {
-        setIsLoading(true);
         setIsError(false);
         const res = await getBoards({
           orderBy,
@@ -109,7 +107,6 @@ export default function Boards({
         setBoards([]);
         setIsError(true);
       } finally {
-        setIsLoading(false);
         setIsError(false);
       }
     };
@@ -202,25 +199,17 @@ export default function Boards({
           {/* 게시글 목록 */}
           {boards.length > 0 ? (
             <>
-              {isLoading ? (
-                <div className="flex h-[540px] items-center justify-center">
-                  <Spinner />
-                </div>
-              ) : (
-                <>
-                  <BoardList data={boards} />
+              <BoardList data={boards} />
 
-                  {/* 페이지네이션 */}
-                  <div className="mt-[60px] mo:mt-8">
-                    <Pagination
-                      totalCount={totalCount}
-                      currentPage={currentPage}
-                      pageSize={PAGE_SIZE}
-                      onPageChange={(page) => setCurrentPage(page)}
-                    />
-                  </div>
-                </>
-              )}
+              {/* 페이지네이션 */}
+              <div className="mt-[60px] mo:mt-8">
+                <Pagination
+                  totalCount={totalCount}
+                  currentPage={currentPage}
+                  pageSize={PAGE_SIZE}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
+              </div>
             </>
           ) : (
             <EmptyList classNames="mt-[60px] mo:mt-10" text={emptyListText} />
