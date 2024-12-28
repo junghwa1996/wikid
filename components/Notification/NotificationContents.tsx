@@ -48,9 +48,14 @@ export default function NotificationContents({
   };
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={handleLinkClick}
       className="flex w-full flex-col gap-[4px] rounded-custom bg-background px-[16px] py-[12px] dark:bg-gray-100"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleLinkClick();
+      }}
     >
       <div>
         <div className="flex w-full items-center justify-between">
@@ -73,6 +78,6 @@ export default function NotificationContents({
         </div>
       </div>
       <div className="text-12 text-gray-400">{timeAgo}</div>
-    </button>
+    </div>
   );
 }
