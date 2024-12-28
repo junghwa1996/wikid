@@ -40,7 +40,7 @@ function InputField({
   const handleFocus = () => {};
 
   const handleBlur = () => {
-    if (value) {
+    if (value && label !== '생일') {
       const error = validate(value);
       const isValid = !error && value.length > (type === 'name' ? 1 : 0);
       onValidation?.(isValid);
@@ -49,36 +49,12 @@ function InputField({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value.trim();
-
-    if (label === '생일') {
-      // 숫자만 추출
-      const numbers = newValue.replace(/\D/g, '');
-
-      // YYYY-MM-DD 형식으로 변환
-      if (numbers.length > 0) {
-        newValue = numbers.slice(0, 4);
-        if (numbers.length > 4) {
-          newValue += '-' + numbers.slice(4, 6);
-        }
-        if (numbers.length > 6) {
-          newValue += '-' + numbers.slice(6, 8);
-        }
-      }
-
-      onChange({
-        ...e,
-        target: {
-          ...e.target,
-          value: newValue,
-        },
-      });
-    } else {
-      onChange(e);
+    onChange(e);
+    if (label !== '생일') {
+      const error = validate(newValue);
+      const isValid = !error && newValue.length > (type === 'name' ? 1 : 0);
+      onValidation?.(isValid);
     }
-
-    const error = validate(newValue);
-    const isValid = !error && newValue.length > (type === 'name' ? 1 : 0);
-    onValidation?.(isValid);
   };
 
   const getInputType = () => {
@@ -86,6 +62,8 @@ function InputField({
       return 'text';
     } else if (type === 'passwordConfirm' || type === 'password') {
       return showPassword ? 'text' : 'password';
+    } else if (label === '생일') {
+      return 'date';
     }
     return type;
   };
@@ -140,13 +118,12 @@ function InputField({
           type={getInputType()}
           value={value}
           onChange={handleChange}
-          placeholder={label === '생일' ? 'YYYY-MM-DD' : placeholder}
-          onBlur={handleBlur}
-          onFocus={handleFocus}
-          className={inputClass}
-          ref={ref}
-          disabled={disabled}
-          {...props}
+          className={`${inputClass} border-gray-200 ${label === '생일' ? '[&::-webkit-calendar-picker-indicator]:cursor-pointer' : ''}`}
+          max={
+            label === '생일'
+              ? new Date().toISOString().split('T')[0]
+              : undefined
+          }
         />
         {(type === 'password' || type === 'passwordConfirm') && (
           <button
