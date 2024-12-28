@@ -1,6 +1,7 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import NotificationWrapper from '@/components/Notification/NotificationWrapper';
+import useOutsideClick from '@/hooks/useOutsideClick';
 
 interface AlarmProps {
   isLoggedIn: boolean;
@@ -8,22 +9,26 @@ interface AlarmProps {
 
 export default function Alarm({ isLoggedIn }: AlarmProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const handleAlarmOpen = () => {
-    if (isOpen) {
-      setIsOpen(false);
-      return;
-    }
-    setIsOpen(true);
-  };
+  const handleAlarmOpen = () => setIsOpen(!isOpen);
   const handleAlarmClose = () => setIsOpen(false);
+  const alarmRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(alarmRef, () => setIsOpen(false));
 
   if (!isLoggedIn) {
     return null;
   }
 
   return (
-    <div className="relative">
-      <button onClick={handleAlarmOpen}>
+    <div ref={alarmRef}>
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={handleAlarmOpen}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') handleAlarmOpen();
+        }}
+      >
         <Image
           src="/icon/icon-alarm.svg"
           className="mo:hidden"
@@ -31,9 +36,11 @@ export default function Alarm({ isLoggedIn }: AlarmProps) {
           width={32}
           height={32}
         />
-      </button>
+      </div>
 
-      <NotificationWrapper isOpen={isOpen} onClose={handleAlarmClose} />
+      {isOpen && (
+        <NotificationWrapper isOpen={isOpen} onClose={handleAlarmClose} />
+      )}
     </div>
   );
 }

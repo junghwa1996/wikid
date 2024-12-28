@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import NotificationBox from '../Notification/NorificationBox';
-import useOutsideClick from '@/hooks/useOutsideClick';
 import instance from '@/lib/axios-client';
 import { useSnackbar } from 'context/SnackBarContext';
+import useOutsideClick from '@/hooks/useOutsideClick';
+import useCheckMobile from '@/hooks/useCheckMobile';
 
 export interface NotificationProps {
   totalCount: number;
@@ -26,9 +27,11 @@ export default function NotificationWrapper({
     NotificationProps | undefined
   >();
   const { showSnackbar } = useSnackbar();
-  const notificationRef = useRef<HTMLDivElement>(null);
+  const notificationRef = useRef<HTMLDivElement | null>(null);
+  const isMobile = useCheckMobile();
 
-  useOutsideClick(notificationRef, onClose);
+  // 모바일일 때만 useOutsideClick 훅을 적용
+  useOutsideClick(isMobile ? notificationRef : { current: null }, onClose);
 
   useEffect(() => {
     const getNotification = async () => {
