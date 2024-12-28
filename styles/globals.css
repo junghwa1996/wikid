@@ -189,7 +189,7 @@ body {
 }
 
 .downFadein {
-  @apply pc:animate-pcFadeIn tamo:animate-tamoFadeIn;
+  @apply animate-pcFadeIn tamo:animate-tamoFadeIn;
 }
 
 .alarmDownFadein {
