@@ -37,18 +37,8 @@ function InputField({
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleFocus = () => {};
-
-  const handleBlur = () => {
-    if (value && label !== '생일') {
-      const error = validate(value);
-      const isValid = !error && value.length > (type === 'name' ? 1 : 0);
-      onValidation?.(isValid);
-    }
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = e.target.value.trim();
+    const newValue = e.target.value.trim();
     onChange(e);
     if (label !== '생일') {
       const error = validate(newValue);
