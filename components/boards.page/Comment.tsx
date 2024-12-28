@@ -69,7 +69,7 @@ export default function Comment({
           alt="user profile"
           width={50}
           height={50}
-          className="object-cover"
+          className="size-full object-cover"
         />
       </div>
       <div className="flex-1">
