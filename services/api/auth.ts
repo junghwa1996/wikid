@@ -48,7 +48,9 @@ export const AuthAPI = {
         }
         // 500 에러 (서버 내부 오류)
         if (error.response?.status === 500) {
-          throw new Error('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+          throw new Error(
+            '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
+          );
         }
       }
       // 기타 예상치 못한 에러

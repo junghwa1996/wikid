@@ -40,6 +40,16 @@ export const ProfileAPI = {
       handleApiError(error);
     }
   },
+
+  // 현재 로그인한 사용자의 프로필 정보를 조회
+  getProfile: async () => {
+    try {
+      const res = await instance.get('/users/me');
+      return res.data.profile;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
 };
 
 // 위키 목록 페이지 요청 파라미터 타입

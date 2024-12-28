@@ -15,9 +15,10 @@ import BoardList from '@/components/boards.page/BoardList';
 
 import 'swiper/css';
 import { useProfileContext } from '@/hooks/useProfileContext';
-import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 import Router from 'next/router';
 import EmptyList from '@/components/EmptyList';
+import { useSnackbar } from 'context/SnackBarContext';
+import Spinner from '@/components/Spinner';
 
 const BoardCardList_Swiper = dynamic(
   () => import('@/components/boards.page/BoardCardList.swiper'),
@@ -76,11 +77,9 @@ export default function Boards({
   const [value, setValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [selectedOption, setSelectedOption] = useState('최신순');
-  const [snackBarOpen, setSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState('');
-  const [snackStyled, setSnackStyled] =
-    useState<SnackBarProps['severity']>(undefined);
+  const { showSnackbar } = useSnackbar();
 
+  const [isLoading, setIsLoading] = useState(false);
   const isMobile = useCheckMobile();
   const PAGE_SIZE = 10;
 
@@ -90,16 +89,19 @@ export default function Boards({
   useEffect(() => {
     const fetchBoards = async () => {
       const orderBy = selectedOption === '최신순' ? 'recent' : 'like';
-      const res = await getBoards({
-        orderBy,
-        pageSize: PAGE_SIZE,
-        page: currentPage,
-        keyword: searchValue,
-      });
-      if (Array.isArray(res.list) && res.list.length > 0) {
+      try {
+        setIsLoading(true);
+        const res = await getBoards({
+          orderBy,
+          pageSize: PAGE_SIZE,
+          page: currentPage,
+          keyword: searchValue,
+        });
         setBoards(res.list);
-      } else {
+      } catch {
         setBoards([]);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -121,9 +123,7 @@ export default function Boards({
     if (isAuthenticated) {
       Router.push('/addboard');
     } else {
-      setSnackStyled('fail');
-      setSnackBarMessage('로그인 후 이용해주세요');
-      setSnackBarOpen(true);
+      showSnackbar('로그인 후 이용해주세요', 'fail');
       return;
     }
   };
@@ -177,32 +177,32 @@ export default function Boards({
 
           {/* 게시글 목록 */}
           {boards.length > 0 ? (
-            <BoardList data={boards} />
+            <>
+              {isLoading ? (
+                <div className="flex h-[540px] items-center justify-center">
+                  <Spinner />
+                </div>
+              ) : (
+                <>
+                  <BoardList data={boards} />
+
+                  {/* 페이지네이션 */}
+                  <div className="mt-[60px] mo:mt-8">
+                    <Pagination
+                      totalCount={totalCount}
+                      currentPage={currentPage}
+                      pageSize={PAGE_SIZE}
+                      onPageChange={(page) => setCurrentPage(page)}
+                    />
+                  </div>
+                </>
+              )}
+            </>
           ) : (
             <EmptyList classNames="mt-[60px] mo:mt-10" text={emptyListText} />
           )}
         </div>
-
-        {/* 페이지네이션 */}
-        {boards.length > 0 && (
-          <div className="mo:-mt-2">
-            <Pagination
-              totalCount={totalCount}
-              currentPage={currentPage}
-              pageSize={PAGE_SIZE}
-              onPageChange={(page) => setCurrentPage(page)}
-            />
-          </div>
-        )}
       </div>
-      <SnackBar
-        severity={snackStyled}
-        open={snackBarOpen}
-        onClose={() => setSnackBarOpen(false)}
-        autoHideDuration={2000}
-      >
-        {snackBarMessage}
-      </SnackBar>
     </main>
   );
 }
