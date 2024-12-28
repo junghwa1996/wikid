@@ -1,12 +1,13 @@
 import useOutsideClick from 'hooks/useOutsideClick';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Profile } from 'types/profile';
 
 import Menu from '../Menu';
 import { useSnackbar } from 'context/SnackBarContext';
 import NotificationWrapper from '../Notification/NotificationWrapper';
+import { ProfileContext } from 'context/ProfileContext';
 
 interface LoginProps {
   isMobile: boolean;
@@ -22,18 +23,22 @@ interface LoginProps {
  * @param isLoggedIn 로그인 여부 판별
  */
 
-export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
+export default function Login({ isMobile }: LoginProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenu, setProfileMenu] = useState<string[]>([]);
   const [showNotification, setShowNotification] = useState(false);
   const { showSnackbar } = useSnackbar();
 
+  // ProfileContext에서 상태 가져오기
+  const profileContext = useContext(ProfileContext);
+  const { isAuthenticated, profile, setAccessToken } = profileContext || {};
   const profileImage = profile?.image ?? '/icon/icon-profile.svg';
+
   const router = useRouter();
   const loginMenuRef = useRef<HTMLDivElement>(null);
 
   const updateProfileMenu = useCallback(() => {
-    if (!isLoggedIn) {
+    if (!isAuthenticated) {
       if (isMobile) return ['로그인', '위키목록', '자유게시판'];
     } else if (isMobile) {
       return ['위키목록', '자유게시판', '알림', '마이페이지', '로그아웃'];
@@ -41,7 +46,7 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
       return ['마이페이지', '로그아웃'];
     }
     return [];
-  }, [isLoggedIn, isMobile]); // 의존성 배열에 필요한 값만 포함
+  }, [isAuthenticated, isMobile]); // 의존성 배열에 필요한 값만 포함
 
   useEffect(() => {
     setProfileMenu(updateProfileMenu());
@@ -57,8 +62,11 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
     } else if (option === '로그인') {
       await router.push('/login');
     } else if (option === '로그아웃') {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      // ProfileContext의 setAccessToken을 호출하여 로그아웃 처리
+      if (setAccessToken) {
+        setAccessToken(null); // accessToken 상태를 null로 설정
+      }
+      localStorage.removeItem('refreshToken'); // refreshToken 제거
       await router.push('/');
       showSnackbar('로그아웃 되었습니다.', 'fail');
     } else if (option === '알림') {
@@ -74,7 +82,7 @@ export default function Login({ isMobile, isLoggedIn, profile }: LoginProps) {
 
   return (
     <>
-      {isLoggedIn ? (
+      {isAuthenticated ? (
         <div ref={loginMenuRef} className="flex">
           <div
             role="button"

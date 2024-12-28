@@ -182,3 +182,8 @@ body {
     --pos2: 503px;
   }
 }
+
+/* 인터랙션 공통 스타일 */
+.scaleStyle {
+  @apply transition-all hover:scale-[1.02] hover:bg-gray-100 hover:shadow-xl;
+}
