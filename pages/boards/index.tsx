@@ -195,7 +195,7 @@ export default function Boards({
             <Dropdown
               options={['최신순', '인기순']}
               onSelect={handleOptionSelect}
-              dropdownSize="w-[140px] ta:w-[120px] mo:w-[89.337vw]"
+              dropdownSize="w-[140px] ta:w-[120px] mo:w-full"
             />
           </div>
 
