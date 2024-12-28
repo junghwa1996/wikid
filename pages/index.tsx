@@ -65,7 +65,7 @@ export default function LandingPage() {
               {isAuthenticated && profile ? '위키 구경하기' : '위키 만들기'}
             </Button>
             <Image
-              src="/images/img-wiki.svg"
+              src="/images/img-wiki.png"
               alt="위키 이미지"
               width={498}
               height={590}
@@ -94,7 +94,7 @@ export default function LandingPage() {
                 align="left"
               />
               <Image
-                src="/images/img-write.svg"
+                src="/images/img-write.png"
                 alt="타이핑 이미지"
                 width={364}
                 height={681}
@@ -104,7 +104,7 @@ export default function LandingPage() {
             </div>
 
             <Image
-              src="/images/img-text-dark.svg"
+              src="/images/img-text-dark.png"
               alt="텍스트 이미지"
               width={520}
               height={681}
@@ -130,7 +130,7 @@ export default function LandingPage() {
           />
 
           <Image
-            src="/images/img-belt.svg"
+            src="/images/img-belt.png"
             alt="벨트 이미지"
             width={1920}
             height={200}
@@ -154,30 +154,40 @@ export default function LandingPage() {
               }
               align="left"
             />
-            <div className="flex flex-wrap gap-10 mo:gap-4 ta:gap-[2.2rem]">
+            <div
+              className="grid gap-10 mo:gap-[0.7rem] ta:gap-8"
+              style={{
+                gridTemplateAreas: `
+                "image-comment image-comment"
+                "image-notification image-notifications"
+              `,
+                gridTemplateColumns: '297fr 575fr',
+              }}
+            >
               <Image
-                src="/images/img-comment.svg"
-                className="h-auto w-full flex-1"
+                src="/images/img-text-green.png"
+                className="h-auto w-full object-cover"
                 alt="텍스트 이미지"
-                width={924}
-                height={280}
+                width={913}
+                height={309}
+                style={{ gridArea: 'image-comment' }}
               />
-              <div className="flex w-full gap-10 mo:gap-4 ta:gap-[2.2rem]">
-                <Image
-                  src="/images/img-bell.svg"
-                  alt="벨 이미지"
-                  width={280}
-                  height={280}
-                  className="h-auto w-full mo:w-[25vw] ta:w-[26vw]"
-                />
-                <Image
-                  src="/images/img-alert.svg"
-                  alt="알림 이미지"
-                  width={604}
-                  height={280}
-                  className="h-auto w-full mo:w-[53.6vw] ta:w-[57vw]"
-                />
-              </div>
+              <Image
+                src="/images/img-bell.png"
+                alt="벨 이미지"
+                width={297}
+                height={297}
+                className="size-full rounded-2xl object-cover"
+                style={{ gridArea: 'image-notification' }}
+              />
+              <Image
+                src="/images/img-text-white.png"
+                alt="알림 이미지"
+                width={575}
+                height={298}
+                className="size-full rounded-xl object-cover"
+                style={{ gridArea: 'image-notifications' }}
+              />
             </div>
           </div>
         </section>
