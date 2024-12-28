@@ -5,11 +5,13 @@ import Button from '@/components/Button';
 import InputField from '@/components/Input';
 import SnackBar from '@/components/SnackBar';
 import { useValidation } from '@/hooks/useValidation';
+import { useProfileContext } from '@/hooks/useProfileContext';
 import { AuthAPI } from '@/services/api/auth';
 import { ProfileAPI } from '@/services/api/profileAPI';
 import { AxiosError } from 'axios';
 
 function MyPage(): React.ReactElement {
+  const { profile } = useProfileContext();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
@@ -210,44 +212,48 @@ function MyPage(): React.ReactElement {
             </div>
           </div>
         </form>
-        <div className="w-[400px] border-b border-gray-200 mo:w-[335px]"></div>
-        {/* 위키 생성 폼 */}
-        <form
-          onSubmit={handleWikiSubmit}
-          className="flex w-[400px] flex-col items-center gap-[32px] mo:w-[335px]"
-        >
-          <div className={inputSectionStyle}>
-            <div className={inputContainerStyle}>
-              <InputField
-                label="위키 생성하기"
-                type="text"
-                value={question}
-                width="100%"
-                onChange={handleQuestionChange}
-                placeholder="질문을 입력해 주세요"
-              />
-              <InputField
-                label=""
-                type="text"
-                value={answer}
-                width="100%"
-                onChange={handleAnswerChange}
-                placeholder="답을 입력해 주세요"
-              />
+        {/* 위키가 없을 때만 구분선과 위키 생성 폼 표시 */}
+        {!profile?.code && (
+          <>
+            <div className="w-[400px] border-b border-gray-200 mo:w-[335px]"></div>
+            <form
+              onSubmit={handleWikiSubmit}
+              className="flex w-[400px] flex-col items-center gap-[32px] mo:w-[335px]"
+            >
+              <div className={inputSectionStyle}>
+                <div className={inputContainerStyle}>
+                  <InputField
+                    label="위키 생성하기"
+                    type="text"
+                    value={question}
+                    width="100%"
+                    onChange={handleQuestionChange}
+                    placeholder="질문을 입력해 주세요"
+                  />
+                  <InputField
+                    label=""
+                    type="text"
+                    value={answer}
+                    width="100%"
+                    onChange={handleAnswerChange}
+                    placeholder="답을 입력해 주세요"
+                  />
 
-              <Button
-                type="submit"
-                disabled={!isWikiFormValid}
-                isLoading={Boolean(isWikiSubmitting)}
-                variant="primary"
-                size="small"
-                className="mt-[8px] self-end"
-              >
-                생성하기
-              </Button>
-            </div>
-          </div>
-        </form>
+                  <Button
+                    type="submit"
+                    disabled={!isWikiFormValid}
+                    isLoading={Boolean(isWikiSubmitting)}
+                    variant="primary"
+                    size="small"
+                    className="mt-[8px] self-end"
+                  >
+                    생성하기
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </>
+        )}
       </div>
       <SnackBar
         open={snackbarOpen}
