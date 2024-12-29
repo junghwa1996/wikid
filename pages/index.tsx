@@ -62,9 +62,9 @@ export default function LandingPage() {
               onClick={handleButtonClick}
               variant="dark"
               size="large"
-              className="mb-[54px] font-['Pretendard'] mo:mb-[44px] mo:text-20b"
+              className="mb-[54px] w-[170px] font-['Pretendard'] mo:mb-[44px] mo:text-20b"
             >
-              {isAuthenticated && profile ? '내 위키 보러가기' : '위키 만들기'}
+              {isAuthenticated && profile ? '내 위키 보기' : '위키 만들기'}
             </Button>
             <motion.div
               initial={{ opacity: 0, y: 40 }}
