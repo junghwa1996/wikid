@@ -83,9 +83,9 @@ function WikiQuizModal({
             />
           </div>
           <p className="text-center text-14 text-gray-400">
-            위키에 작성하기 위해
+            다음 퀴즈를 맞추고
             <br className={keyboardVisible ? 'mo:hidden' : ''} />
-            아래 퀴즈에 답해주세요.
+            위키를 작성해 보세요.
           </p>
         </div>
 
