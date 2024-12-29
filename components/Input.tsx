@@ -117,6 +117,13 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
                 ? new Date().toISOString().split('T')[0]
                 : undefined
             }
+            autoComplete={
+              type === 'password'
+                ? 'current-password'
+                : type === 'passwordConfirm'
+                  ? 'new-password'
+                  : undefined
+            }
           />
           {(type === 'password' || type === 'passwordConfirm') && (
             <button
