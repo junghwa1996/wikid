@@ -83,20 +83,18 @@ export default function LandingPage() {
             </motion.div>
           </div>
         </section>
-
         {/* 친구의 위키 */}
-
         <section className={`mt-[-2px] bg-[#474d66] ${mainStyled.padding}`}>
-          <div
-            className={`flex items-center justify-center gap-10 mo:gap-[10px] ta:gap-5 ${mainStyled.container}`}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.4, ease: 'easeOut' }}
           >
-            <div>
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.7, delay: 0.4, ease: 'easeOut' }}
-              >
+            <div
+              className={`flex items-center justify-center gap-10 mo:gap-[10px] ta:gap-5 ${mainStyled.container}`}
+            >
+              <div>
                 <SectionTitle
                   caption="WRITE"
                   className="mb-[60px] text-[#fff] mo:mb-[30px] ta:mb-[40px]"
@@ -109,31 +107,34 @@ export default function LandingPage() {
                   }
                   align="left"
                 />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.7, delay: 0.4, ease: 'easeOut' }}
-              >
-                <Image
-                  src="/images/img-write.png"
-                  alt="작성 이미지"
-                  width={297}
-                  height={297}
-                  className="h-auto w-full rounded-2xl object-cover"
-                  style={{ gridArea: 'image-write' }}
-                  priority
-                />
-              </motion.div>
-            </div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                    y: [0, -10, 0], // 위아래로 부드럽게 움직임
+                  }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{
+                    duration: 2,
+                    y: {
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    },
+                  }}
+                >
+                  <Image
+                    src="/images/img-write.png"
+                    alt="타이핑 이미지"
+                    width={364}
+                    height={681}
+                    className="h-auto object-contain mo:w-[133px] ta:w-[262px]"
+                    priority
+                  />
+                </motion.div>
+              </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.7, delay: 0.4, ease: 'easeOut' }}
-            >
               <Image
                 src="/images/img-text-dark.png"
                 alt="텍스트 이미지"
@@ -142,10 +143,9 @@ export default function LandingPage() {
                 className="h-auto object-contain mo:w-[192px] ta:w-[365px]"
                 priority
               />
-            </motion.div>
-          </div>
-        </section>
-
+            </div>{' '}
+          </motion.div>
+        </section>{' '}
         {/* share */}
         <section className={mainStyled.padding}>
           <SectionTitle
@@ -211,9 +211,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
         {/* view */}
-
         <section className={`bg-blue-50 ${mainStyled.padding} `}>
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -291,9 +289,7 @@ export default function LandingPage() {
             </div>{' '}
           </motion.div>
         </section>
-
         {/* final */}
-
         <section className={`bg-[#474d66] text-center ${mainStyled.padding}`}>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
