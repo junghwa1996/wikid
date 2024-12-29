@@ -24,11 +24,11 @@ function UserProfile({
 
   // 프로필 이미지 관련 상태와 이벤트 핸들러 훅
   const {
-    isLoading, // 이미지 로딩 상태
-    previewImage, // 이미지 미리보기 URL
-    fileInputRef, // 파일 입력 요소 참조
-    handleImageClick, // 이미지 클릭 핸들러
-    handleFileChange, // 파일 변경 핸들러
+    isLoading,
+    previewImage,
+    fileInputRef,
+    handleImageClick,
+    handleFileChange,
   } = useProfileImage((url) => onDataChange('image', url));
 
   /**
@@ -55,21 +55,22 @@ function UserProfile({
       <p className="flex h-[18px] w-[200px] text-14 mo:w-[180px] mo:text-12 pc:gap-[20px]">
         <span className="flex-[1] text-gray-400">{label}</span>
         <span className="flex-[2] truncate text-gray-500">{data[field]}</span>
-        {/* truncate 클래스 - overflow:hidden, text-overflow:ellipsis, white-space:nowrap */}
       </p>
     );
   };
 
   return (
-    // 메인 컨테이너
-    <div className="max-w-4xl rounded-custom bg-background shadow-custom dark:shadow-custom-dark pc:h-auto pc:w-[320px] pc:p-7 tamo:w-full tamo:p-5">
-      {/* 레이아웃 컨테이너: PC에서는 세로, 모바일/태블릿에서는 가로 배치 */}
+    // 전체 컨테이너
+    <div className="flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark pc:h-auto pc:w-[320px] pc:px-[30px] pc:pb-[47px] tamo:w-full tamo:p-5">
+      {/* 프로필 이미지와 정보를 포함하는 상단 컨테이너 */}
       <div
         className={`flex ${isEditing ? 'flex-col' : 'flex-col mo:flex-row ta:flex-row pc:flex-col'}`}
       >
         {/* 프로필 이미지 섹션 */}
         <div
-          className={`flex items-center justify-center pc:pb-[60px] pc:pt-[40px] tamo:pl-[10px] tamo:pt-4 ${isEditing ? '' : 'mo:self-start ta:self-start'}`}
+          className={`flex items-center justify-center pc:pb-[60px] pc:pt-[40px] tamo:pr-[10px] tamo:pt-4 ${
+            isEditing ? '' : 'mo:self-start ta:self-start'
+          }`}
         >
           {/* 이미지 업로드 버튼 */}
           <button
@@ -82,8 +83,8 @@ function UserProfile({
             <div
               className={`relative ${
                 isEditing
-                  ? 'mo:size-[62px] ta:size-[71px] pc:size-48'
-                  : 'mo:size-[62px] ta:size-[71px] pc:size-48'
+                  ? 'mo:size-[62px] ta:size-[71px] pc:size-[200px]'
+                  : 'mo:size-[62px] ta:size-[71px] pc:size-[200px]'
               }`}
             >
               {/* 프로필 이미지 */}
@@ -118,7 +119,7 @@ function UserProfile({
               </div>
             )}
           </button>
-          {/* 숨겨진 파일 입력 필드: 실제 파일 선택 다이얼로그를 위한 요소 */}
+          {/* 숨겨진 파일 입력 필드 */}
           <input
             ref={fileInputRef}
             type="file"
@@ -130,18 +131,22 @@ function UserProfile({
           />
         </div>
 
-        {/* 프로필 정보 섹션: 사용자 정보를 표시하는 영역 */}
+        {/* 프로필 정보 섹션 */}
         <div
-          className={`${isEditing ? 'mt-4 mo:justify-center' : 'mo:ml-4 mo:flex-1 mo:pl-[20px] ta:ml-4 ta:flex-1 ta:pl-[40px] pc:mt-4'} mt-6 mo:pc:w-full`}
+          className={`${
+            isEditing
+              ? 'mt-4 mo:justify-center'
+              : 'mo:flex-1 ta:flex-1 ta:pl-[40px] pc:mt-4'
+          } mt-6 mo:pc:w-full`}
         >
           <div className="space-y-3">
-            {/* 기본 정보 영역: 항상 표시되는 필수 정보들 */}
+            {/* 기본 정보 영역 */}
             <div
               className={`${
                 isEditing
                   ? 'mo:space-y-3 ta:grid ta:grid-cols-2 ta:place-items-center ta:gap-3 ta:space-y-0 pc:space-y-3'
                   : ''
-              } space-y-3`}
+              } space-y-4`}
             >
               {renderField('거주 도시', 'city')}
               {renderField('MBTI', 'mbti')}
@@ -149,75 +154,59 @@ function UserProfile({
               {isEditing && renderField('SNS 계정', 'sns')}
             </div>
 
-            {/* 추가 정보 영역: 편집 모드와 조회 모드에서 다르게 표시 */}
-            {isEditing ? (
-              // 편집 모드: 모든 필드를 그리드로 표시
+            {/* PC용 추가 정보 섹션 */}
+            {!isEditing && (
+              <div className="hidden space-y-4 pc:block">
+                {renderField('SNS 계정', 'sns')}
+                {renderField('생일', 'birthday')}
+                {renderField('별명', 'nickname')}
+                {renderField('혈액형', 'bloodType')}
+                {renderField('국적', 'nationality')}
+              </div>
+            )}
+
+            {/* 편집 모드일 때 추가 정보 */}
+            {isEditing && (
               <div className="mo:space-y-3 ta:grid ta:grid-cols-2 ta:place-items-center ta:gap-3 pc:space-y-3">
                 {renderField('생일', 'birthday')}
                 {renderField('별명', 'nickname')}
                 {renderField('혈액형', 'bloodType')}
                 {renderField('국적', 'nationality')}
               </div>
-            ) : (
-              // 조회 모드: PC와 모바일/태블릿에서 다르게 표시
-              <>
-                {/* 모바일/태블릿용 펼침/접힘 섹션 */}
-                <div className="pc:hidden">
-                  {!isExpanded ? (
-                    // 접힌 상태: 펼치기 버튼 표시
-                    <div className="flex justify-center">
-                      <button
-                        onClick={toggleExpand}
-                        className="flex items-center gap-2 text-14md text-green-200 hover:text-green-300"
-                      >
-                        <Image
-                          src="/icon/icon-expand.svg"
-                          alt="Expand"
-                          width={16}
-                          height={16}
-                        />
-                      </button>
-                    </div>
-                  ) : (
-                    // 펼친 상태: 추가 정보와 접기 버튼 표시
-                    <div>
-                      <div className="space-y-3">
-                        {renderField('SNS 계정', 'sns')}
-                        {renderField('생일', 'birthday')}
-                        {renderField('별명', 'nickname')}
-                        {renderField('혈액형', 'bloodType')}
-                        {renderField('국적', 'nationality')}
-                      </div>
-                      <div className="mt-3 flex justify-center">
-                        <button
-                          onClick={toggleExpand}
-                          className="flex items-center gap-2 text-14md text-green-200 hover:text-green-300"
-                        >
-                          <Image
-                            src="/icon/icon-collapse.svg"
-                            alt="Collapse"
-                            width={16}
-                            height={16}
-                          />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
+            )}
 
-                {/* PC용 추가 정보 섹션: 항상 표시 */}
-                <div className="hidden space-y-3 pc:block">
-                  {renderField('SNS 계정', 'sns')}
-                  {renderField('생일', 'birthday')}
-                  {renderField('별명', 'nickname')}
-                  {renderField('혈액형', 'bloodType')}
-                  {renderField('국적', 'nationality')}
-                </div>
-              </>
+            {/* 모바일/태블릿용 추가 정보 섹션 */}
+            {!isEditing && isExpanded && (
+              <div className="mt-4 space-y-4 pc:hidden">
+                {renderField('SNS 계정', 'sns')}
+                {renderField('생일', 'birthday')}
+                {renderField('별명', 'nickname')}
+                {renderField('혈액형', 'bloodType')}
+                {renderField('국적', 'nationality')}
+              </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* 모바일/태블릿용 확장 버튼 */}
+      {!isEditing && (
+        <div className="mt-4 flex justify-center pc:hidden">
+          <button
+            onClick={toggleExpand}
+            className="flex items-center gap-2 text-14md text-green-200 hover:text-green-300"
+          >
+            <Image
+              src={
+                isExpanded ? '/icon/icon-collapse.svg' : '/icon/icon-expand.svg'
+              }
+              alt={isExpanded ? 'Collapse' : 'Expand'}
+              width={16}
+              height={16}
+            />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
