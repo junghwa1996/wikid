@@ -62,7 +62,7 @@ function UserProfile({
   return (
     // 전체 컨테이너
     <div
-      className={`${isEditing ? 'px:pb-[36px] mo:px-[37px] mo:pb-[17px] mo:pt-[15px] ta:px-[16px] ta:pb-[37px] ta:pt-[20px] pc:pl-[40px]' : ''}flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark mo:pl-[20px] mo:pt-[15px] ta:px-[30px] ta:pb-[5px] ta:pt-[20px] pc:h-[671px] pc:w-[320px] pc:px-[30px] pc:pb-[47px] pc:pt-[60px] tamo:w-full`}
+      className={`${isEditing ? 'mo:px-[37px] mo:pb-[17px] mo:pl-[34px] mo:pt-[15px] ta:px-[16px] ta:pb-[37px] ta:pt-[20px] pc:h-auto pc:pb-[36px] pc:pl-[40px]' : 'pc:h-[671px]'}flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark mo:pl-[20px] mo:pt-[15px] ta:px-[30px] ta:pb-[5px] ta:pt-[20px] pc:w-[320px] pc:px-[30px] pc:pb-[47px] pc:pt-[60px] tamo:w-full`}
     >
       {/* 프로필 이미지와 정보를 포함하는 상단 컨테이너 */}
       <div
@@ -135,16 +135,18 @@ function UserProfile({
         <div
           className={`${
             isEditing
-              ? 'ta:pb-[37px] ta:pt-[34px] tamo:justify-center'
+              ? 'mo:pt-[24px] ta:pb-[37px] ta:pt-[34px] tamo:justify-center'
               : 'mo:flex-1 mo:pl-[10px] ta:flex-1 ta:pl-[20px]'
           } pc:pt-[60px] mo:pc:w-full`}
         >
-          <div className="mo:space-y-[8px] ta:space-y-[4px]">
+          <div
+            className={`${isEditing ? 'space-y-[16px]' : 'mo:space-y-[8px] ta:space-y-[4px]'}`}
+          >
             {/* 기본 정보 영역 */}
             <div
               className={`${
                 isEditing
-                  ? 'mo:space-y-3 ta:grid ta:grid-cols-2 ta:gap-3 ta:space-y-0 pc:space-y-3'
+                  ? 'mo:space-y-[16px] ta:grid ta:grid-cols-2 ta:gap-[16px] ta:space-y-0 pc:space-y-[16px]'
                   : 'mo:space-y-[8px] ta:space-y-[4px] pc:space-y-[16px]'
               }`}
             >
@@ -167,7 +169,7 @@ function UserProfile({
 
             {/* 편집 모드일 때 추가 정보 */}
             {isEditing && (
-              <div className="mo:space-y-3 ta:grid ta:grid-cols-2 ta:gap-3 pc:space-y-3">
+              <div className="mo:space-y-[16px] ta:grid ta:grid-cols-2 ta:gap-[16px] pc:space-y-[16px]">
                 {renderField('생일', 'birthday')}
                 {renderField('별명', 'nickname')}
                 {renderField('혈액형', 'bloodType')}
