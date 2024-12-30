@@ -107,6 +107,8 @@ export default function BoardDetailCard({
     }
   };
 
+  const buttonStyled = 'px-[45.5px] py-[10.5px] ta:px-[35.5px]';
+
   return (
     <div className="rounded-custom bg-background px-[30px] py-10 shadow-custom dark:shadow-custom-dark mo:p-5 mo:pb-[14px]">
       <header className="mb-[38px] mo:mb-[15px] mo:pb-[11px] ta:mb-[30px] ta:pb-2 tamo:border-b">
@@ -118,8 +120,14 @@ export default function BoardDetailCard({
             <div className="flex items-center gap-[14px] tamo:gap-3">
               {!isMobile ? (
                 <>
-                  <Button onClick={handleUpdateClick}>수정하기</Button>
-                  <Button onClick={handleDeleteClick} variant="danger">
+                  <Button onClick={handleUpdateClick} className={buttonStyled}>
+                    수정하기
+                  </Button>
+                  <Button
+                    onClick={handleDeleteClick}
+                    variant="danger"
+                    className={buttonStyled}
+                  >
                     삭제하기
                   </Button>
                 </>

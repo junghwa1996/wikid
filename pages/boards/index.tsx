@@ -162,7 +162,12 @@ export default function Boards({
           className={`container flex items-center justify-between ${pxTablet}`}
         >
           <h1 className="text-32sb mo:text-24sb">베스트 게시글</h1>
-          <Button onClick={handleCreateClick}>게시물 등록하기</Button>
+          <Button
+            onClick={handleCreateClick}
+            className="px-[35.5px] py-[10.5px] mo:px-[20.5px]"
+          >
+            게시물 등록하기
+          </Button>
         </header>
 
         {/* 베스트 게시글 */}
