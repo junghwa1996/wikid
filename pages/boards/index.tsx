@@ -18,7 +18,6 @@ import { useProfileContext } from '@/hooks/useProfileContext';
 import Router from 'next/router';
 import EmptyList from '@/components/EmptyList';
 import { useSnackbar } from 'context/SnackBarContext';
-import Spinner from '@/components/Spinner';
 import ErrorMessage from '@/components/ErrorMessage';
 
 const BoardCardList_Swiper = dynamic(
@@ -85,7 +84,6 @@ export default function Boards({
   const [isError, setIsError] = useState(false);
   const { showSnackbar } = useSnackbar();
 
-  const [isLoading, setIsLoading] = useState(false);
   const isMobile = useCheckMobile();
   const PAGE_SIZE = 10;
 
@@ -96,7 +94,6 @@ export default function Boards({
     const fetchBoards = async () => {
       const orderBy = selectedOption === '최신순' ? 'recent' : 'like';
       try {
-        setIsLoading(true);
         setIsError(false);
         const res = await getBoards({
           orderBy,
@@ -109,7 +106,6 @@ export default function Boards({
         setBoards([]);
         setIsError(true);
       } finally {
-        setIsLoading(false);
         setIsError(false);
       }
     };
@@ -166,7 +162,12 @@ export default function Boards({
           className={`container flex items-center justify-between ${pxTablet}`}
         >
           <h1 className="text-32sb mo:text-24sb">베스트 게시글</h1>
-          <Button onClick={handleCreateClick}>게시물 등록하기</Button>
+          <Button
+            onClick={handleCreateClick}
+            className="px-[35.5px] py-[10.5px] mo:px-[20.5px]"
+          >
+            게시물 등록하기
+          </Button>
         </header>
 
         {/* 베스트 게시글 */}
@@ -195,32 +196,24 @@ export default function Boards({
             <Dropdown
               options={['최신순', '인기순']}
               onSelect={handleOptionSelect}
-              dropdownSize="w-[140px] ta:w-[120px] mo:w-[89.337vw]"
+              dropdownSize="w-[140px] ta:w-[120px] mo:w-full"
             />
           </div>
 
           {/* 게시글 목록 */}
           {boards.length > 0 ? (
             <>
-              {isLoading ? (
-                <div className="flex h-[540px] items-center justify-center">
-                  <Spinner />
-                </div>
-              ) : (
-                <>
-                  <BoardList data={boards} />
+              <BoardList data={boards} />
 
-                  {/* 페이지네이션 */}
-                  <div className="mt-[60px] mo:mt-8">
-                    <Pagination
-                      totalCount={totalCount}
-                      currentPage={currentPage}
-                      pageSize={PAGE_SIZE}
-                      onPageChange={(page) => setCurrentPage(page)}
-                    />
-                  </div>
-                </>
-              )}
+              {/* 페이지네이션 */}
+              <div className="mt-[60px] mo:mt-8">
+                <Pagination
+                  totalCount={totalCount}
+                  currentPage={currentPage}
+                  pageSize={PAGE_SIZE}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
+              </div>
             </>
           ) : (
             <EmptyList classNames="mt-[60px] mo:mt-10" text={emptyListText} />
