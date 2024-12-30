@@ -4,6 +4,7 @@ import {
   useState,
   ReactNode,
   useCallback,
+  useEffect,
 } from 'react';
 import SnackBar, { SnackBarProps } from '@/components/SnackBar';
 
@@ -20,7 +21,14 @@ const SnackbarContext = createContext<SnackbarContextProps | undefined>(
 );
 
 export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
-  const [snackbarState, setSnackbarState] = useState<{
+  const [queue, setQueue] = useState<
+    {
+      message: string;
+      severity: SnackBarProps['severity'];
+      autoHideDuration?: number;
+    }[]
+  >([]);
+  const [currentSnackbar, setCurrentSnackbar] = useState<{
     open: boolean;
     message: string;
     severity: SnackBarProps['severity'];
@@ -44,30 +52,41 @@ export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
       severity: SnackBarProps['severity'] = 'info',
       autoHideDuration = 2000
     ) => {
-      setSnackbarState({
-        open: true,
-        message,
-        severity,
-        autoHideDuration,
-      });
+      setQueue((prev) => [...prev, { message, severity, autoHideDuration }]);
     },
     []
   );
 
-  const handleClose = () => {
-    setSnackbarState((prev) => ({ ...prev, open: false }));
-  };
+  const handleClose = useCallback(() => {
+    setCurrentSnackbar((prev) => ({ ...prev, open: false }));
+  }, []);
+
+  useEffect(() => {
+    // 현재 스낵바가 닫히고 대기열에 항목이 남아 있다면 다음 스낵바를 표시
+    if (!currentSnackbar.open && queue.length > 0) {
+      const [nextSnackbar, ...remainingQueue] = queue;
+      setQueue(remainingQueue);
+      if (nextSnackbar) {
+        setCurrentSnackbar({
+          ...nextSnackbar,
+          message: nextSnackbar.message || '',
+          severity: nextSnackbar.severity || 'info',
+          open: true,
+        });
+      }
+    }
+  }, [queue, currentSnackbar.open]);
 
   return (
     <SnackbarContext.Provider value={{ showSnackbar }}>
       {children}
       <SnackBar
-        open={snackbarState.open}
+        open={currentSnackbar.open}
         onClose={handleClose}
-        severity={snackbarState.severity}
-        autoHideDuration={snackbarState.autoHideDuration}
+        severity={currentSnackbar.severity}
+        autoHideDuration={currentSnackbar.autoHideDuration}
       >
-        {snackbarState.message}
+        {currentSnackbar.message}
       </SnackBar>
     </SnackbarContext.Provider>
   );

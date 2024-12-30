@@ -4,6 +4,7 @@
 
 :root {
   --background: #ffffff;
+  --card: #fff;
   --white: #ffffff;
   --gray-100: #f7f7fa;
   --gray-200: #e4e5f0;
@@ -28,7 +29,8 @@
 }
 
 .dark {
-  --background: #121212;
+  --background: #191d2d;
+  --card: #2a2f46;
   --white: #e4e4e4;
   --gray-100: #3b415b;
   --gray-200: #474d66;
@@ -41,15 +43,16 @@
   --green-200: #4cbfa4;
   --green-300: #a5e5d1;
 
-  --red-50: #8a1c1c;
-  --red-100: #d14343;
-
   --purple-100: #b095ff;
 
   --yellow-100: #e7a832;
 
   --blue-50: #1a1f2e;
   --blue-100: #1a1f2e;
+}
+
+.bgCard {
+  @apply bg-card;
 }
 
 body {
@@ -188,6 +191,7 @@ body {
   @apply transition-all hover:scale-[1.02] hover:bg-gray-100 hover:shadow-xl;
 }
 
+
 @keyframes scroll {
   0% {
     transform: translateX(0);
@@ -199,4 +203,12 @@ body {
 
 .animate-infinite-scroll {
   animation: scroll 20s linear infinite;
+
+.downFadein {
+  @apply animate-pcFadeIn tamo:animate-tamoFadeIn;
+}
+
+.alarmDownFadein {
+  @apply animate-tamoFadeIn;
+
 }

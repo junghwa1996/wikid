@@ -62,7 +62,7 @@ function UserProfile({
 
   return (
     // 메인 컨테이너
-    <div className="max-w-4xl rounded-custom bg-background shadow-custom dark:shadow-custom-dark pc:h-auto pc:w-[320px] pc:p-7 tamo:w-full tamo:p-5">
+    <div className="bgCard max-w-4xl rounded-custom bg-background shadow-custom dark:shadow-custom-dark pc:h-auto pc:w-[320px] pc:p-7 tamo:w-full tamo:p-5">
       {/* 레이아웃 컨테이너: PC에서는 세로, 모바일/태블릿에서는 가로 배치 */}
       <div
         className={`flex ${isEditing ? 'flex-col' : 'flex-col mo:flex-row ta:flex-row pc:flex-col'}`}
