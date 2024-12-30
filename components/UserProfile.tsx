@@ -62,7 +62,7 @@ function UserProfile({
   return (
     // 전체 컨테이너
     <div
-      className={`${isEditing ? 'px:pb-[36px] mo:px-[37px] mo:pb-[17px] mo:pt-[27px] ta:px-[16px] ta:pb-[37px] pc:px-[40px]' : ''}flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark mo:pl-[20px] ta:px-[30px] ta:pb-[5px] ta:pt-[20px] pc:h-auto pc:w-[320px] pc:px-[30px] pc:pb-[47px] tamo:w-full`}
+      className={`${isEditing ? 'px:pb-[36px] mo:px-[37px] mo:pb-[17px] mo:pt-[15px] ta:px-[16px] ta:pb-[37px] pc:pl-[40px]' : ''}flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark mo:pl-[20px] ta:px-[30px] ta:pb-[5px] ta:pt-[20px] pc:h-auto pc:w-[320px] pc:px-[30px] pc:pb-[47px] pc:pt-[60px] tamo:w-full`}
     >
       {/* 프로필 이미지와 정보를 포함하는 상단 컨테이너 */}
       <div
@@ -70,8 +70,8 @@ function UserProfile({
       >
         {/* 프로필 이미지 섹션 */}
         <div
-          className={`flex items-center justify-center mo:self-start mo:pr-[10px] mo:pt-4 ta:self-start ta:p-0 pc:py-[60px]${
-            isEditing ? 'mo:p-0 ta:p-0' : ''
+          className={`flex items-center justify-center mo:pr-[10px] mo:pt-4 ta:pr-[20px] ${
+            isEditing ? 'mo:p-0 ta:p-0 tamo:justify-center' : 'tamo:self-start'
           }`}
         >
           {/* 이미지 업로드 버튼 */}
@@ -135,9 +135,9 @@ function UserProfile({
         <div
           className={`${
             isEditing
-              ? 'mt-4 mo:justify-center'
-              : 'mo:flex-1 ta:flex-1 ta:pl-[40px] pc:mt-4'
-          } mo:mt-6 mo:pc:w-full`}
+              ? 'ta:pb-[37px] ta:pt-[34px] tamo:justify-center'
+              : 'mo:flex-1 mo:pl-[10px] ta:flex-1 ta:pl-[20px]'
+          } mo:mt-6 pc:pt-[60px] mo:pc:w-full`}
         >
           <div className="space-y-3">
             {/* 기본 정보 영역 */}
@@ -201,9 +201,8 @@ function UserProfile({
                 isExpanded ? '/icon/icon-collapse.svg' : '/icon/icon-expand.svg'
               }
               alt={isExpanded ? 'Collapse' : 'Expand'}
-              width={16}
-              height={16}
-              className="mo:size-4 ta:size-6"
+              width={24}
+              height={24}
             />
           </button>
         </div>
