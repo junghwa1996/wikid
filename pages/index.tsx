@@ -77,7 +77,7 @@ export default function LandingPage() {
                 alt="위키 이미지"
                 width={498}
                 height={590}
-                className="h-auto object-contain mo:w-[336px]"
+                className="h-auto w-auto object-contain mo:h-auto mo:w-[336px]"
                 priority
               />
             </motion.div>
@@ -129,7 +129,7 @@ export default function LandingPage() {
                     alt="타이핑 이미지"
                     width={364}
                     height={681}
-                    className="h-auto w-auto object-contain mo:h-[249px] mo:w-[133px] ta:h-[490px] ta:w-[262px]"
+                    className="h-[681px] w-[364px] object-contain mo:h-[249px] mo:w-[133px] ta:h-[490px] ta:w-[262px]"
                     priority
                   />
                 </motion.div>
@@ -140,7 +140,7 @@ export default function LandingPage() {
                 alt="텍스트 이미지"
                 width={520}
                 height={681}
-                className="h-auto object-contain mo:w-[192px] ta:w-[365px]"
+                className="h-auto w-auto object-contain mo:w-[192px] ta:w-[365px]"
                 priority
               />
             </div>{' '}
