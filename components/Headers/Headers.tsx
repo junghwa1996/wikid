@@ -28,7 +28,9 @@ export default function Headers() {
       </div>
       {/* 로그인 여부에 따라 조건부로 노출 */}
       <div className="flex items-center gap-5 mo:gap-0">
-        <DarkModeToggle />
+        <div className="mo:mr-[10px]">
+          <DarkModeToggle />
+        </div>
         <Alarm isLoggedIn={isAuthenticated} />
         <Login
           isMobile={isMobile}
