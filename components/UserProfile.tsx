@@ -54,22 +54,24 @@ function UserProfile({
     return (
       <p className="flex h-[18px] w-[200px] text-14 mo:w-[180px] mo:text-12 pc:gap-[20px]">
         <span className="flex-[1] text-gray-400">{label}</span>
-        <span className="flex-[2] truncate text-gray-500">{data[field]}</span>
+        <span className={`flex-[2] truncate text-gray-500`}>{data[field]}</span>
       </p>
     );
   };
 
   return (
     // 전체 컨테이너
-    <div className="flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark pc:h-auto pc:w-[320px] pc:px-[30px] pc:pb-[47px] tamo:w-full tamo:p-5">
+    <div
+      className={`${isEditing ? 'px:pb-[36px] mo:px-[37px] mo:pb-[17px] mo:pt-[27px] ta:px-[16px] ta:pb-[37px] pc:px-[40px]' : ''}flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark mo:pl-[20px] ta:px-[30px] ta:pb-[5px] ta:pt-[20px] pc:h-auto pc:w-[320px] pc:px-[30px] pc:pb-[47px] tamo:w-full`}
+    >
       {/* 프로필 이미지와 정보를 포함하는 상단 컨테이너 */}
       <div
         className={`flex ${isEditing ? 'flex-col' : 'flex-col mo:flex-row ta:flex-row pc:flex-col'}`}
       >
         {/* 프로필 이미지 섹션 */}
         <div
-          className={`flex items-center justify-center pc:pb-[60px] pc:pt-[40px] tamo:pr-[10px] tamo:pt-4 ${
-            isEditing ? '' : 'mo:self-start ta:self-start'
+          className={`flex items-center justify-center mo:self-start mo:pr-[10px] mo:pt-4 ta:self-start ta:p-0 pc:py-[60px]${
+            isEditing ? 'mo:p-0 ta:p-0' : ''
           }`}
         >
           {/* 이미지 업로드 버튼 */}
@@ -81,10 +83,8 @@ function UserProfile({
           >
             {/* 이미지 컨테이너 */}
             <div
-              className={`relative ${
-                isEditing
-                  ? 'mo:size-[62px] ta:size-[71px] pc:size-[200px]'
-                  : 'mo:size-[62px] ta:size-[71px] pc:size-[200px]'
+              className={`relative mo:size-[62px] ta:size-[71px] pc:size-[200px] ${
+                isEditing ? 'mo:size-[62px] ta:size-[71px] pc:size-[200px]' : ''
               }`}
             >
               {/* 프로필 이미지 */}
@@ -137,7 +137,7 @@ function UserProfile({
             isEditing
               ? 'mt-4 mo:justify-center'
               : 'mo:flex-1 ta:flex-1 ta:pl-[40px] pc:mt-4'
-          } mt-6 mo:pc:w-full`}
+          } mo:mt-6 mo:pc:w-full`}
         >
           <div className="space-y-3">
             {/* 기본 정보 영역 */}
@@ -203,6 +203,7 @@ function UserProfile({
               alt={isExpanded ? 'Collapse' : 'Expand'}
               width={16}
               height={16}
+              className="mo:size-4 ta:size-6"
             />
           </button>
         </div>
