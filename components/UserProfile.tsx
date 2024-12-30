@@ -52,7 +52,7 @@ function UserProfile({
     }
 
     return (
-      <p className="flex h-[18px] w-[200px] text-14 mo:w-[180px] mo:text-12">
+      <p className="flex w-[200px] text-14 mo:h-[18px] mo:w-[180px] mo:text-12 ta:h-[24px] pc:h-[24px]">
         <span className="flex-[1] text-gray-400">{label}</span>
         <span className={`flex-[2] truncate text-gray-500`}>{data[field]}</span>
       </p>
