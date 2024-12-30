@@ -122,11 +122,11 @@ body {
     @apply my-2 list-inside;
   }
   ul,
-  [data-list='ordered'] {
+  [data-list='bullet'] {
     @apply list-disc;
   }
   ol,
-  [data-list='bullet'] {
+  [data-list='ordered'] {
     @apply list-decimal;
   }
 
