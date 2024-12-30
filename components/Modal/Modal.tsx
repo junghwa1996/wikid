@@ -68,7 +68,7 @@ const Modal = ({
       />
 
       <div
-        className={`${width} relative max-h-[90vh] overflow-y-auto rounded-lg bg-background shadow-custom`}
+        className={`${width} relative max-h-[90vh] overflow-y-auto rounded-lg bg-background shadow-custom mo:mx-4`}
       >
         {/* 닫기 버튼 영역 */}
         <button

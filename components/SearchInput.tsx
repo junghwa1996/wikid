@@ -36,18 +36,15 @@ function SearchInput({
 
   const currentSize = sizeStyles[size];
 
-  const inputStyles = [
+  const formStyles = [
+    'flex',
+    'items-center',
+    'rounded-lg',
+    'bg-gray-100',
+    'px-[20px]',
     currentSize.container,
     currentSize.padding,
-    'rounded-lg',
-    'border-none',
-    'bg-gray-100',
-    'text-gray-500',
-    'text-16',
-    'placeholder:text-gray-400',
-    isFocused
-      ? 'outline outline-2 outline-green-100'
-      : 'focus:outline-green-100',
+    isFocused ? 'outline outline-2 outline-green-100' : '',
   ].join(' ');
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -62,21 +59,26 @@ function SearchInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center rounded-lg bg-gray-100 px-[20px]"
+      className={formStyles}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setIsFocused(false);
+        }
+      }}
     >
-      <label htmlFor="searchInput">
+      <label htmlFor="searchInput" className="flex w-full items-center gap-2">
         <Image src="/icon/icon-search.svg" alt="검색" width={22} height={22} />
+        <input
+          id="searchInput"
+          type="text"
+          value={value}
+          onChange={handleInputChange}
+          placeholder={placeholder}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          className="h-[48px] w-full rounded-[8px] bg-transparent px-[16px] py-[12px] text-16 text-gray-500 outline-none placeholder:text-gray-300 hover:border-gray-300 focus:border-gray-500 [&:-webkit-autofill]:!bg-white [&:-webkit-autofill]:!transition-[background-color] [&:-webkit-autofill]:!duration-[5000s]"
+        />
       </label>
-      <input
-        id="searchInput"
-        className={inputStyles}
-        type="text"
-        value={value}
-        placeholder={placeholder}
-        onChange={handleInputChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-      />
     </form>
   );
 }

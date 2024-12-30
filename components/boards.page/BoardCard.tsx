@@ -27,7 +27,7 @@ export default function BoardCard({
   return (
     <Link
       href={`/boards/${id}`}
-      className="block h-auto w-[250px] overflow-hidden rounded-custom shadow-custom dark:shadow-custom-dark ta:w-full"
+      className="scaleStyle block h-auto w-[250px] overflow-hidden rounded-custom shadow-custom dark:shadow-custom-dark ta:w-full"
     >
       <div className="relative h-[130px] w-auto overflow-hidden bg-gray-100 ta:h-[17.475vw]">
         <Image
@@ -39,11 +39,11 @@ export default function BoardCard({
           sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
-      <div className="bg-background px-[20px] pb-[14px] pt-[20px] mo:pt-[11px]">
+      <div className="bgCard px-[20px] pb-[14px] pt-[20px] mo:pt-[11px]">
         <h3 className="mb-[6px] truncate text-18sb mo:mb-0 mo:text-16sb">
           {title}
         </h3>
-        <div className="flex items-center gap-2 text-14 text-gray-300 mo:text-12">
+        <div className="flex items-center gap-2 text-14 text-gray-400 mo:text-12">
           <p>{name}</p>
           <span className="flex-1">
             {updatedAt && dateConversion(updatedAt)}

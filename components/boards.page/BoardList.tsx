@@ -28,7 +28,7 @@ export default function BoardList({ data = [] }: BoardListResponse) {
           name={item.writer.name}
           likeCount={item.likeCount}
           createdAt={item.createdAt}
-          className={`${tableStyles} mo:flex`}
+          className={`${tableStyles} hover:dark:bg-green-100 mo:flex`}
         />
       ))}
     </div>

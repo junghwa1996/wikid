@@ -11,8 +11,9 @@ import instance from '@/lib/axios-client';
 
 import Blank from './Blank';
 import ContentHeader from './ContentHeader';
-import { useProfileContext } from '@/hooks/useProfileContext';
 import { useSnackbar } from 'context/SnackBarContext';
+import { useAuth } from '@/hooks/useAuth';
+import { ProfileAPI } from '@/services/api/profileAPI';
 
 interface ProfileProps {
   profile: ProfileAnswer;
@@ -31,23 +32,27 @@ export default function Contents({ profile }: ProfileProps) {
 
   const previousContent = useRef<string>(newContent);
   const isEmpty = newContent === '';
-  const { isAuthenticated } = useProfileContext();
+  const { isAuthenticated } = useAuth();
 
   const handleQuizOpen = async () => {
     if (!isAuthenticated) {
-      showSnackbar('로그인 후 이용해주세요.', 'fail');
+      showSnackbar('로그인이 필요한 서비스 입니다.', 'fail');
       return;
     }
-    const res = await instance.get(`/profiles/${profile.code}/ping`);
-    if (res.status === 204) {
-      setIsInfoSnackBarOpen(false);
-      setIsQuizOpen(true);
-    } else {
-      const registeredDate = new Date(res.data.registeredAt);
-      const nowDate = new Date();
-      const diff = nowDate.getTime() - registeredDate.getTime();
-      setDiffTime(diff);
-      setIsInfoSnackBarOpen(true);
+    try {
+      const res = await instance.get(`/profiles/${profile.code}/ping`);
+      if (res.status === 204) {
+        setIsInfoSnackBarOpen(false);
+        setIsQuizOpen(true);
+      } else {
+        const registeredDate = new Date(res.data.registeredAt);
+        const nowDate = new Date();
+        const diff = nowDate.getTime() - registeredDate.getTime();
+        setDiffTime(diff);
+        setIsInfoSnackBarOpen(true);
+      }
+    } catch (error) {
+      showSnackbar('다시 시도해주세요.', 'fail');
     }
   };
 
@@ -55,18 +60,14 @@ export default function Contents({ profile }: ProfileProps) {
   const handleQuizSuccess = async () => {
     showSnackbar('정답입니다!', 'success');
     setIsQuizOpen(false);
-
-    const accessToken = localStorage.getItem('accessToken');
-    const res = await instance.get('/users/me', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    const userCode = (res.data as { profile: ProfileAnswer }).profile.code;
-    if (profile.code === userCode) {
-      setIsProfileEdit(true);
-    } else {
+    // 내 위키인지 확인
+    try {
+      const { code } = await ProfileAPI.getProfile();
+      const userCode = code;
+      if (profile.code === userCode) {
+        setIsProfileEdit(true);
+      }
+    } catch (error) {
       setIsProfileEdit(false);
     }
     setIsEditing(true);
@@ -111,9 +112,9 @@ export default function Contents({ profile }: ProfileProps) {
       setProfileData(profileData);
       setIsEditing(false);
       setIsProfileEdit(false);
+      showSnackbar('저장되었습니다.', 'success');
     } catch (error) {
-      console.error('프로필을 저장하는 데 실패했습니다.', error);
-      // 요청 실패시 오류 처리 추가 (예: 사용자에게 알림)
+      showSnackbar('저장에 실패했습니다.', 'fail');
     }
   };
 

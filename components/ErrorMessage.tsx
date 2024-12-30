@@ -6,11 +6,19 @@ import { SITE_NAME } from 'constants/terms';
 interface Props {
   code?: string;
   title: string;
+  buttonPosition?: 'left' | 'right';
   children: ReactNode;
 }
 
-export default function ErrorMessage({ code, title, children }: Props) {
+export default function ErrorMessage({
+  code,
+  title,
+  buttonPosition = 'left',
+  children,
+}: Props) {
   const router = useRouter();
+
+  const buttonRightStyle = buttonPosition === 'right' && 'justify-end';
 
   return (
     <div>
@@ -24,7 +32,9 @@ export default function ErrorMessage({ code, title, children }: Props) {
 
       <p className="mb-8 text-balance break-keep text-18sb">{children}</p>
 
-      <div className="flex gap-4 mo:justify-center">
+      <div
+        className={`flex gap-4 text-balance mo:justify-center ${buttonRightStyle}`}
+      >
         <Button onClick={router.back} variant="secondary" className="w-[140px]">
           이전 페이지
         </Button>

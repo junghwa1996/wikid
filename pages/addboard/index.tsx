@@ -11,6 +11,8 @@ import ImageUploadModal from '@/components/Modal/ImageUploadModal';
 import TextEditor from '@/components/TextEditor';
 import { useMutation } from '@tanstack/react-query';
 import { useSnackbar } from 'context/SnackBarContext';
+import ErrorMessage from '@/components/ErrorMessage';
+import Modal from '@/components/Modal/Modal';
 
 // 제목 글자수 제한
 const MAX_TITLE = 30;
@@ -21,7 +23,8 @@ const MAX_TITLE = 30;
 export default function Addboard() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isThumbnailOpen, setIsThumbnailOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { showSnackbar } = useSnackbar();
@@ -45,6 +48,7 @@ export default function Addboard() {
     },
     onError: (err) => {
       console.error('--- 썸네일 업로드 에러:', err);
+      showSnackbar('썸네일 등록에 실패하였습니다.', 'fail');
     },
   });
   // 글작성 tanstack
@@ -54,11 +58,12 @@ export default function Addboard() {
       return res;
     },
     onSuccess: (data) => {
-      router.push('/boards/' + data.id);
       showSnackbar('게시물이 등록되었습니다.', 'success');
+      router.push('/boards/' + data.id);
     },
     onError: (err) => {
       console.error('--- 게시물 등록 에러:', err);
+      showSnackbar('게시물 등록에 실패하였습니다.', 'fail');
     },
   });
 
@@ -68,11 +73,14 @@ export default function Addboard() {
   };
   // 썸네일 이미지 클릭 콜백 함수
   const handleAddThumbnail = () => {
-    setIsModalOpen(true);
+    setIsThumbnailOpen(true);
   };
   // 이미지 모달 닫기
   const handleImageModalClose = () => {
-    setIsModalOpen(false);
+    setIsThumbnailOpen(false);
+  };
+  const handleErrorModalClose = () => {
+    setIsErrorOpen(false);
   };
   // 이미지 파일 가져오기
   const getImageFile = (file: File | null) => {
@@ -174,10 +182,34 @@ export default function Addboard() {
 
       <ImageUploadModal
         imageFile={imageFile}
-        isOpen={isModalOpen}
+        isOpen={isThumbnailOpen}
         onClose={handleImageModalClose}
         onGetImageFile={getImageFile}
       />
+
+      <Modal
+        isOpen={isErrorOpen}
+        onClose={handleErrorModalClose}
+        width="w-[520px]"
+      >
+        <ErrorMessage
+          title="게시글 등록에 실패하였습니다."
+          buttonPosition="right"
+        >
+          이용에 불편을 드려 죄송합니다. 잠시 후 다시 시도해 주십시오.
+          <br />
+          오류 현상이 반복되면 코드잇 서버 개발 부서에 연락 부탁 드립니다.
+          <div className="text-14sb text-gray-400">
+            &middot; 11-7팀에는 아무 잘못이 없습니다.
+          </div>
+          <a
+            href="mailto:support@codeit.kr"
+            className="text-14sb hover:underline"
+          >
+            📧 support@codeit.kr
+          </a>
+        </ErrorMessage>
+      </Modal>
     </div>
   );
 }
