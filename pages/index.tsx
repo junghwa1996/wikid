@@ -129,7 +129,7 @@ export default function LandingPage() {
                     alt="타이핑 이미지"
                     width={364}
                     height={681}
-                    className="h-auto object-contain mo:w-[133px] ta:w-[262px]"
+                    className="h-auto w-auto object-contain mo:h-[249px] mo:w-[133px] ta:h-[490px] ta:w-[262px]"
                     priority
                   />
                 </motion.div>

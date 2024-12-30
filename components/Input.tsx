@@ -59,6 +59,17 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       return type;
     };
 
+    const getAutoComplete = () => {
+      switch (type) {
+        case 'password':
+          return 'current-password';
+        case 'passwordConfirm':
+          return 'new-password';
+        default:
+          return undefined;
+      }
+    };
+
     const togglePasswordVisibility = () => {
       setShowPassword(!showPassword);
     };
@@ -117,13 +128,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
                 ? new Date().toISOString().split('T')[0]
                 : undefined
             }
-            autoComplete={
-              type === 'password'
-                ? 'current-password'
-                : type === 'passwordConfirm'
-                  ? 'new-password'
-                  : undefined
-            }
+            autoComplete={getAutoComplete()}
           />
           {(type === 'password' || type === 'passwordConfirm') && (
             <button
