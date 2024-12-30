@@ -191,7 +191,6 @@ body {
   @apply transition-all hover:scale-[1.02] hover:bg-gray-100 hover:shadow-xl;
 }
 
-
 @keyframes scroll {
   0% {
     transform: translateX(0);
@@ -203,6 +202,7 @@ body {
 
 .animate-infinite-scroll {
   animation: scroll 20s linear infinite;
+}
 
 .downFadein {
   @apply animate-pcFadeIn tamo:animate-tamoFadeIn;
@@ -210,5 +210,4 @@ body {
 
 .alarmDownFadein {
   @apply animate-tamoFadeIn;
-
 }
