@@ -39,7 +39,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = e.target.value.trim();
+      const newValue = e.target.value;
       onChange(e);
       if (label !== '생일') {
         const error = validate(newValue);

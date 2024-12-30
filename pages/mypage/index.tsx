@@ -11,7 +11,7 @@ import { useSnackbar } from 'context/SnackBarContext';
 import { AxiosError } from 'axios';
 
 function MyPage(): React.ReactElement {
-  const { profile } = useProfileContext();
+  const { profile, setAccessToken } = useProfileContext();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
@@ -76,10 +76,9 @@ function MyPage(): React.ReactElement {
       setCurrentPassword('');
       setNewPassword('');
       setNewPasswordConfirm('');
-
-      setTimeout(() => {
-        router.push('/login');
-      }, 2000);
+      setAccessToken(null);
+      localStorage.removeItem('refreshToken');
+      router.push('/login');
     } catch (error) {
       if (error instanceof AxiosError) {
         showSnackbar(error.message, 'fail');
@@ -115,10 +114,7 @@ function MyPage(): React.ReactElement {
 
         // 이미 프로필이 존재하는 경우
         if (errorResponse?.code) {
-          // 2초 후 해당 프로필로 이동
-          setTimeout(async () => {
-            await router.push(`/wiki/${errorResponse.code}`);
-          }, 2000);
+          await router.push(`/wiki/${errorResponse.code}`);
           return;
         }
       }
