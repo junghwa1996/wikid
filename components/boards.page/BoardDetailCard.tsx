@@ -108,7 +108,7 @@ export default function BoardDetailCard({
   };
 
   return (
-    <div className="rounded-custom bg-background px-[30px] py-10 shadow-custom dark:shadow-custom-dark mo:p-5 mo:pb-[14px]">
+    <div className="bgCard rounded-custom bg-background px-[30px] py-10 shadow-custom dark:shadow-custom-dark mo:p-5 mo:pb-[14px]">
       <header className="mb-[38px] mo:mb-[15px] mo:pb-[11px] ta:mb-[30px] ta:pb-2 tamo:border-b">
         <div className="mb-[30px] flex items-center justify-between mo:mb-[14px]">
           <h1 className="w-full break-all text-32sb mo:text-24sb">
