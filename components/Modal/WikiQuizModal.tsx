@@ -13,8 +13,8 @@ import Modal from './Modal';
 export const QUIZ_MESSAGES = {
   ERROR: '잘못된 답변입니다. 다시 시도해주세요.',
   SUBMIT_ERROR: '퀴즈 제출 중 오류가 발생했습니다.',
-  WIKI_DESCRIPTION: '위키드는 친구들과 함께 공유하는 즐거운 공간입니다.',
-  WIKI_GUIDANCE: '작성 시 서로를 배려하고 존중해주세요.',
+  WIKI_DESCRIPTION: '위키드는 지인들과 함께하는 즐거운 공간입니다.',
+  WIKI_GUIDANCE: '지인에게 상처를 주지 않도록 작성해 주세요.',
 } as const;
 
 function WikiQuizModal({
@@ -83,9 +83,9 @@ function WikiQuizModal({
             />
           </div>
           <p className="text-center text-14 text-gray-400">
-            위키에 작성하기 위해
+            다음 퀴즈를 맞추고
             <br className={keyboardVisible ? 'mo:hidden' : ''} />
-            아래 퀴즈에 답해주세요.
+            위키를 작성해 보세요.
           </p>
         </div>
 
@@ -121,7 +121,6 @@ function WikiQuizModal({
           제출
         </Button>
       </form>
-
       {!keyboardVisible && (
         <div className="mt-2 px-4 text-center text-12 text-gray-400">
           <p>{QUIZ_MESSAGES.WIKI_DESCRIPTION}</p>

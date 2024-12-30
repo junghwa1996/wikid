@@ -2,14 +2,22 @@ import { AxiosError } from 'axios';
 
 import instance from '../../lib/axios-client';
 
+// AuthAPI 정의
 export const AuthAPI = {
-  signin: async (data: { email: string; password: string }) => {
+  signin: async (
+    data: { email: string; password: string },
+    setAccessToken: (token: string | null) => void // ProfileContext의 setAccessToken을 주입받음
+  ) => {
     try {
       const res = await instance.post('/auth/signIn', data);
 
       // 로그인 성공 시 토큰 저장
       const { accessToken, refreshToken } = res.data;
-      localStorage.setItem('accessToken', accessToken);
+
+      // setAccessToken을 통해 ProfileProvider 상태 업데이트
+      setAccessToken(accessToken);
+
+      // refreshToken은 여전히 localStorage에 직접 저장
       localStorage.setItem('refreshToken', refreshToken);
 
       return res.data;

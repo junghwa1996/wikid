@@ -155,15 +155,16 @@ function MyPage(): React.ReactElement {
   const inputContainerStyle = 'flex w-full flex-col gap-[8px]';
 
   return (
-    <div className="flex min-h-screen justify-center pb-0 pt-[221px] mo:pb-[80px] mo:pt-[108px]">
-      <div className="flex w-full flex-col items-center gap-[32px]">
-        <h2 className="mb-[32px] text-center text-24sb text-gray-500">
+    <div className="flex min-h-screen justify-center pt-[221px] mo:px-[20px] mo:pb-[80px] mo:pt-[108px]">
+      <div className="w-[400px] mo:w-[355px]">
+        <h2 className="mb-[64px] text-center text-24sb text-gray-500">
           계정설정
         </h2>
+
         {/* 비밀번호 변경 폼 */}
         <form
           onSubmit={handlePasswordSubmit}
-          className="flex w-[400px] flex-col items-center gap-[32px] mo:w-[335px]"
+          className="mb-[32px] flex w-full flex-col items-center gap-[32px]"
         >
           <div className={inputSectionStyle}>
             <div className={inputContainerStyle}>
@@ -205,13 +206,14 @@ function MyPage(): React.ReactElement {
             </div>
           </div>
         </form>
+
         {/* 위키가 없을 때만 구분선과 위키 생성 폼 표시 */}
         {!profile?.code && (
           <>
-            <div className="w-[400px] border-b border-gray-200 mo:w-[335px]"></div>
+            <div className="w-full border-b border-gray-200"></div>
             <form
               onSubmit={handleWikiSubmit}
-              className="flex w-[400px] flex-col items-center gap-[32px] mo:w-[335px]"
+              className="mt-[32px] flex w-full flex-col items-center gap-[32px]"
             >
               <div className={inputSectionStyle}>
                 <div className={inputContainerStyle}>
@@ -231,7 +233,6 @@ function MyPage(): React.ReactElement {
                     onChange={handleAnswerChange}
                     placeholder="답을 입력해 주세요"
                   />
-
                   <Button
                     type="submit"
                     disabled={!isWikiFormValid}

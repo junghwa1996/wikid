@@ -21,6 +21,7 @@ export default {
       colors: {
         background: 'var(--background)',
         white: 'var(--white)',
+        card: 'var(--card)',
         gray: {
           100: 'var(--gray-100)',
           200: 'var(--gray-200)',
