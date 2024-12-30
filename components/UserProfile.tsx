@@ -60,7 +60,6 @@ function UserProfile({
   };
 
   return (
-    // 전체 컨테이너
     <div
       className={`${isEditing ? 'mo:px-[37px] mo:pb-[17px] mo:pl-[34px] mo:pt-[15px] ta:px-[16px] ta:pb-[37px] ta:pt-[20px] pc:h-auto pc:pb-[36px] pc:pl-[40px]' : 'pc:h-[671px]'}flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark mo:pl-[20px] mo:pt-[15px] ta:px-[30px] ta:pb-[5px] ta:pt-[20px] pc:w-[320px] pc:px-[30px] pc:pb-[47px] pc:pt-[60px] tamo:w-full`}
     >
