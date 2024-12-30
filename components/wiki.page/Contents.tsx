@@ -52,7 +52,7 @@ export default function Contents({ profile }: ProfileProps) {
         setIsInfoSnackBarOpen(true);
       }
     } catch (error) {
-      showSnackbar('다시 시도해주세요. -1', 'fail');
+      showSnackbar('다시 시도해주세요.', 'fail');
     }
   };
 
