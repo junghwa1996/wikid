@@ -52,7 +52,7 @@ function UserProfile({
     }
 
     return (
-      <p className="flex h-[18px] w-[200px] text-14 mo:w-[180px] mo:text-12 pc:gap-[20px]">
+      <p className="flex h-[18px] w-[200px] text-14 mo:w-[180px] mo:text-12">
         <span className="flex-[1] text-gray-400">{label}</span>
         <span className={`flex-[2] truncate text-gray-500`}>{data[field]}</span>
       </p>
@@ -62,7 +62,7 @@ function UserProfile({
   return (
     // 전체 컨테이너
     <div
-      className={`${isEditing ? 'px:pb-[36px] mo:px-[37px] mo:pb-[17px] mo:pt-[15px] ta:px-[16px] ta:pb-[37px] pc:pl-[40px]' : ''}flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark mo:pl-[20px] ta:px-[30px] ta:pb-[5px] ta:pt-[20px] pc:h-auto pc:w-[320px] pc:px-[30px] pc:pb-[47px] pc:pt-[60px] tamo:w-full`}
+      className={`${isEditing ? 'px:pb-[36px] mo:px-[37px] mo:pb-[17px] mo:pt-[15px] ta:px-[16px] ta:pb-[37px] ta:pt-[20px] pc:pl-[40px]' : ''}flex max-w-4xl flex-col rounded-custom bg-background shadow-custom dark:shadow-custom-dark mo:pl-[20px] mo:pt-[15px] ta:px-[30px] ta:pb-[5px] ta:pt-[20px] pc:h-[671px] pc:w-[320px] pc:px-[30px] pc:pb-[47px] pc:pt-[60px] tamo:w-full`}
     >
       {/* 프로필 이미지와 정보를 포함하는 상단 컨테이너 */}
       <div
@@ -70,7 +70,7 @@ function UserProfile({
       >
         {/* 프로필 이미지 섹션 */}
         <div
-          className={`flex items-center justify-center mo:pr-[10px] mo:pt-4 ta:pr-[20px] ${
+          className={`flex items-center justify-center mo:pr-[10px] ta:pr-[20px] ${
             isEditing ? 'mo:p-0 ta:p-0 tamo:justify-center' : 'tamo:self-start'
           }`}
         >
@@ -137,16 +137,16 @@ function UserProfile({
             isEditing
               ? 'ta:pb-[37px] ta:pt-[34px] tamo:justify-center'
               : 'mo:flex-1 mo:pl-[10px] ta:flex-1 ta:pl-[20px]'
-          } mo:mt-6 pc:pt-[60px] mo:pc:w-full`}
+          } pc:pt-[60px] mo:pc:w-full`}
         >
-          <div className="space-y-3">
+          <div className="mo:space-y-[8px] ta:space-y-[4px]">
             {/* 기본 정보 영역 */}
             <div
               className={`${
                 isEditing
                   ? 'mo:space-y-3 ta:grid ta:grid-cols-2 ta:gap-3 ta:space-y-0 pc:space-y-3'
-                  : ''
-              } space-y-4`}
+                  : 'mo:space-y-[8px] ta:space-y-[4px] pc:space-y-[16px]'
+              }`}
             >
               {renderField('거주 도시', 'city')}
               {renderField('MBTI', 'mbti')}
@@ -156,7 +156,7 @@ function UserProfile({
 
             {/* PC용 추가 정보 섹션 */}
             {!isEditing && (
-              <div className="hidden space-y-4 pc:block">
+              <div className="hidden pc:block pc:space-y-[16px] pc:pt-[16px]">
                 {renderField('SNS 계정', 'sns')}
                 {renderField('생일', 'birthday')}
                 {renderField('별명', 'nickname')}
@@ -177,7 +177,7 @@ function UserProfile({
 
             {/* 모바일/태블릿용 추가 정보 섹션 */}
             {!isEditing && isExpanded && (
-              <div className="mt-4 space-y-4 pc:hidden">
+              <div className="mo:space-y-[8px] ta:space-y-[4px] pc:hidden">
                 {renderField('SNS 계정', 'sns')}
                 {renderField('생일', 'birthday')}
                 {renderField('별명', 'nickname')}
@@ -191,7 +191,7 @@ function UserProfile({
 
       {/* 모바일/태블릿용 확장 버튼 */}
       {!isEditing && (
-        <div className="mt-4 flex justify-center pc:hidden">
+        <div className="flex justify-center pc:hidden tamo:py-[5px]">
           <button
             onClick={toggleExpand}
             className="flex items-center gap-2 text-14md text-green-200 hover:text-green-300"
