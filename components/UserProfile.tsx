@@ -144,7 +144,7 @@ function UserProfile({
             <div
               className={`${
                 isEditing
-                  ? 'mo:space-y-3 ta:grid ta:grid-cols-2 ta:place-items-center ta:gap-3 ta:space-y-0 pc:space-y-3'
+                  ? 'mo:space-y-3 ta:grid ta:grid-cols-2 ta:gap-3 ta:space-y-0 pc:space-y-3'
                   : ''
               } space-y-4`}
             >
@@ -167,7 +167,7 @@ function UserProfile({
 
             {/* 편집 모드일 때 추가 정보 */}
             {isEditing && (
-              <div className="mo:space-y-3 ta:grid ta:grid-cols-2 ta:place-items-center ta:gap-3 pc:space-y-3">
+              <div className="mo:space-y-3 ta:grid ta:grid-cols-2 ta:gap-3 pc:space-y-3">
                 {renderField('생일', 'birthday')}
                 {renderField('별명', 'nickname')}
                 {renderField('혈액형', 'bloodType')}
