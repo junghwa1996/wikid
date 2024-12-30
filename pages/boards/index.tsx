@@ -18,7 +18,7 @@ import { useProfileContext } from '@/hooks/useProfileContext';
 import Router from 'next/router';
 import EmptyList from '@/components/EmptyList';
 import { useSnackbar } from 'context/SnackBarContext';
-import Spinner from '@/components/Spinner';
+import ErrorMessage from '@/components/ErrorMessage';
 
 const BoardCardList_Swiper = dynamic(
   () => import('@/components/boards.page/BoardCardList.swiper'),
@@ -31,6 +31,7 @@ interface BoardsProps {
   initialBoards: Board[];
   initialLikeBoards: Board[];
   totalCount: number;
+  hasError: boolean;
 }
 
 // SSR 데이터 패칭
@@ -52,6 +53,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         initialLikeBoards,
         initialBoards,
         totalCount,
+        hasError: false,
       },
     };
   } catch (error) {
@@ -61,6 +63,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         initialLikeBoards: [],
         initialBoards: [],
         totalCount: 0,
+        hasError: true,
       },
     };
   }
@@ -70,6 +73,7 @@ export default function Boards({
   initialBoards,
   initialLikeBoards,
   totalCount,
+  hasError,
 }: BoardsProps) {
   const [boards, setBoards] = useState<Board[]>(initialBoards);
   const [likeBoards] = useState<Board[]>(initialLikeBoards);
@@ -77,9 +81,9 @@ export default function Boards({
   const [value, setValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [selectedOption, setSelectedOption] = useState('최신순');
+  const [isError, setIsError] = useState(false);
   const { showSnackbar } = useSnackbar();
 
-  const [isLoading, setIsLoading] = useState(false);
   const isMobile = useCheckMobile();
   const PAGE_SIZE = 10;
 
@@ -90,7 +94,7 @@ export default function Boards({
     const fetchBoards = async () => {
       const orderBy = selectedOption === '최신순' ? 'recent' : 'like';
       try {
-        setIsLoading(true);
+        setIsError(false);
         const res = await getBoards({
           orderBy,
           pageSize: PAGE_SIZE,
@@ -100,8 +104,9 @@ export default function Boards({
         setBoards(res.list);
       } catch {
         setBoards([]);
+        setIsError(true);
       } finally {
-        setIsLoading(false);
+        setIsError(false);
       }
     };
 
@@ -135,6 +140,21 @@ export default function Boards({
 
   const pxTablet = 'ta:px-[60px]';
 
+  if (hasError || isError) {
+    return (
+      <div className="container flex min-h-screen items-center justify-center pb-5">
+        <ErrorMessage
+          title="데이터를 가져오는데 문제가 발생했습니다."
+          code="500"
+        >
+          서버에서 전송한 데이터를 가져오는데 문제가 발생했습니다.
+          <br />
+          다시 한 번 시도해주세요.
+        </ErrorMessage>
+      </div>
+    );
+  }
+
   return (
     <main className="pt-[80px] tamo:pt-[60px]">
       <div className="flex flex-col gap-[60px] py-[60px] mo:gap-10 mo:py-10">
@@ -142,7 +162,12 @@ export default function Boards({
           className={`container flex items-center justify-between ${pxTablet}`}
         >
           <h1 className="text-32sb mo:text-24sb">베스트 게시글</h1>
-          <Button onClick={handleCreateClick}>게시물 등록하기</Button>
+          <Button
+            onClick={handleCreateClick}
+            className="px-[35.5px] py-[10.5px] mo:px-[20.5px]"
+          >
+            게시물 등록하기
+          </Button>
         </header>
 
         {/* 베스트 게시글 */}
@@ -157,7 +182,7 @@ export default function Boards({
         {/* 전체 게시글 */}
         <div className={`container ${pxTablet}`}>
           {/* search, dropdown bar */}
-          <div className="mb-5 flex items-center gap-5 mo:mb-[30px] mo:flex-wrap mo:gap-x-[15px]">
+          <div className="mb-5 flex items-center gap-5 mo:mb-4 mo:flex-wrap mo:gap-x-[15px]">
             <div className="flex-1 basis-8/12">
               <SearchInput
                 size="full"
@@ -171,32 +196,24 @@ export default function Boards({
             <Dropdown
               options={['최신순', '인기순']}
               onSelect={handleOptionSelect}
-              dropdownSize="w-[140px] ta:w-[120px] mo:w-[89.337vw]"
+              dropdownSize="w-[140px] ta:w-[120px] mo:w-full"
             />
           </div>
 
           {/* 게시글 목록 */}
           {boards.length > 0 ? (
             <>
-              {isLoading ? (
-                <div className="flex h-[540px] items-center justify-center">
-                  <Spinner />
-                </div>
-              ) : (
-                <>
-                  <BoardList data={boards} />
+              <BoardList data={boards} />
 
-                  {/* 페이지네이션 */}
-                  <div className="mt-[60px] mo:mt-8">
-                    <Pagination
-                      totalCount={totalCount}
-                      currentPage={currentPage}
-                      pageSize={PAGE_SIZE}
-                      onPageChange={(page) => setCurrentPage(page)}
-                    />
-                  </div>
-                </>
-              )}
+              {/* 페이지네이션 */}
+              <div className="mt-[60px] mo:mt-8">
+                <Pagination
+                  totalCount={totalCount}
+                  currentPage={currentPage}
+                  pageSize={PAGE_SIZE}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
+              </div>
             </>
           ) : (
             <EmptyList classNames="mt-[60px] mo:mt-10" text={emptyListText} />

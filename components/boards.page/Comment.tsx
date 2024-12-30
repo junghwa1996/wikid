@@ -62,22 +62,22 @@ export default function Comment({
   }, [createdAt, updatedAt]);
 
   return (
-    <div className="flex items-start gap-5 rounded-custom px-[30px] py-[22px] shadow-custom dark:shadow-custom-dark mo:gap-[15px] mo:px-5 mo:py-4">
+    <div className="bgCard flex items-start gap-5 rounded-custom px-[30px] py-[22px] shadow-custom dark:shadow-custom-dark mo:gap-[15px] mo:px-5 mo:py-4">
       <div className="size-[50px] overflow-hidden rounded-full mo:size-10">
         <Image
           src={profile ? profile : '/icon/icon-profile.svg'}
           alt="user profile"
           width={50}
           height={50}
-          className="object-cover"
+          className="size-full object-cover"
         />
       </div>
       <div className="flex-1">
-        <div className="mb-2 flex items-center justify-between mo:mb-[6px]">
-          <span className="text-18sb">{name}</span>
+        <div className="mb-[6px] flex items-center justify-between">
+          <span className="text-18sb mo:text-16sb">{name}</span>
 
           {!isEditing && isOwner && (
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-5 mo:gap-[15px]">
               <button onClick={handleUpdateClick}>
                 <Image
                   src="/icon/icon-write.svg"
