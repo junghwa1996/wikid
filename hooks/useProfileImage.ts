@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import instance from '@/lib/axios-client';
 import { AxiosError } from 'axios';
-
 import { useSnackbar } from 'context/SnackBarContext';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
