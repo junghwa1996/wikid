@@ -28,13 +28,20 @@ function SignUp() {
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    // 비밀번호가 변경될 때마다 비밀번호 확인란의 유효성도 함께 체크
+    if (passwordConfirm) {
+      handleValidation('passwordConfirm', passwordConfirm === newPassword);
+    }
   };
 
   const handlePasswordConfirmChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setPasswordConfirm(e.target.value);
+    const newPasswordConfirm = e.target.value;
+    setPasswordConfirm(newPasswordConfirm);
+    handleValidation('passwordConfirm', newPasswordConfirm === password);
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
