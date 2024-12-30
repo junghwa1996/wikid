@@ -121,7 +121,6 @@ function WikiQuizModal({
           제출
         </Button>
       </form>
-
       {!keyboardVisible && (
         <div className="mt-2 px-4 text-center text-12 text-gray-400">
           <p>{QUIZ_MESSAGES.WIKI_DESCRIPTION}</p>
