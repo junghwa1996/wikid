@@ -28,6 +28,7 @@ export default function Alarm({ isLoggedIn }: AlarmProps) {
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') handleAlarmOpen();
         }}
+        className={`hover:brightness-75 active:brightness-50 ${isOpen ? 'brightness-50' : ''}`}
       >
         <Image
           src="/icon/icon-alarm.svg"
