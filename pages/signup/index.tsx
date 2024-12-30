@@ -84,7 +84,7 @@ function SignUp() {
   const isFormValid = Object.values(validFields).every(Boolean);
 
   return (
-    <div className="flex min-h-screen justify-center pt-[233px] mo:pt-[108px]">
+    <div className="flex min-h-screen justify-center pt-[233px] mo:px-[20px] mo:pb-[60px] mo:pt-[108px]">
       <form onSubmit={handleSubmit} className="w-[400px] mo:w-[355px]">
         <div className="flex flex-col items-center gap-[24px]">
           <h2 className="mb-[40px] text-center text-24sb text-gray-500 mo:mb-[8px] ta:mb-[24px]">
