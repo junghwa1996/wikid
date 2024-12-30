@@ -114,10 +114,7 @@ function MyPage(): React.ReactElement {
 
         // 이미 프로필이 존재하는 경우
         if (errorResponse?.code) {
-          // 1초 후 해당 프로필로 이동
-          setTimeout(async () => {
-            await router.push(`/wiki/${errorResponse.code}`);
-          }, 1000);
+          await router.push(`/wiki/${errorResponse.code}`);
           return;
         }
       }
