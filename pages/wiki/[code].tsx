@@ -7,6 +7,7 @@ import Contents from '@/components/wiki.page/Contents';
 import Spinner from '@/components/Spinner';
 import IconFaceDizzy from '@/components/Svg/IconFaceDizzy';
 import ErrorMessage from '@/components/ErrorMessage';
+import MyWikiError from '@/components/MyWikiError';
 
 const getProfileData = async (code: string): Promise<ProfileAnswer | null> => {
   try {
@@ -20,6 +21,7 @@ const getProfileData = async (code: string): Promise<ProfileAnswer | null> => {
 export default function Wiki() {
   const [profile, setProfile] = useState<ProfileAnswer | null>(null);
   const [isError, setIsError] = useState(false);
+  const [isMyWikiBlank, setIsMyWikiBlank] = useState(false);
   const router = useRouter();
   const { code } = router.query;
 
@@ -31,7 +33,7 @@ export default function Wiki() {
           if (profileData) {
             setProfile(profileData); // 프로필 상태 업데이트
           } else {
-            setIsError(true);
+            setIsMyWikiBlank(true);
           }
         } catch (error) {
           setIsError(true);
@@ -42,34 +44,47 @@ export default function Wiki() {
     fetchProfile();
   }, [code]);
 
-  return (
-    <>
-      {isError ? (
-        <div className="min-h-screen">
-          <div className="container flex min-h-screen items-center justify-center">
-            <div className="inline-flex gap-8 px-4 mo:flex-col mo:gap-2">
-              <IconFaceDizzy width={180} height={180} className="mo:mx-auto" />
+  if (isError) {
+    return (
+      <div className="min-h-screen">
+        <div className="container flex min-h-screen items-center justify-center">
+          <div className="inline-flex gap-8 px-4 mo:flex-col mo:gap-2">
+            <IconFaceDizzy width={180} height={180} className="mo:mx-auto" />
 
-              <ErrorMessage
-                title="데이터를 가져오는데 문제가 있어요."
-                code="500"
-              >
-                서버에서 전송한 데이터를 가져오는데 문제가 발생했습니다.
-                <br />
-                다시 한 번 시도해주세요.
-              </ErrorMessage>
-            </div>
+            <ErrorMessage title="데이터를 가져오는데 문제가 있어요." code="500">
+              서버에서 전송한 데이터를 가져오는데 문제가 발생했습니다.
+              <br />
+              다시 한 번 시도해주세요.
+            </ErrorMessage>
           </div>
         </div>
-      ) : profile ? (
-        <div className="mt-[120px] flex justify-center pc:mx-[100px]">
-          <Contents key={profile.code} profile={profile} />
+      </div>
+    );
+  }
+
+  if (isMyWikiBlank) {
+    return (
+      <div className="container flex min-h-screen items-center justify-center">
+        <div className="inline-flex gap-8 px-4 mo:flex-col mo:gap-2">
+          <MyWikiError title="내 위키가 비어있어요">
+            마이페이지에서 내 위키를 생성해주세요.
+          </MyWikiError>
         </div>
-      ) : (
-        <div className="flex h-[calc(100vh-120px)] items-center justify-center">
-          <Spinner size={10} />
-        </div>
-      )}
-    </>
+      </div>
+    );
+  }
+
+  if (profile) {
+    return (
+      <div className="mt-[120px] flex justify-center pc:mx-[100px]">
+        <Contents key={profile.code} profile={profile} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-[calc(100vh-120px)] items-center justify-center">
+      <Spinner size={10} />
+    </div>
   );
 }
