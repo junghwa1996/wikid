@@ -62,6 +62,7 @@ export default function CommentForm({
         )}
         <Button
           type="submit"
+          className={!update ? 'px-[34px] py-[10.5px]' : ''}
           disabled={value.length === 0}
           size={isMobile && update ? 'small' : 'normal'}
         >

@@ -63,7 +63,7 @@ export default function Wiki() {
         </div>
       ) : profile ? (
         <div className="mt-[120px] flex justify-center pc:mx-[100px]">
-          <Contents profile={profile} />
+          <Contents key={profile.code} profile={profile} />
         </div>
       ) : (
         <div className="flex h-[calc(100vh-120px)] items-center justify-center">

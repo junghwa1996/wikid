@@ -37,7 +37,7 @@ export default function Dropdown({
   useOutsideClick(dropdownRef, () => setIsOpen(false));
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative mo:w-full" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`${dropdownSize} flex h-[45px] items-center justify-between text-nowrap rounded-xl bg-gray-100 px-5 py-3.5 text-14 leading-none text-gray-400 hover:border-green-200 focus:ring-1 focus:ring-green-200`}

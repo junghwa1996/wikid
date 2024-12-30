@@ -13,7 +13,7 @@ export interface SnackBarProps {
 const severityConfig = {
   fail: {
     style:
-      'bg-red-50 border-red-100 fixed left-1/2 transform -translate-x-1/2 top-[120px] mx-auto mo:bottom-[80px] mo:top-auto shadow-custom mo:min-w-[280px]',
+      'bg-red-50 border-[#d14343] fixed left-1/2 transform -translate-x-1/2 top-[120px] mx-auto mo:bottom-[80px] mo:top-auto shadow-custom mo:min-w-[280px]',
     icon: '/icon/icon-fail.svg',
     textStyle: 'text-red-100 text-14sb mo:text-12sb ',
   },

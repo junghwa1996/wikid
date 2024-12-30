@@ -13,7 +13,7 @@ export default function Headers() {
   const isMobile = useCheckMobile();
 
   return (
-    <header className="fixed left-0 top-0 z-10 flex w-full items-center justify-between bg-background py-5 shadow-custom pc:h-[80px] pc:px-[80px] tamo:h-[60px] tamo:px-[20px]">
+    <header className="fixed left-0 top-0 z-10 flex w-full items-center justify-between bg-background py-5 shadow-custom dark:shadow-custom-dark pc:h-[80px] pc:px-[80px] tamo:h-[60px] tamo:px-[20px]">
       <div className="flex gap-10">
         <Link href="/">
           <Image
@@ -27,7 +27,7 @@ export default function Headers() {
         <GNB />
       </div>
       {/* 로그인 여부에 따라 조건부로 노출 */}
-      <div className="flex items-center gap-5 mo:gap-2">
+      <div className="flex items-center gap-5 mo:gap-0">
         <DarkModeToggle />
         <Alarm isLoggedIn={isAuthenticated} />
         <Login

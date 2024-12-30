@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <QueryClientProvider client={queryClient}>
             <Component {...pageProps} />
             {/* NOTE : 배포 시 false로 변경  */}
-            <ReactQueryDevtools initialIsOpen={true} />
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </SnackbarProvider>
       </ProfileProvider>
