@@ -57,7 +57,7 @@ export const AuthAPI = {
         // 500 에러 (서버 내부 오류)
         if (error.response?.status === 500) {
           throw new Error(
-            '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
+            '이미 사용 중인 이름입니다.\n다른 이름을 입력해주세요.'
           );
         }
       }
