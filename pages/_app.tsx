@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <ProfileProvider>
         <Head>
-          <title>wikid</title>
+          <title>wikied</title>
         </Head>
 
         <SnackbarProvider>
