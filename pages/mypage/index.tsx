@@ -76,8 +76,6 @@ function MyPage(): React.ReactElement {
       setCurrentPassword('');
       setNewPassword('');
       setNewPasswordConfirm('');
-      
-      // 로그아웃 처리
       setAccessToken(null);
       localStorage.removeItem('refreshToken');
       router.push('/login');
