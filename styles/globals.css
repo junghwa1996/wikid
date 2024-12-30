@@ -190,3 +190,11 @@ body {
 .scaleStyle {
   @apply transition-all hover:scale-[1.02] hover:bg-gray-100 hover:shadow-xl;
 }
+
+.downFadein {
+  @apply animate-pcFadeIn tamo:animate-tamoFadeIn;
+}
+
+.alarmDownFadein {
+  @apply animate-tamoFadeIn;
+}
