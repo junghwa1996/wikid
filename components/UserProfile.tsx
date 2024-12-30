@@ -52,7 +52,7 @@ function UserProfile({
     }
 
     return (
-      <p className="flex w-[200px] text-14 mo:h-[18px] mo:w-[180px] mo:text-12 ta:h-[24px] pc:h-[24px]">
+      <p className="flex w-[200px] text-14 mo:h-[18px] mo:w-[160px] mo:text-12 ta:h-[24px] pc:h-[24px]">
         <span className="flex-[1] text-gray-400">{label}</span>
         <span className={`flex-[2] truncate text-gray-500`}>{data[field]}</span>
       </p>
@@ -122,7 +122,7 @@ function UserProfile({
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/png,image/gif, image/webp"
             onChange={handleFileChange}
             className="hidden"
             aria-label="Upload profile image"
@@ -135,7 +135,7 @@ function UserProfile({
           className={`${
             isEditing
               ? 'mo:pt-[24px] ta:pb-[37px] ta:pt-[34px] tamo:justify-center'
-              : 'mo:flex-1 mo:pl-[10px] ta:flex-1 ta:pl-[20px]'
+              : 'mo:flex-1 mo:px-[10px] ta:flex-1 ta:pl-[20px]'
           } pc:pt-[60px] mo:pc:w-full`}
         >
           <div
